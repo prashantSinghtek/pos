@@ -1,0 +1,48 @@
+export class Constants {
+  static API_URL = "http://192.168.100.215:5050/";
+  static X_API_KEY = "X API Key";
+
+  static firm = `${Constants.API_URL}api/Firm/firm`;
+  static updatefirm = `${Constants.API_URL}api/Firm/firm`;
+  static firmUser = `${Constants.API_URL}api/StaffData/staffRole`;
+  static AddfirmParty = `${Constants.API_URL}api/Party/add`;
+  static GetPartyTransaction = `${Constants.API_URL}api/Party/getPartyTransaction/`;
+  static GetfirmParty = `${Constants.API_URL}api/Party/getPartiesLists?firmId=`;
+  static Getpartiesbyfirm = `${Constants.API_URL}api/Party/get/by/id?partyId=  `;
+  static state = `${Constants.API_URL}api/dropdown/State`;
+  static unit = `${Constants.API_URL}api/dropdown/ProductUnit`;
+  static item = `${Constants.API_URL}api/Item/`;
+  static Service = `${Constants.API_URL}api/item/service/`;
+  static category = `${Constants.API_URL}category/`;
+  static getproduct = `${Constants.API_URL}api/Item/itemByFirm/`;
+  static saleCredit = `${Constants.API_URL}api/sales-credit/save?firmId=`;
+  static saleCash = `${Constants.API_URL}api/sales-cash/save?firmId=`;
+  static GetParticularsaleCash = `${Constants.API_URL}api/sales-cash/byId/`;
+  static DeleteParticularsaleCash = `${Constants.API_URL}api/sales-cash/delete/`;
+  static saleCashupdate = `${Constants.API_URL}api/sales-cash/update/`;
+  static sale = `${Constants.API_URL}api/sales-cash/cash-credit/all/`;
+  static GetSale = `${Constants.API_URL}api/sales-cash/sales-credit/all?firmId=`;
+  static saleEstimate = `${Constants.API_URL}api/estimate/save?firmId=`;
+  static getEstimate = `${Constants.API_URL}api/estimate/all/by/firmId?firmId=`;
+  static Estimate = `${Constants.API_URL}api/estimate/`;
+  static SaleOrder = `${Constants.API_URL}api/SalesOrder/save?firmId=`;
+  static getSaleOrder = `${Constants.API_URL}api/SalesOrder/sale?firmId=`;
+  static deliveryChallan = `${Constants.API_URL}api/delivery-challan/`;
+  static paymentin = `${Constants.API_URL}api/payment-in/`;
+  static paymentout = `${Constants.API_URL}api/PaymentOut/`;
+  static purchase = `${Constants.API_URL}api/Purchase/`;
+  static getpurchaseorder = `${Constants.API_URL}api/purchaseOrder/`;
+  static getpurchasereturn = `${Constants.API_URL}api/DebitNote/`;
+  static purchaseReturn = `${Constants.API_URL}api/DebitNote/`;
+  static SaleReturn = `${Constants.API_URL}api/sales-Credit-Note/`;
+  static Expenses = `${Constants.API_URL}api/expense/`;
+  static purchaseOrder = `${Constants.API_URL}api/purchaseOrder/`;
+  static cash = `${Constants.API_URL}api/cash-in-hand/transaction/`;
+  static bankaccount = `${Constants.API_URL}api/bank/`;
+  static getSalereturn = `${Constants.API_URL}api/sales-Credit-Note/sale?firmId=`;
+  static banktocash = `${Constants.API_URL}api/BankToCashTransfer/`;
+  static cashtobank = `${Constants.API_URL}api/CashToBankTransfer/`;
+  static banktobank = `${Constants.API_URL}api/BankToBankTrasfer/`;
+  static adjusmentbank = `${Constants.API_URL}api/BankAdjustmentEntry/`;
+  static partyTransaction = `${Constants.API_URL}api/party-transactions/`;
+}

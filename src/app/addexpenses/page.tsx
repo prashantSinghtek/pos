@@ -1,0 +1,125 @@
+"use client";
+import React, { useEffect, useState } from "react";
+import { CiCircleRemove } from "react-icons/ci";
+import { IoAddCircle } from "react-icons/io5";
+import { useSession } from "next-auth/react";
+import pos_controller from "@/controller/posauth";
+import AddExpenses from "../Components/Addexpenses";
+import AddexpensesWithGST from "../Components/AddexpensesWithGST";
+
+const firmid = localStorage.getItem("selectedStore");
+export default function Page() {
+  const [tabs, setTabs] = useState([{ id: 1, isChecked: false }]);
+  const [activeTab, setActiveTab] = useState<any>(1);
+  const [product, setProduct] = useState()
+  const session = useSession();
+  const token = session?.data?.user?.image;
+  const auth = new pos_controller()
+
+  const addNewTab = () => {
+    const newId = tabs.length ? tabs[tabs.length - 1].id + 1 : 1;
+    setTabs([...tabs, { id: newId, isChecked: false }]);
+    setActiveTab(newId);
+  };
+
+  const handleCheckboxChange = (tabId: any) => {
+    setTabs(
+      tabs.map((tab) =>
+        tab.id === tabId ? { ...tab, isChecked: !tab.isChecked } : tab
+      )
+    );
+  };
+  useEffect(() => {
+    auth.GetProducts(token, firmid).then((res) => { setProduct(res.data) }).catch((err) => console.log(err))
+  }, [token, firmid])
+
+  const removeTab = (tabId: any) => {
+    const newTabs = tabs.filter((tab) => tab.id !== tabId);
+    setTabs(newTabs);
+    if (activeTab === tabId && newTabs.length) {
+      setActiveTab(newTabs[0].id);
+    } else if (!newTabs.length) {
+      setActiveTab(null);
+    }
+  };
+
+  return (
+    <div className="">
+      <div className="mt-4">
+        <div className="flex gap-10 border-b px-10 border-gray-300 items-center">
+          {tabs.map((tab) => (
+            <div
+              key={tab.id}
+              className={`cursor-pointer flex items-center gap-2 p-2    rounded-t-md ${activeTab === tab.id ? "text-[#FF6E3F] border-b-2 border-[#FF6E3F]" : "text-gray-500 "
+                }`}
+              onClick={() => setActiveTab(tab.id)}
+            >
+              EXPENSES #{tab.id}
+              <button
+                title="re"
+                className={`"ml-2   ${activeTab === tab.id ? "text-[#FF6E3F]" : "text-gray-500"}`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  removeTab(tab.id);
+                }}
+              >
+                <CiCircleRemove size={25} className="my-1" />
+              </button>
+            </div>
+          ))}
+          <div
+            // className="ml-2 p-2 bg-blue-500 text-white rounded-md"
+            onClick={addNewTab}
+          >
+            <IoAddCircle size={30} color="orange" />
+          </div>
+        </div>
+      </div>
+
+      <div className="rounded-b-md px-10 p-4">
+        {tabs.map((tab) =>
+          activeTab === tab.id ? (
+            <div key={tab.id} className="mb-5 text-lg text-gray-800 font-semibold flex items-end gap-5">
+              <div className="text-lg text-gray-800">Expenses</div>
+              <div className="flex gap-2 items-end">
+                <span
+                  className={`${tab.isChecked ? "text-[#2D9CDB]" : "text-[#808080]"
+                    }`}
+                >
+                  Gst
+                </span>
+                <label className="flex cursor-pointer select-none items-center">
+                  <div className="relative">
+                    <input
+                      title="check"
+                      type="checkbox"
+                      checked={tab.isChecked}
+                      onChange={() => handleCheckboxChange(tab.id)}
+                      className="sr-only"
+                      id={`creditlimit-${tab.id}`}
+                    />
+                    <div className="block h-8 w-16 rounded-full border border-[#2D9CDB] bg-white"></div>
+                    <div
+                      className={`dot bg-[#2D9CDB] absolute duration-100 top-1 h-6 w-6 rounded-full transition ${tab.isChecked ? "right-1" : "left-1"
+                        }`}
+                    ></div>
+                  </div>
+                </label>
+
+              </div>
+            </div>
+          ) : null
+        )}
+
+
+        {tabs.map((tab) =>
+          activeTab === tab.id ? (
+            <div key={tab.id}>
+              {tab.isChecked ? <AddexpensesWithGST/> : <AddExpenses />}
+            </div>
+          ) : null
+        )}
+      </div>
+    </div>
+  );
+}
