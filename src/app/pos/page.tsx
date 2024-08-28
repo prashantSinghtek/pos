@@ -5,7 +5,7 @@ import Chart from "../Components/Chart";
 import CardPrototype from "../Components/CardPrototype";
 import Table from "../Components/Table";
 
-
+import { Toaster } from 'react-hot-toast';
 
 function page() {
   const header = [
