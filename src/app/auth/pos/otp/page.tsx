@@ -13,7 +13,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 
 const validationSchema = Yup.object().shape({
-  otp: Yup.string().required("otp is required"),
+  otp: Yup.string().required("OPT is required"),
 });
 
 interface schema {
