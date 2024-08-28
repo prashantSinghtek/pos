@@ -10,41 +10,38 @@ import { IoArrowBackCircleOutline } from "react-icons/io5";
 import axios, { AxiosError } from "axios";
 import { BASE_MAIN } from "@/app/config/Constant";
 import { useRouter, useSearchParams } from "next/navigation";
-
-
+import toast from "react-hot-toast";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
     .email("Please enter a valid email")
     .required("Email is required"),
-
 });
 
 interface FormValues {
   email: string;
-
 }
 
 export default function ForgetpasswordPage() {
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
 
-  const searchParams = useSearchParams()
+  const searchParams = useSearchParams();
 
-  const router = useRouter()
+  const router = useRouter();
   const handleVisible = () => {
     setVisible(!visible);
   };
 
   const createQueryString = useCallback(
     (name: string, value: string) => {
-      const params = new URLSearchParams(searchParams.toString())
-      params.set(name, value)
- 
-      return params.toString()
+      const params = new URLSearchParams(searchParams.toString());
+      params.set(name, value);
+
+      return params.toString();
     },
     [searchParams]
-  )
+  );
 
   const handleFormSubmit = async (
     values: FormValues,
@@ -65,24 +62,17 @@ export default function ForgetpasswordPage() {
           },
         }
       );
-      // const url = `/auth/pos/otp?email=${encodeURIComponent(values.email)}`;
-      // router.push("/auth/pos/otp",{
-      //   query: {
-      //     value: values.email,
-      //   }
-      // });
-      
-      router.push(`/auth/pos/otp?${createQueryString('email', values.email)}`)
-    
-      // router.push(
-      //   {
-      //     pathname: '/auth/pos/otp',
-      //     query: {value : values.email},
-      //   },)
-      console.log("====response message===>>>", res);
-      resetForm();
+      if (res.status === 200) {
+        toast.success(res.data.message);
+        resetForm();
+        router.push(
+          `/auth/pos/otp?${createQueryString("email", values.email)}`
+        );
+      } else {
+        toast.error("Failed to create user, please try again.");
+      }
     } catch (err: any) {
-      console.log("error msgggg", err);
+      toast.error("An error occurred during sign-up. Please try again.");
     } finally {
       setSubmitting(false);
       setLoading(false);
@@ -97,12 +87,15 @@ export default function ForgetpasswordPage() {
         </div>
         <div className="w-1/2 px-20">
           <div className="mt-14">
-            <IoArrowBackCircleOutline color="grey" size={40} className="cursor-pointer" />
+            <IoArrowBackCircleOutline
+              color="grey"
+              size={40}
+              className="cursor-pointer"
+            />
           </div>
           <Formik
             initialValues={{
               email: "",
-            
             }}
             onSubmit={handleFormSubmit}
             validationSchema={validationSchema}
@@ -123,7 +116,11 @@ export default function ForgetpasswordPage() {
                         placeholder="jhondoe@gmail.com"
                         className="border border-gray-300 rounded px-3 py-2 w-full"
                       />
-                      <ErrorMessage name="email" component="div" className="text-xs text-red-500" />
+                      <ErrorMessage
+                        name="email"
+                        component="div"
+                        className="text-xs text-red-500"
+                      />
                     </div>
                   </div>
                   <div className="flex justify-center">
