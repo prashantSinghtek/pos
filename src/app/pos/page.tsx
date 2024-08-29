@@ -27,42 +27,42 @@ function page() {
         />
         <Dashboardcard
           image={"/dashboardcard1.png"}
-          title={"Total Sales"}
+          title={"Total Purchase"}
           number={"₹307144"}
         />
         <Dashboardcard
           image={"/dashboardcard1.png"}
-          title={"Total Sales"}
+          title={"Total Expense"}
           number={"₹307144"}
         />
         <Dashboardcard
           image={"/dashboardcard1.png"}
-          title={"Total Sales"}
+          title={"Total revenue"}
           number={"₹307144"}
         />
       </div>
       <div className="mt-5 flex gap-5">
         <Dashboardcard2
-          image={"/Group.png"}
-          title={"Parties/customers"}
+          image={"/dashboardcard1.png"}
+          title={"Cash In Hand"}
           number={"+100"}
           colour={"bg-orange-100"}
         />
         <Dashboardcard2
           image={"/Group2.png"}
-          title={"Parties/customers"}
+          title={"Cash At bank"}
           number={"+100"}
           colour={"bg-blue-100"}
         />
         <Dashboardcard2
           image={"/Group3.png"}
-          title={"Parties/customers"}
+          title={"Total Available Stock"}
           number={"+100"}
           colour={"bg-gray-300"}
         />
         <Dashboardcard2
           image={"/Group4.png"}
-          title={"Parties/customers"}
+          title={"Total Liability"}
           number={"+100"}
           colour={"bg-green-100"}
         />

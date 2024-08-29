@@ -47,25 +47,7 @@ export default function Page() {
   const [partydata, setPartydata] = useState([]);
   const [open, setOpen]= useState(false)
   const [particularParty, setParticularParty] = useState<any>();
-  const data = [
-    {
-      id: 1,
-      name: "All",
-      amount: 1234,
-    },
-    {
-      id: 1,
-      name: "prashant",
-      amount: 1234,
-    },
-    {
-      id: 1,
-      name: "rahul",
-      amount: 1234,
-    },
-  ];
-
-  useEffect(() => {
+   useEffect(() => {
     auth
       .getpartyTransaction(token, selectedtab)
       .then((res) => {
@@ -88,36 +70,6 @@ export default function Page() {
       value5: item?.balance,
     };
   });
-  // const bodyData = [
-  //   {
-  //     value1: "Data1",
-  //     value2: "Data2",
-  //     value3: "Data3",
-  //     value4: "Data4",
-  //     value5: "Data5",
-  //     value6: "Data6",
-  //     value7: "data7",
-  //   },
-  //   {
-  //     value1: "Data1",
-  //     value2: "Data2",
-  //     value3: "Data3",
-  //     value4: "Data4",
-  //     value5: "Data5",
-  //     value6: "Data6",
-  //     value7: "data7",
-  //   },
-  //   {
-  //     value1: "Data1",
-  //     value2: "Data2",
-  //     value3: "Data3",
-  //     value4: "Data4",
-  //     value5: "Data5",
-  //     value6: "Data6",
-  //     value7: "data7",
-  //   },
-  //   // Add more dummy data as needed
-  // ];
 
   const heading = [
     {
@@ -204,6 +156,11 @@ export default function Page() {
     <Additionalfield />,
   ];
 
+
+  useEffect(() => {
+console.log(gstvalues , "gstvalues");
+
+  }, [gstvalues])
   return (
     <>
       <div className="flex justify-between items-center px-1 mt-5">
