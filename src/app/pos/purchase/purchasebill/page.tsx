@@ -38,7 +38,7 @@ export default function Page() {
   const firmid = localStorage.getItem("selectedStore");
   const PAGE_SIZE = 10;
 
-  const [data, setData] = useState([]);
+  const [data, setData] = useState([{},{}]);
 
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -228,7 +228,6 @@ export default function Page() {
                       index % 2 === 1 ? "bg-gray-100 rounded-full" : ""
                     }`}
                   >
-                    {/* {console.log("item", item)} */}
                     <td className="text-sm text-gray-700 text-center px-2 py-1 ">
                       {item?.billDate}
                     </td>

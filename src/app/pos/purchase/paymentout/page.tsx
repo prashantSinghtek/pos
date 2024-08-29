@@ -12,7 +12,8 @@ import TextInput from "@/app/Components/Textinput";
 import Payment from "../../Component/Payment";
 import pos_controller from "@/controller/posauth";
 import { customStyles } from "@/app/Components/Customstyle";
-
+import CustomDatePicker from "@/app/Components/CustomDatePicker";
+import Selector from "@/app/Components/Selector";
 export default function Page() {
   const [open, setOpen] = useState(false);
   const auth = new pos_controller();
@@ -59,8 +60,8 @@ export default function Page() {
     "Balance",
     "Print/share",
   ];
-
-
+  const [date, setDate] = useState(null);
+  const [dateEnd, setDateEnd] = useState(null);
   const startIndex = (currentPage - 1) * PAGE_SIZE;
   const endIndex = startIndex + PAGE_SIZE;
   const currentDisplayedData = data.slice(startIndex, endIndex);
@@ -86,54 +87,89 @@ export default function Page() {
     setSelectedPaymentOptions(selectedOption);
   };
 
+  const [selectedOption, setSelectedOption] = useState<string>("All Firms");
+  const [selectedOptionFirm, setSelectedOptionFirm] = useState<string>("All Firms");
+  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+
+  const options = [
+    "All Purchase invoice",
+    "this month",
+    "last month",
+    "this quarter",
+    "this year",
+    "custom"
+  ];
+
+  const optionsFirm = [
+    "All Purchase invoice",
+    "this month",
+    "last month",
+    "this quarter",
+    "this year",
+    "custom"
+  ];
+  // Wrapper function to ensure type safety for single select
+  const handleSingleSelectChange = (selected: string | string[]) => {
+    if (typeof selected === "string") {
+      setSelectedOption(selected);
+    }
+  };
+  const handleFirmSelectChange = (selected: string | string[]) => {
+    if (typeof selected === "string") {
+      setSelectedOptionFirm(selected);
+    }
+  };
+  // Wrapper function to ensure type safety for multi-select
+  const handleMultiSelectChange = (selected: string | string[]) => {
+    if (Array.isArray(selected)) {
+      setSelectedOptions(selected);
+    }
+  };
   return (
     <div className="mr-5">
       <div className="mt-5">
         <CardPrototype>
           <>
-            <div className="flex gap-5 items-end">
-              <div className="w-[10%] text-[22px] mb-1">This Month</div>
-              <div className="rounded-md text-gray-800 bg-gray-200 px-5 py-2 h-fit">
+          <div className="flex gap-5 items-start w-[70%]">
+              <div className="w-full  text-[20px]  font-bold">
+                <Selector
+                  options={options}
+                  selectedOptions={selectedOption}
+                  onChange={handleSingleSelectChange}
+                  placeholder="Select a filter"
+                />
+                {/* <Selector
+        options={options}
+        selectedOptions={selectedOptions}
+        onChange={handleMultiSelectChange}
+        multiSelect={true}
+        placeholder="Select multiple firms"
+      /> */}
+              </div>
+              <div className="rounded-md text-gray-800 bg-gray-200 px-5 py-2">
                 Between
               </div>
-              <div className="w-[30%] flex flex-col justify-center items-start">
-                <div className="text-gray-800 text-base w-full">
-                  <TextInput
-                    name="dateFrom"
-                    type="date"
-                    placeholder="05/04/2024"
-                    label="Date From:"
-                    istouched={"Touch"}
-                    className="text-gray-800 text-base w-full"
-                  />
-                </div>
+              <div className="w-[100%]  text-[20px] ">
+                <CustomDatePicker
+                  selectedDate={date}
+                  onDateChange={(date: any) => setDate(date)}
+                  className=""
+                />
               </div>
-              <div className="w-[30%] flex flex-col justify-center items-start">
-                <div className="text-gray-800 text-base w-full">
-                  <TextInput
-                    name="dateTo"
-                    type="date"
-                    placeholder="05/04/2024"
-                    label="Date To:"
-                    istouched={"Touch"}
-                    className="text-gray-800 text-base w-full"
-                  />
-                </div>
+              <div className="w-full  text-[20px] ">
+                <CustomDatePicker
+                  selectedDate={dateEnd}
+                  onDateChange={(date: any) => setDateEnd(date)}
+                  className=""
+                />
               </div>
-              <div className="w-[10%] flex flex-col justify-center items-start">
-                <div className="text-gray-800 text-base w-full">
-                  <Select
-                    options={stateOptions}
-                    placeholder="Select"
-                    value={selectedAllFirmOption}
-                    onChange={handleChangedAllFirm}
-                    onBlur={() =>
-                      setTouchedAllFirm({ ...touchedAllFirm, state: true })
-                    }
-                    styles={customStyles}
-                    className="w-[100%] bg-white outline-none font-medium font-optima text-primary text-sm focus-within:outline-gray-200 focus-within:outline focus-within:outline-2"
-                  />
-                </div>
+              <div className="w-full  text-[20px]  font-bold">
+                <Selector
+                  options={optionsFirm}
+                  selectedOptions={selectedOptionFirm}
+                  onChange={handleFirmSelectChange}
+                  placeholder="Select a firm"
+                />
               </div>
             </div>
             <div className="mt-10 flex items-center gap-5 ">
