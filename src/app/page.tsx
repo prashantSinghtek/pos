@@ -3,7 +3,7 @@ import Loginpage from "./auth/pos/page";
 import { Toaster } from 'react-hot-toast';
 export default function Home() {
   return (
-    <div>
+    <div className="select-none">
       <Loginpage />
       <Toaster position="top-right" />
     </div>

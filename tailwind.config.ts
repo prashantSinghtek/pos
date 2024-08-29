@@ -12,6 +12,7 @@ const config: Config = {
     './src/app/**/*.{js,ts,jsx,tsx}',
     './src/app/auth/ondc/components/**/*.{js,ts,jsx,tsx}',
     './src/app/globals.css',
+    "./node_modules/flowbite/**/*.js",
     './src/layouts/DashboardLayout.tsx',
   ],
   theme: {
@@ -22,7 +23,9 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require('flowbite/plugin')
+  ],
   corePlugins: {},
 
   variants: {

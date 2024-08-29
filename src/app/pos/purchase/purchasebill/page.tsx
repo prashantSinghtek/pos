@@ -1,6 +1,8 @@
-"use client"
+"use client";
 import Button from "@/app/Components/Button";
 import CardPrototype from "@/app/Components/CardPrototype";
+import CustomDatePicker from "@/app/Components/CustomDatePicker";
+import Selector from "@/app/Components/Selector";
 import Table from "@/app/Components/Table";
 import TextInput from "@/app/Components/Textinput";
 import pos_controller from "@/controller/posauth";
@@ -15,10 +17,7 @@ import { MdCurrencyRupee } from "react-icons/md";
 import { RiBillLine, RiFileExcel2Line } from "react-icons/ri";
 import { VscGraph } from "react-icons/vsc";
 
-
-
-
-export default function page() {
+export default function Page() {
   const header = [
     "Date",
     "Invoice No.",
@@ -30,9 +29,9 @@ export default function page() {
     " ",
   ];
 
-
-
-  const [open, setOpen] = useState(false);
+  const [date, setDate] = useState(null);
+  const [dateEnd, setDateEnd] = useState(null);
+  const [open, SetOpen] = useState(false);
   const auth = new pos_controller();
   const session = useSession();
   const token = session?.data?.user?.image;
@@ -44,17 +43,16 @@ export default function page() {
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-    auth.GetpurchaseBill(token, firmid)
+    auth
+      .GetpurchaseBill(token, firmid)
       .then((res) => {
         setData(res.data);
         console.log(res, "===res");
-
       })
       .catch((error) => {
         console.error(error);
-      })
-  }, [token, firmid])
-
+      });
+  }, [token, firmid]);
 
   const startIndex = (currentPage - 1) * PAGE_SIZE;
   const endIndex = startIndex + PAGE_SIZE;
@@ -62,52 +60,89 @@ export default function page() {
   const totalPages = Math.ceil(data.length / PAGE_SIZE);
   const itemStartIndex = startIndex + 1;
   const itemEndIndex = Math.min(startIndex + PAGE_SIZE, data.length);
+  const [selectedOption, setSelectedOption] = useState<string>("All Firms");
+  const [selectedOptionFirm, setSelectedOptionFirm] = useState<string>("All Firms");
+  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
 
+  const options = [
+    "All Purchase invoice",
+    "this month",
+    "last month",
+    "this quarter",
+    "this year",
+    "custom"
+  ];
+
+  const optionsFirm = [
+    "All Purchase invoice",
+    "this month",
+    "last month",
+    "this quarter",
+    "this year",
+    "custom"
+  ];
+  // Wrapper function to ensure type safety for single select
+  const handleSingleSelectChange = (selected: string | string[]) => {
+    if (typeof selected === "string") {
+      setSelectedOption(selected);
+    }
+  };
+  const handleFirmSelectChange = (selected: string | string[]) => {
+    if (typeof selected === "string") {
+      setSelectedOptionFirm(selected);
+    }
+  };
+  // Wrapper function to ensure type safety for multi-select
+  const handleMultiSelectChange = (selected: string | string[]) => {
+    if (Array.isArray(selected)) {
+      setSelectedOptions(selected);
+    }
+  };
   return (
     <div className="mr-5">
       <div className="mt-5">
         <CardPrototype>
           <>
-            <div className="flex gap-5 items-end">
-              <div className="w-[10%]  text-[22px] mb-1">This Month</div>
-              <div className="rounded-md text-gray-800 bg-gray-200 px-5 py-2 h-fit">
+            <div className="flex gap-5 items-start w-[70%]">
+              <div className="w-full  text-[20px]  font-bold">
+                <Selector
+                  options={options}
+                  selectedOptions={selectedOption}
+                  onChange={handleSingleSelectChange}
+                  placeholder="Select a filter"
+                />
+                {/* <Selector
+        options={options}
+        selectedOptions={selectedOptions}
+        onChange={handleMultiSelectChange}
+        multiSelect={true}
+        placeholder="Select multiple firms"
+      /> */}
+              </div>
+              <div className="rounded-md text-gray-800 bg-gray-200 px-5 py-2">
                 Between
               </div>
-              <div className="w-[30%] flex flex-col justify-center items-start">
-                <div className="text-gray-800 text-base w-full">
-                  <TextInput
-                    name="datefrom"
-                    type="datefrom"
-                    placeholder="05/04/2024"
-                    label="Date From:"
-                    istouched={"Touch"}
-                    className="text-gray-800 text-base w-full"
-                  />
-                </div>
+              <div className="w-[100%]  text-[20px] ">
+                <CustomDatePicker
+                  selectedDate={date}
+                  onDateChange={(date: any) => setDate(date)}
+                  className=""
+                />
               </div>
-              <div className="w-[30%] flex flex-col justify-center items-start">
-                <div className="text-gray-800 text-base w-full">
-                  <TextInput
-                    name="datefrom"
-                    type="datefrom"
-                    placeholder="05/04/2024"
-                    label="Date To:"
-                    istouched={"Touch"}
-                    className="text-gray-800 text-base w-full"
-                  />
-                </div>
+              <div className="w-full  text-[20px] ">
+                <CustomDatePicker
+                  selectedDate={dateEnd}
+                  onDateChange={(date: any) => setDateEnd(date)}
+                  className=""
+                />
               </div>
-              <div className="w-[10%] flex flex-col justify-center items-start">
-                <div className="text-gray-800 text-base w-full">
-                  <TextInput
-                    name="datefrom"
-                    type="datefrom"
-                    placeholder=""
-                    label=""
-                    istouched={"Touch"}
-                    className="text-gray-800 text-base w-full"
-                  />
-                </div>
+              <div className="w-full  text-[20px]  font-bold">
+                <Selector
+                  options={optionsFirm}
+                  selectedOptions={selectedOptionFirm}
+                  onChange={handleFirmSelectChange}
+                  placeholder="Select a firm"
+                />
               </div>
             </div>
             <div className="mt-10 flex items-center gap-5 ">
@@ -141,7 +176,7 @@ export default function page() {
           </>
         </CardPrototype>
       </div>
-      <div className="mt-5 flex justify-between">
+      <div className="mt-5 flex justify-between z-0">
         <div className="flex gap-3 items-center">
           <div className="text-[20px]">Transaction</div>
           <TextInput
@@ -157,7 +192,6 @@ export default function page() {
           </div>
         </div>
         <div className="flex gap-3 items-center">
-
           <div className="text-[#769FB6] border-2 border-[#769FB6] rounded-full p-2">
             <IoPrintOutline size={20} />
           </div>
@@ -190,8 +224,9 @@ export default function page() {
                 {currentDisplayedData.map((item: any, index: any) => (
                   <tr
                     key={index}
-                    className={`font-light border-y border-gray-200 ${index % 2 === 1 ? "bg-gray-100 rounded-full" : ""
-                      }`}
+                    className={`font-light border-y border-gray-200 ${
+                      index % 2 === 1 ? "bg-gray-100 rounded-full" : ""
+                    }`}
                   >
                     {/* {console.log("item", item)} */}
                     <td className="text-sm text-gray-700 text-center px-2 py-1 ">
@@ -234,7 +269,10 @@ export default function page() {
                 <span className="font-semibold text-gray-500 ">
                   {itemStartIndex}-{itemEndIndex}
                 </span>{" "}
-                of <span className="font-semibold text-gray-500 ">{data.length}</span>
+                of{" "}
+                <span className="font-semibold text-gray-500 ">
+                  {data.length}
+                </span>
               </span>
               <ul className="inline-flex -space-x-px rtl:space-x-reverse text-sm h-14">
                 <li>
