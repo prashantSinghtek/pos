@@ -9,7 +9,7 @@ import { AiFillGooglePlusCircle } from "react-icons/ai";
 import axios from "axios";
 import { BASE_MAIN } from "@/app/config/Constant";
 import toast from "react-hot-toast";
-
+import { useRouter } from "next/navigation";
 const validationSchema = Yup.object().shape({
   email: Yup.string()
     .email("Please enter a valid email")
@@ -45,7 +45,7 @@ export default function Signup() {
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
   const [error, setError] = useState("");
-
+  const router = useRouter();
   const handleVisible = () => {
     setVisible(!visible);
   };
@@ -63,18 +63,24 @@ export default function Signup() {
         email: values.email,
         mobile: values.phonenumber,
         password: values.password,
-        confirmedPassword : values.confirmpassword
+        confirmedPassword: values.confirmpassword,
       };
-      const res :any = await axios.post(`${BASE_MAIN}loginAPI/createUser`, data, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
+      const res: any = await axios.post(
+        `${BASE_MAIN}loginAPI/createUser`,
+        data,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       if (res.status === 200) {
         toast.success(res.data.message);
-        resetForm();
-      } else {
+        router.push(
+          `/auth/pos/otpVerification?email=${values.email}&firstname=${values.firstname}&lastname=${values.lastname}&phonenumber=${values.phonenumber}&password=${values.password}&confirmedPassword=${values.confirmpassword}`
+        );
+        // resetForm();
+      } else { 
         toast.error("Failed to create user, please try again.");
       }
     } catch (err: any) {
