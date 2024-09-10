@@ -142,7 +142,7 @@ export default function Addfirmform() {
             <div className="flex flex-col justify-center items-center text-[#FF7006]">
               <div className="bg-[#FEE8E1] text-[#FF7006] p-12 rounded-full text-center relative">
                 <img
-                  src={`http://192.168.100.215:5050${initialValues.logo}`}
+                  src={`https://pos.testinguat.com:5442${initialValues.logo}`}
                   alt=""
                 />
                 <label htmlFor="logoUpload" className="cursor-pointer">

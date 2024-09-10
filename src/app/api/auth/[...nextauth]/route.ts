@@ -3,6 +3,15 @@ import axios from "axios";
 import { NextAuthOptions } from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
 import CredentialProvider from "next-auth/providers/credentials";
+import https from 'https';
+
+const agent = new https.Agent({
+  rejectUnauthorized: false,  // Bypasses SSL certificate validation
+});
+
+const axiosInstance = axios.create({
+  httpsAgent: agent,
+});
 
 export const authOptions: NextAuthOptions = {
   secret: process.env.JWT_SECRET,
@@ -21,18 +30,18 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
       profile: async (profile) => {
         try {
-          const { data } = await axios.post("BASE_URL", {
+          const { data } = await axiosInstance.post("BASE_URL", {
             email: profile.email.toString(),
           });
           if (!data.exists) {
-            const savedUser = await axios.post("BASE_URL", {
+            const savedUser = await axiosInstance.post("BASE_URL", {
               first_name: profile.given_name,
               last_name: profile.family_name,
               email: profile.email,
               password: profile.sub,
               source: "web",
             });
-            const accessData = await axios.post("BASE_URL", {
+            const accessData = await axiosInstance.post("BASE_URL", {
               email: savedUser.data.email,
               password: profile.sub,
             });
@@ -68,13 +77,14 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       authorize: async (credentials: any) => {
+        console.log(credentials, "credentials");
         if (!credentials || !credentials.email || !credentials.password) {
           throw new Error("Email and password are required");
         }
 
         try {
-          const { data } = await axios.post(
-            `${process.env.BASE_URL}/loginAPI/login`,
+          const { data } = await axiosInstance.post(
+            `https://pos.testinguat.com:5442/loginAPI/login`,
             {
               email: credentials.email,
               password: credentials.password,
@@ -84,19 +94,20 @@ export const authOptions: NextAuthOptions = {
           if (!data) {
             throw new Error("Invalid login response");
           }
-
-         const userData = data;
-         return {
-           id: userData?.data?.message.toString(),
-           email: userData?.data?.message.toString(),
-           image: userData?.data?.token.toString(),
-           type: userData?.data?.roles.toString(),
-         };
+          console.log(data, 'jkjhjkhjhjghfgdhsfghsdgfgsd');
+          const userData = data;
+          return {
+            id: userData?.data?.message.toString(),
+            email: userData?.data?.message.toString(),
+            image: userData?.data?.token.toString(),
+            type: userData?.data?.roles.toString(),
+          };
         } catch (error: any) {
           console.log("error", error);
           if (error.response && error.response.data.message) {
             throw new Error(error.response.data.message);
           }
+          console.log("errorerrorerrorrrrwwwwww", error.message);
           throw new Error(error.message);
         }
       },

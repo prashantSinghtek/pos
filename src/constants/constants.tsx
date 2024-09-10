@@ -1,5 +1,5 @@
 export class Constants {
-  static API_URL = "http://192.168.100.215:5050/";
+  static API_URL = "https://pos.testinguat.com:5442/";
   static X_API_KEY = "X API Key";
 
   static firm = `${Constants.API_URL}api/Firm/firm`;
