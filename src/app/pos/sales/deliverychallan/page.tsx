@@ -19,8 +19,8 @@ interface Filters {
 const firmid = localStorage.getItem("selectedStore");
 export default function Page() {
   const session = useSession();
-  const token = session?.data?.user?.image;
-  console.log("session", session)
+  const token = session?.data?.uToken;
+  console.log("sessionPage", session)
   const [data, setData] = useState([])
   const [Returndata, setReturnData] = useState([])
   const [id, setId] = useState()

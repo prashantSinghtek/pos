@@ -127,14 +127,25 @@ export const authOptions: NextAuthOptions = {
         token.email = user.email;
         token.uToken = user.token; // Include token from user
         token.type = user.type;
+        token.firstName = user.firstName;
+        token.lastName = user.lastName;
+        token.type = user.type; // or any other property you want
       }
       return token;
     },
     async session({ session, token }: any) {
+      debugger
+
+console.log(token ,session ,  "sessiontoken");
       session.id = token.id;
       session.email = token.email;
       session.uToken = token.uToken; // Include token in session
       session.type = token.type;
+      session.message = token.message;
+      session.user.id = token.id;
+      session.user.firstName = token.firstName;
+      session.user.lastName = token.lastName;
+      session.user.type = token.type;
       return session;
     },
   },

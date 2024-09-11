@@ -15,9 +15,6 @@ export default function Home() {
     }
   }, [session, status]);
   
-  if (status === "loading") {
-    return <div>Loading...</div>;
-  }
   return (
     <div className="select-none">
       <Loginpage />
