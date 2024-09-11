@@ -1,7 +1,7 @@
 import { customStyles } from '@/app/Components/Customstyle';
 import Textarea from '@/app/Components/Textarea';
 import TextInput from '@/app/Components/Textinput';
-import pos_controller from '@/controller/posauth';
+import { addPaymentIn, getParty } from '@/controller/posauth';
 import { Field, Formik } from 'formik';
 import { useSession } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
@@ -16,13 +16,12 @@ export default function Payment({ setOpen,defaultdata }: any) {
     }
 
     const session = useSession();
-    const token = session?.data?.user?.image;
-    const auth = new pos_controller();
+    const token = session?.data?.uToken;
     const [parties, setParties] = useState<any[]>([]);
     const path = usePathname()
     useEffect(() => {
         if (token && firmid) {
-            auth.Getparty(token, firmid)
+            getParty(firmid)
                 .then((res) => {
                     setParties(res?.data?.data);
                 })
@@ -87,7 +86,7 @@ export default function Payment({ setOpen,defaultdata }: any) {
                 });
             }
             let res
-            { path == '/pos/purchase/paymentout' ? res = await auth.Addpaymentout(formData, token) : res = await auth.AddPaymentIn(formData, token); }
+            { path == '/pos/purchase/paymentout' ? res = await addPaymentIn(formData) : res = await addPaymentIn(formData); }
 
             setOpen(false)
             console.log(res);

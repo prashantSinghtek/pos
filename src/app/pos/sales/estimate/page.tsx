@@ -3,7 +3,8 @@ import Button from "@/app/Components/Button";
 import CardPrototype from "@/app/Components/CardPrototype";
 import { customStyles } from "@/app/Components/Customstyle";
 import TextInput from "@/app/Components/Textinput";
-import pos_controller from "@/controller/posauth";
+import { getEstimate } from "@/controller/posauth";
+
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -33,9 +34,8 @@ export default function Page() {
   const [id, setId] = useState()
   const [open1, setOpen1] = useState(false);
   const [id1, setId1] = useState()
-  const auth = new pos_controller();
   const session = useSession();
-  const token = session?.data?.user?.image;
+  const token = session?.data?.uToken;
   const firmid = localStorage.getItem("selectedStore");
   const PAGE_SIZE = 4;
 
@@ -67,7 +67,7 @@ export default function Page() {
 
 
   useEffect(() => {
-    auth.GetEstimate(token, firmid)
+    getEstimate(firmid)
       .then((res) => {
         setData(res.data)
         // console.log(res)

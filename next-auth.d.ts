@@ -1,4 +1,4 @@
-// next-auth.d.ts
+// next-d.ts
 import NextAuth from "next-auth";
 
 declare module "next-auth" {

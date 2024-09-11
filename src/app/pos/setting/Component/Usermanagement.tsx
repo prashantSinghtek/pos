@@ -7,12 +7,12 @@ import { IoShieldSharp } from "react-icons/io5";
 import Adduserform from "./Adduserform";
 import ModuleForm from "./Moduleform";
 import { useSession } from "next-auth/react";
-import pos_controller from "@/controller/posauth";
+import { getFirmUser } from "@/controller/posauth";
+
 
 export default function Usermanagement() {
   const session = useSession();
-  const token = session?.data?.user?.image;
-  const auth = new pos_controller();
+  const token = session?.data?.uToken;
   // const body = [
   //   {
   //     value1: "prashant agarwal",
@@ -45,8 +45,7 @@ export default function Usermanagement() {
   };
 
   useEffect(() => {
-    auth
-      .Getfirmuser(token)
+   getFirmUser()
       .then((res: any) => {
         console.log("dfg", res);
         setBody(res.data);

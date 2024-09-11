@@ -9,7 +9,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Select from "react-select";
 import { customStyles } from "./Customstyle";
-import pos_controller from "@/controller/posauth";
+
 import Table from "./Addsaletable";
 import { components } from 'react-select';
 import AddexpenseswithGSTtable from "./AddexpenseswithGSTtable";
@@ -31,10 +31,10 @@ const firmid = localStorage.getItem("selectedStore");
 export default function AddexpensesWithGST({ product }: any) {
     console.log("product", product)
     const session = useSession();
-    const token = session?.data?.user?.image;
+    const token = session?.data?.uToken;
     const auth = new pos_controller()
     useEffect(() => {
-        auth.Getparty(token, firmid)
+        Getparty(token, firmid)
             .then((res) => { console.log(">>>>>>>>>>>", res); setParties(res?.data?.data) })
             .catch((err) => {
                 console.log(err);
@@ -99,7 +99,7 @@ export default function AddexpensesWithGST({ product }: any) {
 
     const [update, setupdate] = useState(false);
     useEffect(() => {
-        auth.GetExpensesCategory(token, firmid)
+        GetExpensesCategory(token, firmid)
             .then((res) => { setExpenses(res?.data), setupdate(false) })
             .catch((err) => {
                 console.log(err);
@@ -146,7 +146,7 @@ export default function AddexpensesWithGST({ product }: any) {
 
             }
             console.log(value)
-            const res = await auth.AddExpensesWithoutGST(token, firmid, "withGST", value,SelectedExpenses)
+            const res = await AddExpensesWithoutGST(token, firmid, "withGST", value,SelectedExpenses)
             console.log("AddExpensesWithoutGST added", res)
             reset()
             // router.push(res)
@@ -164,7 +164,7 @@ export default function AddexpensesWithGST({ product }: any) {
     };
 
     useEffect(() => {
-        auth.State(token).then((res) => {
+        State(token).then((res) => {
             setData(res?.data);
         }).catch((err) => {
             console.log(err);

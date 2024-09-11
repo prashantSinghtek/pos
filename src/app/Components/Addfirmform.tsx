@@ -5,7 +5,7 @@ import TextInput from "./Textinput";
 import { IoMdAdd } from "react-icons/io";
 import Textarea from "./Textarea";
 import { Formik } from "formik";
-import pos_controller from "@/controller/posauth";
+import { addFirm, myCompany, updateFirm } from "@/controller/posauth";
 import { useSession } from "next-auth/react";
 import * as Yup from "yup";
 
@@ -29,13 +29,11 @@ export default function Addfirmform() {
   });
   
   const session = useSession();
-  const token = session?.data?.user?.image;
-  const auth = new pos_controller();
+  const token = session?.data?.uToken;
   const firmid = localStorage.getItem("selectedStore");
 
   useEffect(() => {
-    auth
-      .myCompany(token, firmid)
+   myCompany(firmid)
       .then((res) => {
         setInitialValues({
           Businessname: res.data?.buisnessName || "",
@@ -105,7 +103,9 @@ export default function Addfirmform() {
       fieldValues.forEach((file: File) => {
         formData.append("signaturePath", file);
       });
-      const res = await firmid ? auth.Updatefirm(formData, firmid, token) : auth.Addfirm(formData, token);
+      const res = firmid
+      ? await updateFirm(formData, firmid)
+      : await addFirm(formData);
       actions.resetForm();
     } catch (err: any) {
       if (err.inner) {
@@ -382,3 +382,4 @@ export default function Addfirmform() {
     </div>
   );
 }
+

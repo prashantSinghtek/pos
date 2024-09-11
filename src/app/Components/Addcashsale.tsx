@@ -9,8 +9,9 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Select from "react-select";
 import { customStyles } from "./Customstyle";
-import pos_controller from "@/controller/posauth";
+
 import Table from "./Addsaletable";
+import { addSaleCash, getParty, getState } from "@/controller/posauth";
 
 const validationSchema = Yup.object({
   partiesName: Yup.string().required("Required"),
@@ -29,10 +30,9 @@ const firmid = localStorage.getItem("selectedStore");
 export default function AddCashSale({ product ,defaultSelectedproduct}: any) {
 
   const session = useSession();
-  const token = session?.data?.user?.image;
-  const auth = new pos_controller()
+  const token = session?.data?.uToken;
   useEffect(() => {
-    auth.Getparty(token, firmid)
+    getParty(firmid)
       .then((res) => { console.log(">>>>>>>>>>>", res); setParties(res?.data?.data) })
       .catch((err) => {
         console.log(err);
@@ -135,16 +135,9 @@ export default function AddCashSale({ product ,defaultSelectedproduct}: any) {
         items: selectedProduct
       }
       console.log(value)
-      const res = await auth.AddsaleCash(token, firmid, value)
-      // console.log("sale added", res)
+      const res = await addSaleCash(firmid, value)
       router.push(res)
-    
-      // res.setHeader('Content-Type', 'application/pdf');
-      // await CreateInvoiceItem(values,SelectedParties,SelectedPaymenttype, storeid, firm, selectedProduct, totalTax, discountAmount, totalAmount)
-      //   .then((res) => { setInvoice(res?.newInvoiceItem); router.push(`addsale/${res?.newInvoiceItem?.id}`) });
-
-
-    } catch (error) {
+        } catch (error) {
       console.error("Error:", error);
     } finally {
       setSubmitting(false);
@@ -152,7 +145,7 @@ export default function AddCashSale({ product ,defaultSelectedproduct}: any) {
   };
 
   useEffect(() => {
-    auth.State(token).then((res) => {
+    getState().then((res) => {
       setData(res?.data);
     }).catch((err) => {
       console.log(err);

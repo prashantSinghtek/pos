@@ -18,7 +18,7 @@ export default function CashToBank({ data , SetCashToBankTransfer }: any) {
 
     const auth = new pos_controller()
     const session = useSession();
-    const token = session?.data?.user?.image;
+    const token = session?.data?.uToken;
 
     const allbank = data?.map((option: any) => ({
         value: option?.displayName?.toUpperCase(),
@@ -58,7 +58,7 @@ export default function CashToBank({ data , SetCashToBankTransfer }: any) {
                             formData.append("file", file);
                         });
 
-                        const response = await auth.AddCashToBank(token, formData);
+                        const response = await AddCashToBank(token, formData);
                         console.log(response);
                         SetCashToBankTransfer(false);
                         // toast.success("Bank Created.")

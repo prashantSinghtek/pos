@@ -9,9 +9,10 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
   import Select from "react-select";
 import { customStyles } from "./Customstyle";
-import pos_controller from "@/controller/posauth";
+
 import Table from "./Addsaletable";
 import PaymentType from "./PaymentType";
+import { addSaleCredit, getParty, getState } from "@/controller/posauth";
 
 const validationSchema = Yup.object({
   partiesName: Yup.string().required("Required"),
@@ -30,10 +31,9 @@ const firmid = localStorage.getItem("selectedStore");
 export default function AddCreditSale({ product }: any) {
   console.log("product", product)
   const session = useSession();
-  const token = session?.data?.user?.image;
-  const auth = new pos_controller()
+  const token = session?.data?.uToken;
   useEffect(() => {
-    auth.Getparty(token, firmid)
+    getParty(firmid)
       .then((res) => { console.log(">>>>>>>>>>>", res); setParties(res?.data?.data) })
       .catch((err) => {
         console.log(err);
@@ -112,7 +112,7 @@ export default function AddCreditSale({ product }: any) {
         items: selectedProduct
       }
       console.log(value)
-      const res = await auth.AddsaleCredit(token, firmid, value)
+      const res = await addSaleCredit( firmid, value)
       console.log("sale added", res)
       router.push(res)
       // await CreateInvoiceItem(values,SelectedParties,SelectedPaymenttype, storeid, firm, selectedProduct, totalTax, discountAmount, totalAmount)
@@ -127,7 +127,7 @@ export default function AddCreditSale({ product }: any) {
   };
 
   useEffect(() => {
-    auth.State(token).then((res) => {
+    getState().then((res) => {
       setData(res?.data);
     }).catch((err) => {
       console.log(err);

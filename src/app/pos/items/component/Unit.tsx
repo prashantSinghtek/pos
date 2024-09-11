@@ -17,10 +17,11 @@ import Productfrom from "./Productfrom";
 import Serviceform from "./Serviceform";
 import { useRouter } from "next/navigation";
 import { Formik } from "formik";
-import pos_controller from "@/controller/posauth";
+
 import { useSession } from "next-auth/react";
 import Select from "react-select";
 import { customStyles } from "@/app/Components/Customstyle";
+import { addUnits, getUnits } from "@/controller/posauth";
 // import { PiMapPinAreaBold } from "react-icons/pi";
 
 export default function Unit() {
@@ -29,14 +30,11 @@ export default function Unit() {
   const [adjustitemmodalopen, setAdjustitemmodalopen] = useState(false);
   const [unit, setUnit] = useState();
   const session = useSession();
-  const token = session?.data?.user?.image;
+  const token = session?.data?.uToken;
   const Router = useRouter();
   const [Selectedbank, setSelectedbank] = useState<any>();
-  const auth = new pos_controller();
-
   useEffect(() => {
-    auth
-      .GetUnits(token)
+    getUnits()
       .then((res) => setUnit(res))
       .catch((err) => console.log(err, "unit error"));
   }, [token]);
@@ -52,7 +50,7 @@ export default function Unit() {
         name: values.Unitname,
         shortName: values.shortname,
       };
-      const res = await auth.AddUnits(value, token);
+      const res = await addUnits(value);
       console.log(">>>>", res);
       resetForm();
     } catch (err) {

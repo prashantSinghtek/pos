@@ -18,7 +18,7 @@ import Serviceform from "./Serviceform";
 import { useRouter } from "next/navigation";
 import { Formik } from "formik";
 import { useSession } from "next-auth/react";
-import pos_controller from "@/controller/posauth";
+
 // import { PiMapPinAreaBold } from "react-icons/pi";
 
 export default function Product() {
@@ -27,7 +27,7 @@ export default function Product() {
   const [modalOpenFrom, setModalOpenFrom] = useState("");
   const [selectedCategory, setSelectedCategory] = useState();
   console.log(session)
-  const token = session?.data?.user?.image;
+  const token = session?.data?.uToken;
   console.log("dfvgbdefg", token)
   const auth = new pos_controller()
   const [selectedtab, setSelectedtab] = useState<any>();
@@ -45,7 +45,7 @@ export default function Product() {
     console.log("Form values:", values);
     try {
       setSubmitting(true);
-      const res = await auth.Addcategory(values.Categoryname, token, firmid)
+      const res = await Addcategory(values.Categoryname, token, firmid)
       console.log("defv", res)
       resetForm();
       setModalopen(false)
@@ -63,7 +63,7 @@ export default function Product() {
     console.log("Form values:", values);
     try {
       setSubmitting(true);
-      const res = await auth.PutCategoryName(token, selectedtab,values.Categoryname)
+      const res = await PutCategoryName(token, selectedtab,values.Categoryname)
       console.log("defv", res)
       resetForm();
       setModalopen(false)
@@ -75,11 +75,11 @@ export default function Product() {
   };
 
   useEffect(() => {
-    auth.Getcategory(token).then((res: any) => { setCategory(res.data) }).catch((err) => console.log("ctegory", err))
+    Getcategory(token).then((res: any) => { setCategory(res.data) }).catch((err) => console.log("ctegory", err))
   }, [token])
 
   useEffect(() => {
-    auth.GetParticularCategory(token,selectedtab).then((res: any) => { setParticularcategory(res.data)}).catch((err) => console.log("ctegory", err))
+    GetParticularCategory(token,selectedtab).then((res: any) => { setParticularcategory(res.data)}).catch((err) => console.log("ctegory", err))
   }, [token,selectedtab])
 
   const header = [

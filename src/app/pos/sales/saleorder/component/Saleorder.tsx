@@ -3,7 +3,8 @@ import Button from "@/app/Components/Button";
 import Table from "@/app/Components/Table";
 import Table2 from "@/app/Components/Table2";
 import TextInput from "@/app/Components/Textinput";
-import pos_controller from "@/controller/posauth";
+import { getSaleOrder } from "@/controller/posauth";
+
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import { HiDotsVertical } from "react-icons/hi";
@@ -27,9 +28,8 @@ export default function Saleorder() {
   const [id, setId] = useState()
   const [open1, setOpen1] = useState(false);
   const [id1, setId1] = useState()
-  const auth = new pos_controller();
   const session = useSession();
-  const token = session?.data?.user?.image;
+  const token = session?.data?.uToken;
   const firmid = localStorage.getItem("selectedStore");
   const PAGE_SIZE = 10;
 
@@ -46,7 +46,7 @@ export default function Saleorder() {
 
 
   useEffect(() => {
-    auth.GetSaleOrder(token, firmid)
+    getSaleOrder(firmid)
       .then((res) => {
         setData(res.data);
         console.log(res, "===res");

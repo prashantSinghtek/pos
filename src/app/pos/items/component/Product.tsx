@@ -15,9 +15,10 @@ import Productfrom from "./Productfrom";
 import Serviceform from "./Serviceform";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import pos_controller from "@/controller/posauth";
+
 import Stockadd from "./Stockadd";
 import StockReduce from "./StockReduce";
+import { getItemBySearch, getParticularItems, getProducts } from "@/controller/posauth";
 // import { PiMapPinAreaBold } from "react-icons/pi";
 
 export default function Product() {
@@ -28,8 +29,7 @@ export default function Product() {
   const session = useSession();
   const [searchTerm, setSearchTerm] = useState("");
   const [searchTermData, setSearchTermData] = useState<any>([]);
-  const token = session?.data?.user?.image;
-  const auth = new pos_controller();
+  const token = session?.data?.uToken;
   const [selectedtab, setSelectedtab] = useState<any>();
   const [selectedlistitem, setSelectedlistitem] = useState();
   const [modalOpenFrom, setModalOpenFrom] = useState("");
@@ -49,8 +49,7 @@ export default function Product() {
   };
 
   useEffect(() => {
-    auth
-      .GetProducts(token, firmid)
+    getProducts(firmid)
       .then((res) => {
         setProduct(res.data);
         setProductupdate(false);
@@ -60,8 +59,7 @@ export default function Product() {
   console.log("selectedtab", selectedtab);
 
   useEffect(() => {
-    auth
-      .GetParticularItems(token, selectedtab)
+    getParticularItems(selectedtab)
       .then((res: any) => {
         setSelectedProduct(res.data), console.log(res);
       })
@@ -69,8 +67,7 @@ export default function Product() {
   }, [token, selectedtab]);
 
   useEffect(() => {
-    auth
-      .GetItemBySearch(token, searchTerm, firmid)
+    getItemBySearch(searchTerm, firmid)
       .then((res) => {
         setSearchTermData(res?.data);
       })

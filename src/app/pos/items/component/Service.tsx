@@ -17,7 +17,8 @@ import Productfrom from "./Productfrom";
 import Serviceform from "./Serviceform";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import pos_controller from "@/controller/posauth";
+import { getParticularService, getService } from "@/controller/posauth";
+
 // import { PiMapPinAreaBold } from "react-icons/pi";
 
 export default function Service() {
@@ -27,10 +28,9 @@ export default function Service() {
   const Router = useRouter();
   const firmid = localStorage.getItem("selectedStore");
   const session = useSession();
-  const token = session?.data?.user?.image;
-  const auth = new pos_controller();
+  const token = session?.data?.uToken;
   const [service, setService] = useState([]);
-  const [Particularservice, setParticularService] = useState([]);
+  const [Particularservice, setParticularService] = useState<any>([]);
   const [selectedlistitem, setSelectedlistitem] = useState();
   const [modalOpenFrom, setModalOpenFrom] = useState("");
   const data = [
@@ -67,8 +67,7 @@ export default function Service() {
     setIsChecked(!isChecked);
   };
   useEffect(() => {
-    auth
-      .GetService(firmid, token)
+   getService(firmid)
       .then((res) => {
         setService(res.data);
         console.log(res);
@@ -78,8 +77,7 @@ export default function Service() {
       });
   }, [firmid, token]);
   useEffect(() => {
-    auth
-      .getParticularService(selectedtab, token)
+   getParticularService(selectedtab)
       .then((res) => {
         // setService(res.data)
         setParticularService(res?.data?.itemService);

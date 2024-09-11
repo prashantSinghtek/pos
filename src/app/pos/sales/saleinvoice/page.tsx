@@ -3,7 +3,8 @@ import Button from "@/app/Components/Button";
 import CardPrototype from "@/app/Components/CardPrototype";
 import Table from "@/app/Components/Table";
 import TextInput from "@/app/Components/Textinput";
-import pos_controller from "@/controller/posauth";
+import { deleteParticularSaleCash, getSale } from "@/controller/posauth";
+
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -22,9 +23,8 @@ export default function Page() {
   const [id, setId] = useState()
   const [open1, setOpen1] = useState(false);
   const [id1, setId1] = useState()
-  const auth = new pos_controller();
   const session = useSession();
-  const token = session?.data?.user?.image;
+  const token = session?.data?.uToken;
   const firmid = localStorage.getItem("selectedStore");
   const PAGE_SIZE = 10;
   const [saleupdate,setSaleupdate] = useState(false)
@@ -48,7 +48,7 @@ export default function Page() {
   // console.log(data,"===data");
 
   useEffect(() => {
-    auth.GetSale(token, firmid)
+    getSale(firmid)
       .then((res) => {
         setData(res);
         setSaleupdate(false)
@@ -69,7 +69,7 @@ export default function Page() {
 
 const handleDelete =async (id:any)=>{
   try {
-    const res = await auth.DeleteParticularsaleCash(token,id)
+    const res = await deleteParticularSaleCash(id)
     console.log(res)
     setSaleupdate(true)
   } catch (error) {

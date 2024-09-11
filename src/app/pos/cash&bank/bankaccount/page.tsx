@@ -18,7 +18,7 @@ import { Formik } from "formik";
 import { BsBank } from "react-icons/bs";
 import Checkbox from "@/app/Components/Checkbox";
 import { useSession } from "next-auth/react";
-import pos_controller from "@/controller/posauth";
+
 import BankToCash from "./Component/BankToCash";
 import CashToBank from "./Component/CashToBank";
 import BankToBank from "./Component/BankToBank";
@@ -40,7 +40,7 @@ export default function Product() {
   const [checkedItems, setCheckedItems] = useState<string[]>([]);
   const firmid = localStorage.getItem("selectedStore");
   const session = useSession();
-  const token = session?.data?.user?.image;
+  const token = session?.data?.uToken;
   const auth = new pos_controller()
   const [data, setData] = useState([]);
   const [data1, setData1] = useState<any>();
@@ -67,7 +67,7 @@ export default function Product() {
   };
 
   useEffect(() => {
-    auth.GetBankAccount(token, firmid)
+    GetBankAccount(token, firmid)
       .then((res) => {
         setData(res.data)
         console.log(res)
@@ -79,7 +79,7 @@ export default function Product() {
 
 
   useEffect(() => {
-    auth.GetBankAccountbyid(token, selectedtab)
+    GetBankAccountbyid(token, selectedtab)
       .then((res) => {
         setData1(res.data)
         console.log(res)
@@ -264,7 +264,7 @@ export default function Product() {
                   "accountHolderName": values.Accountholdername,
 
                 }
-                const res = await auth.PutBankAccount(token, firmid, value);
+                const res = await PutBankAccount(token, firmid, value);
                 console.log(">>>>>>>>", res)
                 setModalopen(false)
                 // toast.success("Bank Created.")
@@ -452,7 +452,7 @@ export default function Product() {
                   "accountHolderName": values.Accountholdername,
 
                 }
-                const res = await auth.AddBankAccount(token, firmid, value);
+                const res = await AddBankAccount(token, firmid, value);
                 console.log(">>>>>>>>", res)
                 setModalopen(false)
                 // toast.success("Bank Created.")

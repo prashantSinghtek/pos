@@ -11,7 +11,7 @@ import { customStyles } from "@/app/Components/Customstyle";
 import Select from "react-select";
 import { Formik } from "formik";
 import { useSession } from "next-auth/react";
-import pos_controller from "@/controller/posauth";
+
 
 
 
@@ -38,15 +38,15 @@ export default function Productfrom({setProductupdate,selectedproduct}:any) {
   console.log("firmisdv", firmid)
   const [fieldValue, setFieldValue] = useState<any>([]);
   const session = useSession();
-  const token = session?.data?.user?.image;
+  const token = session?.data?.uToken;
   const auth = new pos_controller()
   useEffect(() => {
-    auth.GetUnits(token).
+    GetUnits(token).
       then((res) => setUnit(res)).catch((err) => console.log(err, "unit error"))
   }, [token])
 
   useEffect(() => {
-    auth.Getcategory(token).then((res) => { console.log("category", res); setCategory(res.data) }).catch((err) => console.log("ctegory", err))
+    Getcategory(token).then((res) => { console.log("category", res); setCategory(res.data) }).catch((err) => console.log("ctegory", err))
   }, [token])
 
 
@@ -140,7 +140,7 @@ export default function Productfrom({setProductupdate,selectedproduct}:any) {
      
 
       console.log(">>>>>>>>>>", formData)
-      const res = await auth.AddService(formData, token)
+      const res = await AddService(formData, token)
       console.log("res_addservice", res)
       setProductupdate(true)
 

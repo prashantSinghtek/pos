@@ -19,7 +19,7 @@ export default function BankToBank({ data , SetBankToBankTransfer }: any) {
 
     const auth = new pos_controller()
     const session = useSession();
-    const token = session?.data?.user?.image;
+    const token = session?.data?.uToken;
 
     const allbank = data?.map((option: any) => ({
         value: option?.displayName?.toUpperCase(),
@@ -65,7 +65,7 @@ export default function BankToBank({ data , SetBankToBankTransfer }: any) {
                             formData.append("file", file);
                         });
 
-                        const response = await auth.AddBankToBank(token,Selectedbank,Selectedbankto, formData);
+                        const response = await AddBankToBank(token,Selectedbank,Selectedbankto, formData);
                         console.log(response);
                         SetBankToBankTransfer(false);
                         // toast.success("Bank Created.")

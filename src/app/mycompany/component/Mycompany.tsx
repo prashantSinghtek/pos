@@ -2,14 +2,14 @@
 import React, { useEffect, useState } from "react";
 import { HiDotsVertical } from "react-icons/hi";
 import { useSession } from "next-auth/react";
-import pos_controller from "@/controller/posauth";
+
 import { useRouter } from "next/navigation";
+import { myCompany } from "@/controller/posauth";
 
 const Mycompany = () => {
   const router = useRouter();
   const session = useSession();
-  const token = session?.data?.user?.image;
-  const auth = new pos_controller();
+  const token = session?.data?.uToken;
   const [data, setData] = useState<any>([]);
   const [selectedfirm, setselectedfirm] = useState();
 console.log("datq",data)
@@ -23,8 +23,7 @@ console.log("datq",data)
 
 
   useEffect(() => {
-    auth
-      .myCompany(token)
+   myCompany(token)
       .then((res) => {
         setData(res.data);
         console.log(res.data, "fjgfgdud");

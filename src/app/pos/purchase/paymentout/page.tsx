@@ -10,15 +10,15 @@ import Modal from "@/app/Components/Modal";
 import Table from "@/app/Components/Table";
 import TextInput from "@/app/Components/Textinput";
 import Payment from "../../Component/Payment";
-import pos_controller from "@/controller/posauth";
+
 import { customStyles } from "@/app/Components/Customstyle";
 import CustomDatePicker from "@/app/Components/CustomDatePicker";
 import Selector from "@/app/Components/Selector";
+import { getPaymentOut } from "@/controller/posauth";
 export default function Page() {
   const [open, setOpen] = useState(false);
-  const auth = new pos_controller();
   const session = useSession();
-  const token = session?.data?.user?.image;
+  const token = session?.data?.uToken;
 
   const firmid = localStorage.getItem("selectedStore");
   const [data, setData] = useState([]);
@@ -38,8 +38,7 @@ export default function Page() {
   const [currentPage, setCurrentPage] = useState(1);
   
   useEffect(() => {
-    auth
-      .GetPaymentOut(token,firmid)
+    getPaymentOut(firmid)
       .then((res) => {
         setData(res);
         console.log(res)

@@ -9,7 +9,7 @@ import { BsThreeDotsVertical } from 'react-icons/bs';
 export default function page() {
     const firmid = localStorage.getItem("selectedStore");
     const session = useSession();
-    const token = session?.data?.user?.image;
+    const token = session?.data?.uToken;
     const auth = new pos_controller()
     const [body, setBody] = useState<any>([]);
     const [selecteduser, setSelecteduser] = useState<any>();
@@ -37,7 +37,7 @@ export default function page() {
     };
 
     useEffect(()=>{
-        auth.getcash(token,firmid).then((res)=>{setBody(res.data),console.log(res.data)}).catch((err)=>console.log(err))
+        getcash(token,firmid).then((res)=>{setBody(res.data),console.log(res.data)}).catch((err)=>console.log(err))
     },[token,firmid])
 
     useEffect(()=>{
@@ -45,7 +45,7 @@ export default function page() {
     },[token,firmid])
 
     useEffect(()=>{
-      auth.GetCashAmount(token,firmid).then((res)=>{SetCashAmount(res?.data),console.log(res)}).catch((err)=>console.log(err))
+      GetCashAmount(token,firmid).then((res)=>{SetCashAmount(res?.data),console.log(res)}).catch((err)=>console.log(err))
   },[token,firmid])
 
   return (

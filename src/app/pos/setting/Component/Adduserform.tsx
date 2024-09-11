@@ -1,12 +1,13 @@
 import TextInput from "@/app/Components/Textinput";
-import pos_controller from "@/controller/posauth";
+import { addFirmUser } from "@/controller/posauth";
+
 import { Formik } from "formik";
 import { useSession } from "next-auth/react";
 import React from "react";
 
 export default function Adduserform() {
   const session = useSession();
-  const token = session?.data?.user?.image;
+  const token = session?.data?.uToken;
   const handleFormSubmit = async (values: any, actions: any) => {
     console.log("values>>>>>>>>>>>>>>>>>", values);
     try {
@@ -20,8 +21,7 @@ export default function Adduserform() {
         confirmedPassword: values.ConfirmPassword,
         userRole: values.UserRole,
       };
-      const auth = new pos_controller();
-      const res = await auth.AddFirmUser(value, token);
+      const res = await addFirmUser(value);
       console.log("res..........", res);
       actions.resetForm();
     } catch (err) {

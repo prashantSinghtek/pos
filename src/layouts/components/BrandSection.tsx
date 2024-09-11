@@ -5,19 +5,18 @@ import { LayoutContext } from "../context";
 import Image from "next/image";
 import Modal from "@/app/Components/Modal";
 import Addfirmform from "@/app/Components/Addfirmform";
-import pos_controller from "@/controller/posauth";
+
 import { useSession } from "next-auth/react";
+import { myCompany } from "@/controller/posauth";
 
 export default function BrandSection() {
   const { isDrawerCollapsed } = useContext(LayoutContext);
   const session = useSession();
-  const token = session?.data?.user?.image;
-  const auth = new pos_controller();
+  const token = session?.data?.uToken;
   const [data, setData] = useState<any>([]);
   const firmid = localStorage.getItem("selectedStore");
   useEffect(() => {
-    auth
-      .myCompany(token, firmid)
+    myCompany(firmid)
       .then((res) => {
         setData(res);
       })

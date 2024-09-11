@@ -4,7 +4,8 @@ import Modal from "@/app/Components/Modal";
 import Table from "@/app/Components/Table";
 import Table2 from "@/app/Components/Table2";
 import TextInput from "@/app/Components/Textinput";
-import pos_controller from "@/controller/posauth";
+import { addDeliveryChallan, getParticularDeliveryChallan } from "@/controller/posauth";
+
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import { HiDotsVertical } from "react-icons/hi";
@@ -108,14 +109,12 @@ export default function Page() {
 
 
   useEffect(() => {
-    const auth = new pos_controller()
-    auth.deliveryChallan(token).then((res) => { setData(res.data) })
-      .catch((err) => console.log(err))
+    // addDeliveryChallan(token).then((res) => { setData(res.data) })
+    //   .catch((err) => console.log(err))
 
   }, [token])
   useEffect(() => {
-    const auth = new pos_controller()
-    auth.particulardeliveryChallan(token, id).then((res) => { console.log(res.data); setReturnData(res.data.items) })
+    getParticularDeliveryChallan( id).then((res) => { console.log(res.data); setReturnData(res.data.items) })
       .catch((err) => console.log(err))
 
   }, [token, id])

@@ -5,7 +5,7 @@ import Loginpage from "./auth/pos/page";
 import { Toaster } from 'react-hot-toast';
 import { useEffect } from "react";
 export default function Home() {
-  const { data: session, status } = useSession();
+  const { data: session, status } = useSession();            
   useEffect(() => {
     if (status === "authenticated" && session?.uToken) {
       // Set the token in localStorage

@@ -21,8 +21,9 @@ import Additionalfield from "./component/Additionalfield";
 import Table2 from "@/app/Components/Table2";
 import { ErrorMessage, Formik } from "formik";
 import * as Yup from "yup";
-import pos_controller from "@/controller/posauth";
+
 import { useSession } from "next-auth/react";
+import { addFirmParty, getPartiesByID, getParty, getPartyTransaction } from "@/controller/posauth";
 // import { PiMapPinAreaBold } from "react-icons/pi";
 
 const validationSchema = Yup.object({
@@ -34,9 +35,8 @@ const validationSchema = Yup.object({
 });
 
 export default function Page() {
-  const auth = new pos_controller();
   const session = useSession();
-  const token = session?.data?.user?.image;
+  const token = session?.data?.uToken;
   const userid = (session as any)?.data?.id;
   const [selectedtab, setSelectedtab] = useState<any>();
   const [partyTransaction, setPartyTrasaction] = useState([]);
@@ -48,8 +48,7 @@ export default function Page() {
   const [open, setOpen]= useState(false)
   const [particularParty, setParticularParty] = useState<any>();
    useEffect(() => {
-    auth
-      .getpartyTransaction(token, selectedtab)
+    getPartyTransaction(selectedtab)
       .then((res) => {
         setPartyTrasaction(res);
         console.log("-->>>", res);
@@ -112,8 +111,7 @@ export default function Page() {
     };
     try {
       setSubmitting(true);
-      auth
-        .AddfirmParty(value, token, firmid)
+     addFirmParty(value,  firmid)
         .then((res) => {})
         .catch((err) => {
           console.log(err);
@@ -129,8 +127,7 @@ export default function Page() {
   };
 
   useEffect(() => {
-    auth
-      .Getparty(token, firmid)
+   getParty(firmid)
       .then((res: any) => {
         setPartydata(res.data?.data);
         console.log(res, "dffs");
@@ -139,8 +136,7 @@ export default function Page() {
   }, [token, firmid, open]);
 
   useEffect(() => {
-    auth
-      .GetpartiesbyID(token, selectedtab)
+   getPartiesByID( selectedtab)
       .then((res: any) => {
         setParticularParty(res?.data?.data);
         console.log(">>>>>>>>>>partiesp", res);

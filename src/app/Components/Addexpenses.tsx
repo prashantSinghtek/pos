@@ -9,7 +9,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Select from "react-select";
 import { customStyles } from "./Customstyle";
-import pos_controller from "@/controller/posauth";
+
 import Table from "./Addsaletable";
 import { components } from 'react-select';
 import Modal from "./Modal";
@@ -34,7 +34,7 @@ const firmid = localStorage.getItem("selectedStore");
 export default function AddExpenses() {
     // console.log("product", product)
     const session = useSession();
-    const token = session?.data?.user?.image;
+    const token = session?.data?.uToken;
     const auth = new pos_controller()
     const [modalopen, setModalopen] = useState(false);
     const [update, setupdate] = useState(false);
@@ -62,7 +62,7 @@ export default function AddExpenses() {
     );
     console.log("Expenses", Expenses)
     useEffect(() => {
-        auth.GetExpensesCategory(token, firmid)
+        GetExpensesCategory(token, firmid)
             .then((res) => { setExpenses(res?.data), setupdate(false) })
             .catch((err) => {
                 console.log(err);
@@ -147,7 +147,7 @@ export default function AddExpenses() {
                 paymentType:[SelectedPaymenttype],
             }
             console.log(value)
-            const res = await auth.AddExpensesWithoutGST(token, firmid, "withoutGST", value,SelectedExpenses)
+            const res = await AddExpensesWithoutGST(token, firmid, "withoutGST", value,SelectedExpenses)
             console.log("AddsaleEstimate added", res)
 
 
@@ -161,7 +161,7 @@ export default function AddExpenses() {
     };
 
     useEffect(() => {
-        auth.State(token).then((res) => {
+        State(token).then((res) => {
             setData(res?.data);
         }).catch((err) => {
             console.log(err);
@@ -182,7 +182,7 @@ export default function AddExpenses() {
         console.log("Form values:", values);
         try {
             setSubmitting(true);
-            const res = await auth.AddExpensesCategory(token, firmid, values.Categoryname, selectedExpensestype)
+            const res = await AddExpensesCategory(token, firmid, values.Categoryname, selectedExpensestype)
             console.log("defv", res)
             resetForm();
             setupdate(true)

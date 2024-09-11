@@ -3,17 +3,16 @@ import React, { useEffect, useState } from "react";
 import { CiCircleRemove } from "react-icons/ci";
 import { IoAddCircle } from "react-icons/io5";
 import { useSession } from "next-auth/react";
-import pos_controller from "@/controller/posauth";
+
 import AddSaleCredit from "../Components/AddCreditNote";
+import { getProducts } from "@/controller/posauth";
 const firmid = localStorage.getItem("selectedStore");
 export default function Page() {
     const [tabs, setTabs] = useState([{ id: 1, isChecked: false }]);
     const [activeTab, setActiveTab] = useState<any>(1);
     const [product, setProduct] = useState()
     const session = useSession();
-    const token = session?.data?.user?.image;
-    const auth = new pos_controller()
-
+    const token = session?.data?.uToken;
     const addNewTab = () => {
         const newId = tabs.length ? tabs[tabs.length - 1].id + 1 : 1;
         setTabs([...tabs, { id: newId, isChecked: false }]);
@@ -28,7 +27,7 @@ export default function Page() {
         );
     };
     useEffect(() => {
-        auth.GetProducts(token, firmid).then((res) => { setProduct(res.data) }).catch((err) => console.log(err))
+        getProducts(firmid).then((res) => { setProduct(res.data) }).catch((err) => console.log(err))
     }, [token, firmid])
 
     const removeTab = (tabId: any) => {

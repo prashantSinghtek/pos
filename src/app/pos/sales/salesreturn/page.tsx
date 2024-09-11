@@ -4,7 +4,8 @@ import CardPrototype from "@/app/Components/CardPrototype";
 import { customStyles } from "@/app/Components/Customstyle";
 import Table from "@/app/Components/Table";
 import TextInput from "@/app/Components/Textinput";
-import pos_controller from "@/controller/posauth";
+import { getSaleReturn } from "@/controller/posauth";
+
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import { CiFilter } from "react-icons/ci";
@@ -43,9 +44,8 @@ export default function Page() {
 
 
   const [open, setOpen] = useState(false);
-  const auth = new pos_controller();
   const session = useSession();
-  const token = session?.data?.user?.image;
+  const token = session?.data?.uToken;
   const firmid = localStorage.getItem("selectedStore");
   const PAGE_SIZE = 4;
 
@@ -80,7 +80,7 @@ export default function Page() {
 
 
   useEffect(() => {
-    auth.GetSaleReturn(token, firmid)
+    getSaleReturn(firmid)
       .then((res) => {
         setData(res.data);
         // console.log(res, "===res");

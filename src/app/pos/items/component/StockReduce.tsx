@@ -19,7 +19,7 @@ export default function StockReduce({ selectedproduct }: any) {
     }
     console.log("firmisdv", firmid)
     const session = useSession();
-    const token = session?.data?.user?.image;
+    const token = session?.data?.uToken;
     const auth = new pos_controller()
     const submitForm = async (
         values: any,
@@ -28,7 +28,7 @@ export default function StockReduce({ selectedproduct }: any) {
         console.log("Form values:", values);
         try {
             setSubmitting(true);
-            const res = await auth.ItemStockAdjustment(values, token, selectedproduct.item.id, firmid, "reduce")
+            const res = await ItemStockAdjustment(values, token, selectedproduct.item.id, firmid, "reduce")
             console.log(res)
             resetForm();
         } catch (err) {

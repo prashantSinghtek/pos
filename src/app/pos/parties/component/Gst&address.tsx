@@ -5,8 +5,9 @@ import { IoMdAdd } from "react-icons/io";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import Select from "react-select";
-import pos_controller from "@/controller/posauth";
+
 import { useSession } from "next-auth/react";
+import { getState } from "@/controller/posauth";
 
 const validationSchema = Yup.object().shape({
   Gsttype: Yup.string(),
@@ -18,8 +19,7 @@ const validationSchema = Yup.object().shape({
 export default function Gstaddress({ Gstaddressvalues }: any) {
   const [showenable, setShowenable] = useState(false);
   const session = useSession();
-  const token = session?.data?.user?.image;
-  const auth = new pos_controller();
+  const token = session?.data?.uToken;
   const [selectedstate, setSelectedstate] = useState<any>();
   const [data, setData] = useState<any>([]);
   const [touchedstate, setTouchedstate] = useState({ state: false })
@@ -56,7 +56,7 @@ export default function Gstaddress({ Gstaddressvalues }: any) {
   };
 
   useEffect(() => {
-    auth.State(token).then((res) => {
+    getState().then((res) => {
       setData(res?.data);
     }).catch((err) => {
       console.log(err);

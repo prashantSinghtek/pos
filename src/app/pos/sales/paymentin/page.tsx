@@ -11,19 +11,19 @@ import Modal from "@/app/Components/Modal";
 import Table from "@/app/Components/Table";
 import TextInput from "@/app/Components/Textinput";
 import Payment from "../../Component/Payment";
-import pos_controller from "@/controller/posauth";
+
 import { customStyles } from "@/app/Components/Customstyle";
 import { FaShare } from "react-icons/fa";
 import { HiDotsVertical } from "react-icons/hi";
+import { getParticularPaymentIn, getPaymentIn } from "@/controller/posauth";
 
 export default function Page() {
   const [open, setOpen] = useState(false);
   const [open1, setOpen1] = useState(false);
   const [id,setId] = useState()
   const [id1, setId1] = useState()
-  const auth = new pos_controller();
   const session = useSession();
-  const token = session?.data?.user?.image;
+  const token = session?.data?.uToken;
   const [defaultdata,setDefaultdata] = useState()
 
 
@@ -44,8 +44,7 @@ export default function Page() {
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-    auth
-      .GetPaymentIn(token)
+getPaymentIn()
       .then((res) => {
         console.log(res)
         setData(res.data);
@@ -55,8 +54,7 @@ export default function Page() {
       });
   }, [token, open]);
   useEffect(() => {
-    auth
-      .GetParticularPaymentIn(token,id)
+getParticularPaymentIn(id)
       .then((res) => {
         console.log(res.data)
         setDefaultdata(res?.data)

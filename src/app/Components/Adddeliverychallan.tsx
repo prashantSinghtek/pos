@@ -9,7 +9,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Select from "react-select";
 import { customStyles } from "./Customstyle";
-import pos_controller from "@/controller/posauth";
+
 import Table from "./Addsaletable";
 
 const validationSchema = Yup.object({
@@ -29,10 +29,10 @@ const firmid = localStorage.getItem("selectedStore");
 export default function AddDeliveryChallan({ product }: any) {
     console.log("product", product)
     const session = useSession();
-    const token = session?.data?.user?.image;
+    const token = session?.data?.uToken;
     const auth = new pos_controller()
     useEffect(() => {
-        auth.Getparty(token, firmid)
+        Getparty(token, firmid)
             .then((res) => { console.log(">>>>>>>>>>>", res); setParties(res?.data?.data) })
             .catch((err) => {
                 console.log(err);
@@ -112,7 +112,7 @@ export default function AddDeliveryChallan({ product }: any) {
             }
             console.log(value)
             console.log("token, firmid, value",token, firmid, value)
-            const res = await auth.AddDeliveryChallan(token, firmid, value)
+            const res = await AddDeliveryChallan(token, firmid, value)
             alert("Delivery challan created successfully")
             console.log("AddDeliveryChallan added", res)
 
@@ -127,7 +127,7 @@ export default function AddDeliveryChallan({ product }: any) {
     };
 
     useEffect(() => {
-        auth.State(token).then((res) => {
+        State(token).then((res) => {
             setData(res?.data);
         }).catch((err) => {
             console.log(err);

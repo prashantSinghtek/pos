@@ -11,23 +11,22 @@ import Table from "@/app/Components/Table";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import tabCategory from "../../../../public/tabCategory.png";
-import pos_controller from "@/controller/posauth";
+
 import { Tabs } from "@mui/base/Tabs";
 import { TabsList } from "@mui/base/TabsList";
 import { TabPanel } from "@mui/base/TabPanel";
 import { Tab } from "@mui/base/Tab";
+import { getExpensesCategory, getExpensesTransaction } from "@/controller/posauth";
 
 export default function Page() {
   const [selectedtab, setSelectedtab] = useState(1);
   const firmid = localStorage.getItem("selectedStore");
   const session = useSession();
-  const token = session?.data?.user?.image;
+  const token = session?.data?.uToken;
   const [ExpensesTranaction, setExpensesTranaction] = useState([]);
-  const auth = new pos_controller();
   const [Expenses, setExpenses] = useState<any>([]);
   useEffect(() => {
-    auth
-      .GetExpensesTranaction(token, selectedtab, firmid)
+   getExpensesTransaction(selectedtab, firmid)
       .then((res) => {
         console.log(res);
         setExpensesTranaction(res?.data);
@@ -60,8 +59,7 @@ export default function Page() {
   ];
 
   useEffect(() => {
-    auth
-      .GetExpensesCategory(token, firmid)
+    getExpensesCategory(firmid)
       .then((res) => {
         setExpenses(res?.data);
         console.log("res", res);

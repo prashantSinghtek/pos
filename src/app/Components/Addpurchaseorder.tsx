@@ -9,7 +9,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Select from "react-select";
 import { customStyles } from "./Customstyle";
-import pos_controller from "@/controller/posauth";
+
 import Table from "./Addsaletable";
 
 const validationSchema = Yup.object({
@@ -29,10 +29,10 @@ const firmid = localStorage.getItem("selectedStore");
 export default function AddPurchaseOrder({ product }: any) {
     console.log("product", product)
     const session = useSession();
-    const token = session?.data?.user?.image;
+    const token = session?.data?.uToken;
     const auth = new pos_controller()
     useEffect(() => {
-        auth.Getparty(token, firmid)
+        Getparty(token, firmid)
             .then((res) => { console.log(">>>>>>>>>>>", res); setParties(res?.data?.data) })
             .catch((err) => {
                 console.log(err);
@@ -111,7 +111,7 @@ export default function AddPurchaseOrder({ product }: any) {
                 items: selectedProduct
             }
             console.log(value)
-            const res = await auth.AddpurchaseOrder(token, firmid, value)
+            const res = await AddpurchaseOrder(token, firmid, value)
             // console.log("sale added", res)
 
             // router.push(res)
@@ -130,7 +130,7 @@ export default function AddPurchaseOrder({ product }: any) {
     };
 
     useEffect(() => {
-        auth.State(token).then((res) => {
+        State(token).then((res) => {
             setData(res?.data);
         }).catch((err) => {
             console.log(err);

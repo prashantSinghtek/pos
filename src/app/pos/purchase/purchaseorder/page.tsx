@@ -2,7 +2,7 @@
 import Button from '@/app/Components/Button'
 import Table from '@/app/Components/Table'
 import TextInput from '@/app/Components/Textinput'
-import pos_controller from '@/controller/posauth'
+import { getPurchaseOrder } from '@/controller/posauth'
 import { useSession } from 'next-auth/react'
 import React, { useEffect, useState } from 'react'
 import { CiFilter } from 'react-icons/ci'
@@ -29,9 +29,8 @@ export default function page() {
 
   const [open, setOpen] = useState(false);
 
-  const auth = new pos_controller();
   const session = useSession();
-  const token = session?.data?.user?.image;
+  const token = session?.data?.uToken;
   const firmid = localStorage.getItem("selectedStore");
   const PAGE_SIZE = 10;
 
@@ -40,7 +39,7 @@ export default function page() {
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-    auth.GetpurchaseOrder(token, firmid)
+    getPurchaseOrder(firmid)
       .then((res) => {
         setData(res);
         console.log(res, "===res");

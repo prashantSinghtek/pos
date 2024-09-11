@@ -1,1185 +1,304 @@
 import { Constants } from "@/constants/constants";
 import axios from "@/utils/axios";
+const apiRequest = async (
+  method: 'get' | 'post' | 'put' | 'delete',
+  url: string,
+  values?: any,
+  responseType?: 'blob'
+) => {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    throw new Error('Token is missing');
+  }
 
-export default class pos_controller {
-  private header = {
-    headers: {
-      Authorization: "",
-    },
-  };
-
-  constructor(token?: string) {
-    this.header = {
+  try {
+    const { data } = await axios({
+      method,
+      url,
+      data: values,
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    };
+      responseType: responseType || 'json',
+    });
+
+    if (responseType === 'blob') {
+      const aTag = document.createElement('a');
+      aTag.href = URL.createObjectURL(data);
+      aTag.download = 'filename.pdf'; // You can set a dynamic filename here if needed
+      document.body.appendChild(aTag);
+      aTag.click();
+      document.body.removeChild(aTag);
+      return URL.createObjectURL(data);
+    }
+
+    return data;
+  } catch (error: any) {
+    throw error;
   }
+};
+export const addFirm = (values: any) => apiRequest('post', Constants.firm, values);
 
-  Addfirm = async (values: any, token: any) => {
-    try {
-      const { data } = await axios.post(Constants.firm, values, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
-  //update firm
+export const updateFirm = (values: any, id: any) => apiRequest('put', `${Constants.firm}/${id}`, values);
 
-  Updatefirm = async (values: any, id: any, token: any) => {
-    try {
-      const { data } = await axios.put(`${Constants.firm + "/" + id}`, values, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
-  AddFirmUser = async (values: any, token: any) => {
-    try {
-      const { data } = await axios.post(Constants.firmUser, values, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
+export const addFirmUser = (values: any) => apiRequest('post', Constants.firmUser, values);
+export const myCompany = (id?: any) => {
+  const url = id ? `${Constants.firm}/${id}` : Constants.firm;
+  return apiRequest('get', url);
+};
 
-  myCompany = async (token: any, id?: any) => {
-    try {
-      let data;
-      if (id) {
-        data = await axios.get(`${Constants.firm + "/" + id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-      } else {
-        data = await axios.get(Constants.firm, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-      }
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
+export const addFirmParty = (values: any, id: any) => {
+  const url = `${Constants.AddfirmParty}?firmId=${id}`;
+  return apiRequest('post', url, values);
+};
 
-  AddfirmParty = async (values: any, token: any, id: any) => {
-    try {
-      const { data } = await axios.post(
-        `${Constants.AddfirmParty}?firmId=${id}`,
-        values,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
-  State = async (token: any) => {
-    try {
-      const data = await axios.get(`${Constants.state}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
-  Getparty = async (token: any, firmid: any) => {
-    try {
-      const data = await axios.get(`${Constants.GetfirmParty + firmid}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
-  Getfirmuser = async (token: any) => {
-    try {
-      const data = await axios.get(`${Constants.firmUser}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
-  GetpartiesbyID = async (token: any, id: any) => {
-    try {
-      const data = await axios.get(`${Constants.Getpartiesbyfirm + id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
-  AddUnits = async (values: any, token: any) => {
-    try {
-      const { data } = await axios.post(`${Constants.unit}`, values, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
-  GetUnits = async (token: any) => {
-    try {
-      const { data } = await axios.get(`${Constants.unit}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
-  GetProducts = async (token: any, firmid: any) => {
-    try {
-      const { data } = await axios.get(`${Constants.getproduct + firmid}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
-  AddItems = async (values: any, token: any) => {
-    try {
-      const { data } = await axios.post(`${Constants.item + "save"}`, values, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
-  ItemStockAdjustment = async (
-    values: any,
-    token: any,
-    itemid: any,
-    firmid: any,
-    stockAdjustmentType: any
-  ) => {
-    try {
-      const { data } = await axios.post(
-        `${Constants.item +
-        itemid +
-        "/stock/adjustment/" +
-        stockAdjustmentType +
-        "/firm/" +
-        firmid +
-        "?adjustmentQuantity=" +
-        values.qty +
-        "&stockAdjustmentDetails=" +
-        values.details +
-        "&atPrice=" +
-        values.price
-        }`,
-        null,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
-  GetParticularItems = async (token: any, id: any) => {
-    try {
-      const { data } = await axios.get(`${Constants.item + id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
+export const getState = () => {
+  return apiRequest('get', Constants.state);
+};
 
-  Addcategory = async (categoryName: any, token: any, firmId: any) => {
-    try {
-      const { data } = await axios.post(
-        `${Constants.category +
-        "add?categoryName=" +
-        categoryName +
-        "&firmId=" +
-        firmId
-        }`,
-        null,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
-  Getcategory = async (token: any) => {
-    try {
-      const { data } = await axios.get(`${Constants.category + "get/all"}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
-  GetParticularCategory = async (token: any, id: any) => {
-    try {
-      const { data } = await axios.get(`${Constants.category + "get/" + id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
-  GetParticularcategory = async (token: any, id: any) => {
-    try {
-      const { data } = await axios.get(
-        `${Constants.category + "get/all" + id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
-  AddsaleCredit = async (token: any, id: any, values: any) => {
-    try {
-      const { data } = await axios.post(
-        `${Constants.saleCredit + id}`,
-        values,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          responseType: "blob",
-        }
-      );
-      console.log(data);
-      let aTag = document.createElement("a");
-      aTag.href = URL.createObjectURL(data);
-      aTag.download = "filename.pdf"; // Specify the filename here
-      document.body.appendChild(aTag);
-      aTag.click(); // Trigger the download
-      document.body.removeChild(aTag); // Clean up
+export const getParty = (firmid: any) => {
+  const url = `${Constants.GetfirmParty}${firmid}`;
+  return apiRequest('get', url);
+};
 
-      return URL.createObjectURL(data);
-    } catch (error: any) {
-      throw error;
-    }
-  };
-  AddsaleOrder = async (token: any, id: any, values: any) => {
-    try {
-      const { data } = await axios.post(`${Constants.SaleOrder + id}`, values, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        responseType: "blob",
-      });
-      console.log(data);
-      let aTag = document.createElement("a");
-      aTag.href = URL.createObjectURL(data);
-      aTag.download = "filename.pdf"; // Specify the filename here
-      document.body.appendChild(aTag);
-      aTag.click(); // Trigger the download
-      document.body.removeChild(aTag); // Clean up
+export const getFirmUser = () => {
+  return apiRequest('get', Constants.firmUser);
+};
 
-      return URL.createObjectURL(data);
-    } catch (error: any) {
-      throw error;
-    }
-  };
+export const getPartiesByID = (id: any) => {
+  const url = `${Constants.Getpartiesbyfirm}${id}`;
+  return apiRequest('get', url);
+};
 
-  GetSaleOrder = async (token: any, id: any) => {
-    try {
-      const { data } = await axios.get(`${Constants.getSaleOrder + id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
+export const addUnits = (values: any) => {
+  return apiRequest('post', Constants.unit, values);
+};
 
-  AddsaleCash = async (token: any, id: any, values: any) => {
-    try {
-      const { data } = await axios.post(`${Constants.saleCash + id}`, values, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        responseType: "blob",
-      });
-      console.log(data);
-      let aTag = document.createElement("a");
-      aTag.href = URL.createObjectURL(data);
-      aTag.download = "filename.pdf"; // Specify the filename here
-      document.body.appendChild(aTag);
-      aTag.click(); // Trigger the download
-      document.body.removeChild(aTag); // Clean up
+export const getUnits = () => {
+  return apiRequest('get', Constants.unit);
+};
 
-      return URL.createObjectURL(data);
-    } catch (error: any) {
-      throw error;
-    }
-  };
+export const getProducts = (firmid: any) => {
+  const url = `${Constants.getproduct}${firmid}`;
+  return apiRequest('get', url);
+};
 
-  GetSale = async (token: any, id: any) => {
-    try {
-      const { data } = await axios.get(`${Constants.sale + id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
+export const addItems = (values: any) => {
+  const url = `${Constants.item}save`;
+  return apiRequest('post', url, values);
+};
 
-  AddsaleEstimate = async (token: any, id: any, values: any) => {
-    try {
-      const { data } = await axios.post(
-        `${Constants.saleEstimate + id}`,
-        values,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          responseType: "blob",
-        }
-      );
-      let aTag = document.createElement("a");
-      aTag.href = URL.createObjectURL(data);
-      aTag.download = "filename.pdf"; // Specify the filename here
-      document.body.appendChild(aTag);
-      aTag.click(); // Trigger the download
-      document.body.removeChild(aTag); // Clean up
+export const itemStockAdjustment = (
+  values: any,
+  itemid: any,
+  firmid: any,
+  stockAdjustmentType: any
+) => {
+  const url = `${Constants.item}${itemid}/stock/adjustment/${stockAdjustmentType}/firm/${firmid}?adjustmentQuantity=${values.qty}&stockAdjustmentDetails=${values.details}&atPrice=${values.price}`;
+  return apiRequest('post', url);
+};
 
-      return URL.createObjectURL(data);
-    } catch (error: any) {
-      throw error;
-    }
-  };
+export const getParticularItems = (id: any) => {
+  const url = `${Constants.item}${id}`;
+  return apiRequest('get', url);
+};
 
-  AddpurchaseOrder = async (token: any, id: any, values: any) => {
-    try {
-      const { data } = await axios.post(
-        `${Constants.purchaseOrder + "savepurchaseOrder?firmId=" + id}`,
-        values,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
+export const addCategory = (categoryName: any, firmId: any) => {
+  const url = `${Constants.category}add?categoryName=${categoryName}&firmId=${firmId}`;
+  return apiRequest('post', url);
+};
 
-  GetEstimate = async (token: any, id: any) => {
-    try {
-      const { data } = await axios.get(`${Constants.getEstimate + id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
-  GetParticularEstimate = async (token: any, id: any) => {
-    try {
-      const { data } = await axios.get(`${Constants.Estimate + id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
-  GetParticularsaleCash = async (token: any, id: any) => {
-    try {
-      const { data } = await axios.get(
-        `${Constants.GetParticularsaleCash + id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
-  DeleteParticularsaleCash = async (token: any, id: any) => {
-    try {
-      const { data } = await axios.delete(
-        `${Constants.DeleteParticularsaleCash + id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
+export const getCategory = () => {
+  return apiRequest('get', `${Constants.category}get/all`);
+};
 
-  AddDeliveryChallan = async (token: any, id: any, values: any) => {
-    try {
-      const { data } = await axios.post(
-        `${Constants.deliveryChallan + "save/" + id}`,
-        values,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
-  deliveryChallan = async (token: any) => {
-    try {
-      const { data } = await axios.get(`${Constants.deliveryChallan + "all"}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
+export const getParticularCategory = (id: any) => {
+  return apiRequest('get', `${Constants.category}get/${id}`);
+};
 
-  particulardeliveryChallan = async (token: any, id: any) => {
-    try {
-      const { data } = await axios.get(`${Constants.deliveryChallan + id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
-  // GetSale = async (token: any, id: any) => {
-  //   try {
-  //     const { data } = await axios.get(`${Constants.GetSale + id}`, {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     });
-  //     // console.log("data", data);
-  //     return data;
-  //   } catch (error: any) {
-  //     throw error;
-  //   }
-  // };
+export const getParticularCategoryById = (id: any) => {
+  return apiRequest('get', `${Constants.category}get/all${id}`);
+};
 
-  AddPaymentIn = async (values: any, token: any) => {
-    try {
-      const { data } = await axios.post(
-        `${Constants.paymentin + "details/add"}`,
-        values,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          responseType: "blob",
-        }
-      );
-      let aTag = document.createElement("a");
-      aTag.href = URL.createObjectURL(data);
-      aTag.download = "filename.pdf"; // Specify the filename here
-      document.body.appendChild(aTag);
-      aTag.click(); // Trigger the download
-      document.body.removeChild(aTag); // Clean up
+export const addSaleCredit = (id: any, values: any) => {
+  return apiRequest('post', `${Constants.saleCredit}${id}`, values, 'blob');
+};
 
-      return URL.createObjectURL(data);
-      // console.log("data", data);
-    } catch (error: any) {
-      throw error;
-    }
-  };
+export const addSaleOrder = (id: any, values: any) => {
+  return apiRequest('post', `${Constants.SaleOrder}${id}`, values, 'blob');
+};
 
-  GetPaymentIn = async (token: any) => {
-    try {
-      const { data } = await axios.get(`${Constants.paymentin + "all"}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
-  GetParticularPaymentIn = async (token: any, id: any) => {
-    try {
-      const { data } = await axios.get(`${Constants.paymentin + id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
+export const getSaleOrder = (id: any) => {
+  return apiRequest('get', `${Constants.getSaleOrder}${id}`);
+};
 
-  GetSaleReturn = async (token: any, id: any) => {
-    try {
-      const { data } = await axios.get(`${Constants.getSalereturn + id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
-  GetPaymentOut = async (token: any, id: any) => {
-    try {
-      const { data } = await axios.get(
-        `${Constants.paymentout + "getPaymentOutLists?firmId=" + id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
+export const addSaleCash = (id: any, values: any) => {
+  return apiRequest('post', `${Constants.saleCash}${id}`, values, 'blob');
+};
 
-  AddPurchase = async (token: any, id: any, values: any) => {
-    try {
-      const { data } = await axios.post(
-        `${Constants.purchase + "savePurchase?firmId=" + id}`,
-        values,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
+export const getSale = (id: any) => {
+  return apiRequest('get', `${Constants.sale}${id}`);
+};
 
-  AddpurchaseReturn = async (token: any, id: any, values: any) => {
-    try {
-      const { data } = await axios.post(
-        `${Constants.purchaseReturn + "save?firmId=" + id}`,
-        values,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
+export const addSaleEstimate = (id: any, values: any) => {
+  return apiRequest('post', `${Constants.saleEstimate}${id}`, values, 'blob');
+};
 
-  GetpurchaseBill = async (token: any, id: any) => {
-    try {
-      const { data } = await axios.get(
-        `${Constants.purchase + "getPurchaseListsByFirm?firmId=" + id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
+export const addPurchaseOrder = (id: any, values: any) => {
+  return apiRequest('post', `${Constants.purchaseOrder}savepurchaseOrder?firmId=${id}`, values);
+};
 
-  GetpurchaseOrder = async (token: any, id: any) => {
-    try {
-      const { data } = await axios.get(
-        `${Constants.getpurchaseorder + "getPurchaseLists?firmId=" + id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
+export const getEstimate = (id: any) => {
+  return apiRequest('get', `${Constants.getEstimate}${id}`);
+};
 
-  GetpurchaseReturn = async (token: any, id: any) => {
-    try {
-      const { data } = await axios.get(
-        `${Constants.getpurchasereturn + "getDebitLists?firmId=" + id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
+export const getParticularEstimate = (id: any) => {
+  return apiRequest('get', `${Constants.Estimate}${id}`);
+};
 
-  // GetSaleReturn = async (token: any, id: any) => {
-  //   try {
-  //     const { data } = await axios.get(`${Constants.getpurchasereturn + "getDebitLists?firmId=" + id}`, {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     });
-  //     // console.log("data", data);
-  //     return data;
-  //   } catch (error: any) {
-  //     throw error;
-  //   }
-  // };
+export const getParticularSaleCash = (id: any) => {
+  return apiRequest('get', `${Constants.GetParticularsaleCash}${id}`);
+};
 
-  AddSaleReturn = async (token: any, id: any, values: any) => {
-    try {
-      const { data } = await axios.post(
-        `${Constants.SaleReturn + "save?firmId=" + id}`,
-        values,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          responseType: "blob",
-        }
-      );
-      console.log(data);
-      let aTag = document.createElement("a");
-      aTag.href = URL.createObjectURL(data);
-      aTag.download = "filename.pdf"; // Specify the filename here
-      document.body.appendChild(aTag);
-      aTag.click(); // Trigger the download
-      document.body.removeChild(aTag); // Clean up
+export const deleteParticularSaleCash = (id: any) => {
+  return apiRequest('delete', `${Constants.DeleteParticularsaleCash}${id}`);
+};
 
-      return URL.createObjectURL(data);
-    } catch (error: any) {
-      throw error;
-    }
-  };
+export const addDeliveryChallan = (id: any, values: any) => {
+  return apiRequest('post', `${Constants.deliveryChallan}save/${id}`, values);
+};
 
-  GetExpensesCategory = async (token: any, id: any) => {
-    try {
-      const { data } = await axios.get(
-        `${Constants.Expenses + "all/expense-category-with-type?firmId=" + id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
+export const getDeliveryChallans = () => {
+  return apiRequest('get', `${Constants.deliveryChallan}all`);
+};
 
-  AddExpensesCategory = async (token: any, id: any, name: any, type: any) => {
-    try {
-      const { data } = await axios.post(
-        `${Constants.Expenses +
-        "create/expense-category-with-type?firmId=" +
-        id +
-        "&expenseCategory=" +
-        name +
-        "&expenseType=" +
-        type
-        }`,
-        null,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
+export const getParticularDeliveryChallan = (id: any) => {
+  return apiRequest('get', `${Constants.deliveryChallan}${id}`);
+};
 
-  AddExpensesWithoutGST = async (
-    token: any,
-    id: any,
-    type: any,
-    values: any,
-    categoryId: any
-  ) => {
-    // console.log("token",token)
-    try {
-      const { data } = await axios.post(
-        `${Constants.Expenses +
-        "create/firm/" +
-        id +
-        "?expenseType=" +
-        type +
-        "&categoryId=" +
-        categoryId
-        }`,
-        values,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
+export const addPaymentIn = (values: any) => {
+  return apiRequest('post', `${Constants.paymentin}details/add`, values, 'blob');
+};
 
-  getcash = async (token: any, id: any) => {
-    try {
-      const { data } = await axios.get(`${Constants.cash + "all/firm/" + id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
+export const getPaymentIn = () => {
+  return apiRequest('get', `${Constants.paymentin}all`);
+};
 
-  GetCashAmount = async (token: any, id: any) => {
-    try {
-      const { data } = await axios.get(
-        `${Constants.cash + "amount/firm/" + id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
+export const getParticularPaymentIn = (id: any) => {
+  return apiRequest('get', `${Constants.paymentin}${id}`);
+};
 
-  AddBankAccount = async (token: any, id: any, values: any) => {
-    // console.log("token",token)
-    try {
-      const { data } = await axios.post(
-        `${Constants.bankaccount + "addBankAccount?firmId=" + id}`,
-        values,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
+export const getSaleReturn = (id: any) => {
+  return apiRequest('get', `${Constants.getSalereturn}${id}`);
+};
 
-  GetBankAccount = async (token: any, id: any) => {
-    try {
-      const { data } = await axios.get(
-        `${Constants.bankaccount + "getByFirm/" + id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
-  GetBankAccountbyid = async (token: any, id: any) => {
-    try {
-      const { data } = await axios.get(
-        `${Constants.bankaccount + "byId/" + id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
+export const getPaymentOut = (id: any) => {
+  return apiRequest('get', `${Constants.paymentout}getPaymentOutLists?firmId=${id}`);
+};
 
-  AddBankToCash = async (token: any, values: any) => {
-    // console.log("token",token)
-    try {
-      const { data } = await axios.post(
-        `${Constants.banktocash + "save"}`,
-        values,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
+export const addPurchase = (id: any, values: any) => {
+  return apiRequest('post', `${Constants.purchase}savePurchase?firmId=${id}`, values);
+};
 
-  AddCashToBank = async (token: any, values: any) => {
-    // console.log("token",token)
-    try {
-      const { data } = await axios.post(
-        `${Constants.cashtobank + "save"}`,
-        values,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
+export const addPurchaseReturn = (id: any, values: any) => {
+  return apiRequest('post', `${Constants.purchaseReturn}save?firmId=${id}`, values);
+};
 
-  AddBankToBank = async (token: any, fromid: any, toid: any, values: any) => {
-    // console.log("token",token)
-    try {
-      const { data } = await axios.post(
-        `${Constants.banktobank + "save/" + fromid + "/" + toid}`,
-        values,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
+export const getPurchaseBill = (id: any) => {
+  return apiRequest('get', `${Constants.purchase}getPurchaseListsByFirm?firmId=${id}`);
+};
 
-  AddAdjusmentBank = async (token: any, id: any, values: any) => {
-    // console.log("token",token)
-    try {
-      const { data } = await axios.post(
-        `${Constants.adjusmentbank + "save/" + id}`,
-        values,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
+export const getPurchaseOrder = (id: any) => {
+  return apiRequest('get', `${Constants.getpurchaseorder}getPurchaseLists?firmId=${id}`);
+};
 
-  PutBankAccount = async (token: any, id: any, values: any) => {
-    // console.log("token",token)
-    try {
-      const { data } = await axios.put(
-        `${Constants.bankaccount + id}`,
-        values,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
+export const getPurchaseReturn = (id: any) => {
+  return apiRequest('get', `${Constants.getpurchasereturn}getDebitLists?firmId=${id}`);
+};
+export const addSaleReturn = (id: any, values: any) => {
+  return apiRequest('post', `${Constants.SaleReturn}save?firmId=${id}`, values, 'blob');
+};
 
-  PutCategoryName = async (token: any, id: any, values: any) => {
-    // console.log("token",token)
-    try {
-      const { data } = await axios.put(
-        `${Constants.category + "update/" + id + "?categoryName=" + values}`,
-        null,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
+export const getExpensesCategory = (id: any) => {
+  return apiRequest('get', `${Constants.Expenses}all/expense-category-with-type?firmId=${id}`);
+};
 
-  // GetPartyTranaction = async (token: any, id: any) => {
-  //   try {
-  //     const { data } = await axios.get(`${Constants.GetPartyTransaction + id}`, {
+export const addExpensesCategory = (id: any, name: any, type: any) => {
+  return apiRequest('post', `${Constants.Expenses}create/expense-category-with-type?firmId=${id}&expenseCategory=${name}&expenseType=${type}`);
+};
 
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     });
-  //     // console.log("data", data);
-  //     return data;
-  //   } catch (error: any) {
-  //     throw error;
-  //   }
-  // };
+export const addExpensesWithoutGST = (id: any, type: any, values: any, categoryId: any) => {
+  return apiRequest('post', `${Constants.Expenses}create/firm/${id}?expenseType=${type}&categoryId=${categoryId}`, values);
+};
 
-  GetExpensesTranaction = async (token: any, categoryid: any, firmid: any) => {
-    try {
-      const { data } = await axios.get(
-        `${Constants.Expenses + "category/" + categoryid + "/firm/" + firmid}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
-  GetItemBySearch = async (token: any, searchTerm: any, firmid: any) => {
-    try {
-      const { data } = await axios.get(
-        `${Constants.item +
-        "search?searchTerm=" +
-        searchTerm +
-        "&firmId=" +
-        firmid
-        }`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
+export const getCash = (id: any) => {
+  return apiRequest('get', `${Constants.cash}all/firm/${id}`);
+};
 
-  AddService = async (values: any, token: any) => {
-    try {
-      const { data } = await axios.post(
-        `${Constants.Service + "save"}`,
-        values,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
+export const getCashAmount = (id: any) => {
+  return apiRequest('get', `${Constants.cash}amount/firm/${id}`);
+};
 
-  GetService = async (id: any, token: any) => {
-    try {
-      const { data } = await axios.get(
-        `${Constants.Service + "itemServiceByFirm/" + id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
-  getParticularService = async (id: any, token: any) => {
-    try {
-      const { data } = await axios.get(`${Constants.Service + id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
-  getpartyTransaction = async (token: any, id: any) => {
-    try {
-      const { data } = await axios.get(
-        `${Constants.GetPartyTransaction + id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
+export const addBankAccount = (id: any, values: any) => {
+  return apiRequest('post', `${Constants.bankaccount}addBankAccount?firmId=${id}`, values);
+};
 
-  getpartyTransactionbySearch = async (token: any, searchTerm: any) => {
-    try {
-      const { data } = await axios.get(
-        `${Constants.partyTransaction + "search?searchTerm=" + searchTerm}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      // console.log("data", data);
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
-  };
-}
+export const getBankAccount = (id: any) => {
+  return apiRequest('get', `${Constants.bankaccount}getByFirm/${id}`);
+};
+
+export const getBankAccountById = (id: any) => {
+  return apiRequest('get', `${Constants.bankaccount}byId/${id}`);
+};
+
+export const addBankToCash = (values: any) => {
+  return apiRequest('post', `${Constants.banktocash}save`, values);
+};
+
+export const addCashToBank = (values: any) => {
+  return apiRequest('post', `${Constants.cashtobank}save`, values);
+};
+
+export const addBankToBank = (fromid: any, toid: any, values: any) => {
+  return apiRequest('post', `${Constants.banktobank}save/${fromid}/${toid}`, values);
+};
+
+export const addAdjustmentBank = (id: any, values: any) => {
+  return apiRequest('post', `${Constants.adjusmentbank}save/${id}`, values);
+};
+
+export const putBankAccount = (id: any, values: any) => {
+  return apiRequest('put', `${Constants.bankaccount}${id}`, values);
+};
+
+export const putCategoryName = (id: any, values: any) => {
+  return apiRequest('put', `${Constants.category}update/${id}?categoryName=${values}`);
+};
+
+export const getExpensesTransaction = (categoryid: any, firmid: any) => {
+  return apiRequest('get', `${Constants.Expenses}category/${categoryid}/firm/${firmid}`);
+};
+
+export const getItemBySearch = (searchTerm: any, firmid: any) => {
+  return apiRequest('get', `${Constants.item}search?searchTerm=${searchTerm}&firmId=${firmid}`);
+};
+
+export const addService = (values: any) => {
+  return apiRequest('post', `${Constants.Service}save`, values);
+};
+
+export const getService = (id: any) => {
+  return apiRequest('get', `${Constants.Service}itemServiceByFirm/${id}`);
+};
+
+export const getParticularService = (id: any) => {
+  return apiRequest('get', `${Constants.Service}${id}`);
+};
+
+export const getPartyTransaction = (id: any) => {
+  return apiRequest('get', `${Constants.GetPartyTransaction}${id}`);
+};
+
+export const getPartyTransactionBySearch = (searchTerm: any) => {
+  return apiRequest('get', `${Constants.partyTransaction}search?searchTerm=${searchTerm}`);
+};
