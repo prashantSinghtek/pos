@@ -99,6 +99,8 @@ export const authOptions: NextAuthOptions = {
           }
       
           const userData = data;
+          console.log(userData, "userData");
+          
           return {
             id: userData?.data?.message.toString(),
             email: userData?.data?.message.toString(),
