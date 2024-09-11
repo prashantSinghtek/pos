@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 import { Inter, Roboto } from "next/font/google";
 import "../globals.css";
 import NextAuthSessionProvider from "./providers/nextAuthSessionProvider";
-import { getServerSession } from "next-auth";
-import { authOptions } from "./api/auth/[...nextauth]/route";
 import { Toaster } from "react-hot-toast";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -23,8 +21,6 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getServerSession(authOptions);
-  console.log("session>>>>>>", session);
   return (
     <html lang="en">
       <NextAuthSessionProvider>

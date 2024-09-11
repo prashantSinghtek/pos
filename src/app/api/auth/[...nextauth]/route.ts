@@ -3,11 +3,10 @@ import axios from "axios";
 import { NextAuthOptions } from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
 import CredentialProvider from "next-auth/providers/credentials";
-import https from 'https';
-import { toast } from "react-hot-toast";
+import https from "https";
 
 const agent = new https.Agent({
-  rejectUnauthorized: false,  // Bypasses SSL certificate validation
+  rejectUnauthorized: false, // Bypasses SSL certificate validation
 });
 
 const axiosInstance = axios.create({
@@ -49,15 +48,15 @@ export const authOptions: NextAuthOptions = {
             return {
               id: savedUser.data.id,
               email: savedUser.data.email,
-              image: accessData.data.access.toString(),
               type: "user",
+              token: accessData.data.token, // Add the token property
             };
           } else {
             return {
               id: data.user.id.toString(),
               email: data.user.email.toString(),
-              image: data.access.toString(),
               type: "user",
+              token: data.access.toString(), // Add the token property
             };
           }
         } catch (err) {
@@ -79,12 +78,11 @@ export const authOptions: NextAuthOptions = {
       },
       authorize: async (credentials: any) => {
         console.log(credentials, "credentials");
-      
+
         if (!credentials || !credentials.email || !credentials.password) {
-          // Return an error message instead of calling `toast`
-          return null;  // This will cause a login failure
+          return null;
         }
-      
+
         try {
           const { data } = await axiosInstance.post(
             `https://pos.testinguat.com:5442/loginAPI/login`,
@@ -93,24 +91,23 @@ export const authOptions: NextAuthOptions = {
               password: credentials.password,
             }
           );
-      
+
           if (!data) {
             throw new Error("Invalid login response");
           }
-      
           const userData = data;
-          console.log(userData, "userData");
-          
           return {
             id: userData?.data?.message.toString(),
-            email: userData?.data?.message.toString(),
-            image: userData?.data?.token.toString(),
-            type: userData?.data?.roles.toString(),
+            firstName: userData?.data?.firstName,
+            lastName: userData?.data?.lastName,
+            contact: userData?.data?.contact,
+            email: userData?.data?.email,
+            token: userData?.data?.token,
+            type: userData?.data?.userId,
+            message: userData?.data?.message,
           };
         } catch (error: any) {
           console.log("error", error);
-      
-          // Return the error message as part of the response
           throw new Error(
             error.response && error.response.data.message
               ? error.response.data.message
@@ -118,7 +115,6 @@ export const authOptions: NextAuthOptions = {
           );
         }
       },
-      
     }),
   ],
   callbacks: {
@@ -129,7 +125,7 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.id = user.id;
         token.email = user.email;
-        token.uToken = user.uToken;
+        token.uToken = user.token; // Include token from user
         token.type = user.type;
       }
       return token;
@@ -137,7 +133,7 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }: any) {
       session.id = token.id;
       session.email = token.email;
-      session.uToken = token.uToken;
+      session.uToken = token.uToken; // Include token in session
       session.type = token.type;
       return session;
     },

@@ -32,7 +32,6 @@ export default function LoginForm() {
     values: schema,
     { setFieldError, setSubmitting }: any
   ) => {
-    console.log("fesdgfrdsfg", values);
     setSubmitting(true);
     setLoading(true);
     const result = await signIn("login", {
@@ -47,6 +46,7 @@ export default function LoginForm() {
       setLoading(false);
       toast.error(result.error);
     } else {
+      console.log(result ,"result" );
       setSubmitting(false);
       toast.success("Logged in successfully!");
       window.location.href = "/pos";
