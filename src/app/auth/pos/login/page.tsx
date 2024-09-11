@@ -8,7 +8,7 @@ import TextInput from "@/app/Components/Textinput";
 import { AiFillGooglePlusCircle } from "react-icons/ai";
 import { IoArrowBackCircleOutline } from "react-icons/io5";
 import { signIn } from "next-auth/react";
-
+import { toast } from "react-hot-toast";
 interface schema {
   email: string;
   password: string;
@@ -28,34 +28,29 @@ export default function LoginForm() {
   const handleVisible = () => {
     setVisible(!visible);
   };
-  const handleFormSubmit = (
+  const handleFormSubmit = async (
     values: schema,
     { setFieldError, setSubmitting }: any
   ) => {
     console.log("fesdgfrdsfg", values);
     setSubmitting(true);
     setLoading(true);
-    signIn("login", {
+    const result = await signIn("login", {
+      redirect: false,
       email: values.email,
       password: values.password,
-      redirect: true,
-    })
-      .then((res: any) => {
-        console.log("login response22", res);
-        if (res?.error) {
-          setFieldError("email", res?.error);
-          setSubmitting(false);
-          setLoading(false);
-          return;
-        }
+    });
 
-        setSubmitting(false);
-        setLoading(false);
-      })
-      .catch((error: any) => {
-        setSubmitting(false);
-        console.log("err===>", error);
-      });
+    if (result?.error) {
+      setFieldError("email", result?.error);
+      setSubmitting(false);
+      setLoading(false);
+      toast.error(result.error);
+    } else {
+      setSubmitting(false);
+      toast.success("Logged in successfully!");
+      window.location.href = "/pos";
+    }
   };
   const words = `sign in to continue!`;
 

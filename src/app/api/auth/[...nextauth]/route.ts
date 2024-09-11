@@ -4,6 +4,7 @@ import { NextAuthOptions } from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
 import CredentialProvider from "next-auth/providers/credentials";
 import https from 'https';
+import { toast } from "react-hot-toast";
 
 const agent = new https.Agent({
   rejectUnauthorized: false,  // Bypasses SSL certificate validation
@@ -78,10 +79,12 @@ export const authOptions: NextAuthOptions = {
       },
       authorize: async (credentials: any) => {
         console.log(credentials, "credentials");
+      
         if (!credentials || !credentials.email || !credentials.password) {
-          throw new Error("Email and password are required");
+          // Return an error message instead of calling `toast`
+          return null;  // This will cause a login failure
         }
-
+      
         try {
           const { data } = await axiosInstance.post(
             `https://pos.testinguat.com:5442/loginAPI/login`,
@@ -90,11 +93,11 @@ export const authOptions: NextAuthOptions = {
               password: credentials.password,
             }
           );
-
+      
           if (!data) {
             throw new Error("Invalid login response");
           }
-          console.log(data, 'jkjhjkhjhjghfgdhsfghsdgfgsd');
+      
           const userData = data;
           return {
             id: userData?.data?.message.toString(),
@@ -104,13 +107,16 @@ export const authOptions: NextAuthOptions = {
           };
         } catch (error: any) {
           console.log("error", error);
-          if (error.response && error.response.data.message) {
-            throw new Error(error.response.data.message);
-          }
-          console.log("errorerrorerrorrrrwwwwww", error.message);
-          throw new Error(error.message);
+      
+          // Return the error message as part of the response
+          throw new Error(
+            error.response && error.response.data.message
+              ? error.response.data.message
+              : "An unexpected error occurred: " + error.message
+          );
         }
       },
+      
     }),
   ],
   callbacks: {
