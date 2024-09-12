@@ -30,12 +30,15 @@ export default function Addfirmform() {
 
   const session = useSession();
   const token = localStorage.getItem("authToken");
-  const firmid = localStorage.getItem("selectedStore");
 
+  const [firmId, setFirmId] = useState("")
+  console.log(firmId , "firmId");
+  
   useEffect(() => {
-    myCompany(firmid)
+    myCompany()
       .then((res) => {
         setInitialValues({
+          
           Businessname: res.data?.buisnessName || "",
           Phonenumber: res.data?.phoneNumber || "",
           GSTIN: res.data?.gstNumber || "",
@@ -48,12 +51,13 @@ export default function Addfirmform() {
           Signature: res.data?.signaturePath || "",
           desc: "",
           logo: res.data?.logoPath || "",
-        });
+        });     
+        setFirmId(res[0].id)
       })
       .catch((err) => {
         console.log("error", err);
       });
-  }, [token, firmid]);
+  }, [token]);
 
   const handleImageChange = (newFiles: FileList | null) => {
     if (newFiles) {
@@ -129,8 +133,8 @@ export default function Addfirmform() {
         formData.append("signaturePath", "null"); // Use "null" as a string or empty string if needed
       }
 
-      const res = firmid
-        ? await updateFirm(formData, firmid)
+      const res = firmId
+        ? await updateFirm(formData, firmId)
         : await addFirm(formData);
       actions.resetForm();
     } catch (err: any) {
@@ -412,7 +416,7 @@ export default function Addfirmform() {
                   className="bg-[#FF8900] px-8 py-2 my-10 rounded-full text-lg text-white"
                   onClick={() => handleSubmit()}
                 >
-                  {firmid ? "Update" : "Save"}
+                  {firmId ? "Update" : "Save"}
                 </div>
               </div>
             )}

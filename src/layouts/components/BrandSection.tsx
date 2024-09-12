@@ -14,16 +14,15 @@ export default function BrandSection() {
   const session = useSession();
   const token = localStorage.getItem("authToken");
   const [data, setData] = useState<any>([]);
-  const firmid = localStorage.getItem("selectedStore");
   useEffect(() => {
-    myCompany(firmid)
+    myCompany()
       .then((res) => {
         setData(res);
       })
       .catch((err) => {
         console.log("error", err);
       });
-  }, [token, firmid]);
+  }, [token]);
   
 
   const [open, setOpen] = useState(false);
@@ -35,7 +34,7 @@ export default function BrandSection() {
           onClick={() => setOpen(!open)}
         >
           <span className="w-full text-center">
-          {data?.data?.buisnessName ?  data?.data?.buisnessName : 'POS' }
+          {data?.length > 0 ? data[0].buisnessName ?  data[0].buisnessName  : 'POS' : 'POS' }
           </span>
         </div>
 

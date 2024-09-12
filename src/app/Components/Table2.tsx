@@ -145,7 +145,7 @@ const Table2 = ({ headerData, bodyData, onPageChange, count }: any) => {
           {/* Body */}
           <tbody className="w-full">
             {/* Apply filters to displayed data */}
-            {applyFilters(currentDisplayedData).map((item: any, index: any) => (
+            {applyFilters(currentDisplayedData)?.map((item: any, index: any) => (
               <tr
                 key={index}
                 className={`font-light border-y border-gray-200 ${index % 2 === 1 ? "bg-gray-100 rounded-full" : ""

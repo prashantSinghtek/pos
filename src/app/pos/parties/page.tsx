@@ -60,7 +60,7 @@ export default function Page() {
 
   const headerData = ["Type", "Number", "Date", "Total", "Balance", " "];
 
-  const bodyData = partyTransaction.map((item: any) => {
+  const bodyData = partyTransaction?.map((item: any) => {
     return {
       value1: item?.type,
       value2: item?.number,
@@ -144,7 +144,7 @@ export default function Page() {
       .catch((err) => console.log(err));
   }, [token, selectedtab]);
 
-  const count = bodyData.length; // Assuming count is based on bodyData length
+  const count = bodyData?.length; // Assuming count is based on bodyData length
   const isFullScreen = true;
   const content = [
     <Gstaddress Gstaddressvalues={setGstvalues} />,
