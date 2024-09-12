@@ -8,6 +8,7 @@ import { Formik } from "formik";
 import { addFirm, myCompany, updateFirm } from "@/controller/posauth";
 import { useSession } from "next-auth/react";
 import * as Yup from "yup";
+import { BASE_MAIN } from "../config/Constant";
 
 export default function Addfirmform() {
   const [moreinformation, setMoreinformation] = useState(false);
@@ -31,33 +32,32 @@ export default function Addfirmform() {
   const session = useSession();
   const token = localStorage.getItem("authToken");
 
-  const [firmId, setFirmId] = useState("")
-  console.log(firmId , "firmId");
-  
+  const [firmId, setFirmId] = useState("");
+  console.log(firmId, "firmId");
+
   useEffect(() => {
     myCompany()
       .then((res) => {
         setInitialValues({
-          
-          Businessname: res.data?.buisnessName || "",
-          Phonenumber: res.data?.phoneNumber || "",
-          GSTIN: res.data?.gstNumber || "",
-          Email: res.data?.email || "",
-          BusinessType: res.data?.buisnessType || "",
-          BusinessCategory: res.data?.buisnessCategory || "",
-          PinCode: res.data?.pinCode || "",
-          state: res.data?.state || "",
-          billingaddress: res.data?.buisnessAddress || "",
-          Signature: res.data?.signaturePath || "",
-          desc: "",
-          logo: res.data?.logoPath || "",
-        });     
-        setFirmId(res[0].id)
+          Businessname: res[0].buisnessName || "",
+          Phonenumber: res[0].phoneNumber || "",
+          GSTIN: res[0].gstNumber || "",
+          Email: res[0].email || "",
+          BusinessType: res[0].buisnessType || "",
+          BusinessCategory: res[0].buisnessCategory || "",
+          PinCode: res[0].pinCode || "",
+          state: res[0].state || "",
+          billingaddress: res[0].buisnessAddress || "",
+          Signature: res[0].signaturePath || "",
+          desc: res[0].buisnessDescription,
+          logo: res[0].logoPath || "",
+        });
+        setFirmId(res[0].id);
       })
       .catch((err) => {
         console.log("error", err);
       });
-  }, [token]);
+  }, []);
 
   const handleImageChange = (newFiles: FileList | null) => {
     if (newFiles) {
@@ -92,17 +92,21 @@ export default function Addfirmform() {
       .matches(/^\d{6}$/, "Pincode is invalid"),
     state: Yup.string().required("State is required"),
     billingaddress: Yup.string().required("Billing address is required"),
-    Signature: Yup.mixed().required("Signature is required"),
+    Signature: Yup.mixed()
+      .required("Signature is required")
+      .nullable(),
     desc: Yup.string()
       .required("Description is required")
       .max(500, "Description cannot exceed 500 characters"),
-    logo: Yup.mixed().required("Logo is required"),
+    logo: Yup.mixed()
+      .required("Logo is required")
+      .nullable(),
   });
-
+  
   const handleFormSubmit = async (values: any, actions: any) => {
     try {
-      debugger;
       await validationSchema.validate(values, { abortEarly: false });
+  
       actions.setSubmitting(true);
       const formData = new FormData();
       formData.append("businessName", values.Businessname);
@@ -115,27 +119,28 @@ export default function Addfirmform() {
       formData.append("state", values.state);
       formData.append("businessAddress", values.billingaddress);
       formData.append("businessDescription", values.desc);
-      // Check if fieldValue exists, if not, append null
-      if (fieldValue && fieldValue.length > 0) {
-        fieldValue.forEach((file: File) => {
-          formData.append("logoPath", file);
-        });
-      } else {
-        formData.append("logoPath", "null"); // Use "null" as a string or empty string if needed
-      }
+  
 
-      // Check if fieldValues exists, if not, append null
-      if (fieldValues && fieldValues.length > 0) {
-        fieldValues.forEach((file: File) => {
-          formData.append("signaturePath", file);
-        });
-      } else {
-        formData.append("signaturePath", "null"); // Use "null" as a string or empty string if needed
-      }
+    if (fieldValue && fieldValue.length > 0) {
+      fieldValue.forEach((file: File) => {
+        formData.append("logoPath", file);
+      });
+    } else {
+      formData.append("logoPath", ""); // Use "null" as a string or empty string if needed
+    }
 
+    // Check if fieldValues exists, if not, append null
+    if (fieldValues && fieldValues.length > 0) {
+      fieldValues.forEach((file: File) => {
+        formData.append("signaturePath", file);
+      });
+    } else {
+      formData.append("signaturePath", ""); // Use "null" as a string or empty string if needed
+    }
       const res = firmId
         ? await updateFirm(formData, firmId)
         : await addFirm(formData);
+  
       actions.resetForm();
     } catch (err: any) {
       if (err.inner) {
@@ -149,6 +154,7 @@ export default function Addfirmform() {
       actions.setSubmitting(false);
     }
   };
+  
   return (
     <div className="mx-10">
       <Formik
@@ -168,10 +174,6 @@ export default function Addfirmform() {
           <>
             <div className="flex flex-col justify-center items-center text-[#FF7006]">
               <div className="bg-[#FEE8E1] text-[#FF7006] p-12 rounded-full text-center relative">
-                <img
-                  src={`https://pos.testinguat.com:5442${initialValues.logo}`}
-                  alt=""
-                />
                 <label htmlFor="logoUpload" className="cursor-pointer">
                   <input
                     name="logo"
@@ -184,6 +186,9 @@ export default function Addfirmform() {
                   <FiUploadCloud size={40} />
                 </label>
               </div>
+              {errors.logo && (
+                <p className="mt-2 text-red-600 text-sm">{errors.logo}</p>
+              )}
               <div className="py-4">Add Logo</div>
             </div>
             <div className="py-5">Add Firm</div>
@@ -377,7 +382,7 @@ export default function Addfirmform() {
                   <div className="w-[30%] flex gap-2 items-end">
                     <div className="w-[70%] flex-col space-y-2">
                       <div className="text-gray-500">Add Signature</div>
-                      <label htmlFor="fileInput" className="sr-only">
+                      <label htmlFor="fileInput" className="sr-only hidden">
                         Choose File
                       </label>
                       <input
@@ -388,9 +393,11 @@ export default function Addfirmform() {
                         className="border-dashed border-2 rounded-md px-3 py-2 text-center border-[#FF6E3F] bg-[#FEE8E1] text-[#FF6E3F]"
                         aria-labelledby="fileInput"
                       />
-                      {/* {errors.Businessname && (
-                    <p className="mt-2 text-red-600 text-sm">{errors.Businessname}</p>
-                  )} */}
+                      {errors.Signature && (
+                        <p className="mt-2 text-red-600 text-sm">
+                          {errors.Signature}
+                        </p>
+                      )}
                     </div>
                   </div>
                 </div>
