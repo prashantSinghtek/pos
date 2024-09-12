@@ -4,6 +4,7 @@ import { NextAuthOptions } from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
 import CredentialProvider from "next-auth/providers/credentials";
 import https from "https";
+import { BASE_MAIN } from "@/app/config/Constant";
 
 const agent = new https.Agent({
   rejectUnauthorized: false, // Bypasses SSL certificate validation
@@ -85,7 +86,7 @@ export const authOptions: NextAuthOptions = {
 
         try {
           const { data } = await axiosInstance.post(
-            `https://pos.testinguat.com:5442/loginAPI/login`,
+            `${BASE_MAIN}loginAPI/login`,
             {
               email: credentials.email,
               password: credentials.password,

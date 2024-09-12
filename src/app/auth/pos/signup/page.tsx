@@ -77,7 +77,7 @@ export default function Signup() {
       if (res.status === 200) {
         toast.success(res.data.message);
         router.push(
-          `/auth/pos/otpVerification?email=${values.email}&firstname=${values.firstname}&lastname=${values.lastname}&phonenumber=${values.phonenumber}&password=${values.password}&confirmedPassword=${values.confirmpassword}`
+          `/auth/pos/otpVerification?email=${values.email}&firstname=${values.firstname}&lastname=${values.lastname}&phonenumber=${values.phonenumber}&password=${values.password}&confirmpassword=${values.confirmpassword}`
         );
         // resetForm();
       } else { 

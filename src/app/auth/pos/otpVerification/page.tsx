@@ -57,7 +57,7 @@ export default function page() {
       );
       console.log("====response message===>>>", res);
       resetForm();
-      router.push("/pos");
+      router.push("/");
     } catch (err: any) {
       console.log("error msgggg", err);
     } finally {

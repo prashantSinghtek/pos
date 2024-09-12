@@ -27,13 +27,13 @@ export default function Addfirmform() {
     desc: "",
     logo: "",
   });
-  
+
   const session = useSession();
   const token = session?.data?.uToken;
   const firmid = localStorage.getItem("selectedStore");
 
   useEffect(() => {
-   myCompany(firmid)
+    myCompany(firmid)
       .then((res) => {
         setInitialValues({
           Businessname: res.data?.buisnessName || "",
@@ -68,22 +68,36 @@ export default function Addfirmform() {
   };
 
   const validationSchema = Yup.object().shape({
-    Businessname: Yup.string().required("Business name is required").max(100, "Business name cannot exceed 100 characters"),
-    Phonenumber: Yup.string().required("Phone number is required").matches(/^\d{10}$/, "Phone number is invalid"),
-    GSTIN: Yup.string().required("GSTIN is required").matches(/^([0-9]{2})([A-Z]{5})([0-9]{4})([A-Z]{1})([1-9A-Z]{1})([Z]{1})([0-9A-Z]{1})$/, "GSTIN is invalid"),
+    Businessname: Yup.string()
+      .required("Business name is required")
+      .max(100, "Business name cannot exceed 100 characters"),
+    Phonenumber: Yup.string()
+      .required("Phone number is required")
+      .matches(/^\d{10}$/, "Phone number is invalid"),
+    GSTIN: Yup.string()
+      .required("GSTIN is required")
+      .matches(
+        /^([0-9]{2})([A-Z]{5})([0-9]{4})([A-Z]{1})([1-9A-Z]{1})([Z]{1})([0-9A-Z]{1})$/,
+        "GSTIN is invalid"
+      ),
     Email: Yup.string().required("Email is required").email("Email is invalid"),
     BusinessType: Yup.string().required("Business type is required"),
     BusinessCategory: Yup.string().required("Business category is required"),
-    PinCode: Yup.string().required("Pincode is required").matches(/^\d{6}$/, "Pincode is invalid"),
+    PinCode: Yup.string()
+      .required("Pincode is required")
+      .matches(/^\d{6}$/, "Pincode is invalid"),
     state: Yup.string().required("State is required"),
     billingaddress: Yup.string().required("Billing address is required"),
     Signature: Yup.mixed().required("Signature is required"),
-    desc: Yup.string().required("Description is required").max(500, "Description cannot exceed 500 characters"),
+    desc: Yup.string()
+      .required("Description is required")
+      .max(500, "Description cannot exceed 500 characters"),
     logo: Yup.mixed().required("Logo is required"),
   });
 
   const handleFormSubmit = async (values: any, actions: any) => {
     try {
+      debugger;
       await validationSchema.validate(values, { abortEarly: false });
       actions.setSubmitting(true);
       const formData = new FormData();
@@ -97,15 +111,27 @@ export default function Addfirmform() {
       formData.append("state", values.state);
       formData.append("businessAddress", values.billingaddress);
       formData.append("businessDescription", values.desc);
-      fieldValue.forEach((file: File) => {
-        formData.append("logoPath", file);
-      });
-      fieldValues.forEach((file: File) => {
-        formData.append("signaturePath", file);
-      });
+      // Check if fieldValue exists, if not, append null
+      if (fieldValue && fieldValue.length > 0) {
+        fieldValue.forEach((file: File) => {
+          formData.append("logoPath", file);
+        });
+      } else {
+        formData.append("logoPath", "null"); // Use "null" as a string or empty string if needed
+      }
+
+      // Check if fieldValues exists, if not, append null
+      if (fieldValues && fieldValues.length > 0) {
+        fieldValues.forEach((file: File) => {
+          formData.append("signaturePath", file);
+        });
+      } else {
+        formData.append("signaturePath", "null"); // Use "null" as a string or empty string if needed
+      }
+
       const res = firmid
-      ? await updateFirm(formData, firmid)
-      : await addFirm(formData);
+        ? await updateFirm(formData, firmid)
+        : await addFirm(formData);
       actions.resetForm();
     } catch (err: any) {
       if (err.inner) {
@@ -119,9 +145,6 @@ export default function Addfirmform() {
       actions.setSubmitting(false);
     }
   };
-
-  // update firm 
-  ;
   return (
     <div className="mx-10">
       <Formik
@@ -174,7 +197,9 @@ export default function Addfirmform() {
                     className="text-gray-800 text-base w-[100%]"
                   />
                   {errors.Businessname && (
-                    <p className="mt-2 text-red-600 text-sm">{errors.Businessname}</p>
+                    <p className="mt-2 text-red-600 text-sm">
+                      {errors.Businessname}
+                    </p>
                   )}
                 </div>
               </div>
@@ -191,7 +216,9 @@ export default function Addfirmform() {
                     className="text-gray-800 text-base w-[100%]"
                   />
                   {errors.Phonenumber && (
-                    <p className="mt-2 text-red-600 text-sm">{errors.Phonenumber}</p>
+                    <p className="mt-2 text-red-600 text-sm">
+                      {errors.Phonenumber}
+                    </p>
                   )}
                 </div>
               </div>
@@ -230,7 +257,11 @@ export default function Addfirmform() {
                 </div>
               </div>
 
-              <div className={`w-[30%] flex gap-1 items-end ${moreinformation ? "hidden" : ""}`}>
+              <div
+                className={`w-[30%] flex gap-1 items-end ${
+                  moreinformation ? "hidden" : ""
+                }`}
+              >
                 <div
                   className="px-3 flex gap-2 items-center py-2 text-center text-[#2D9CDB] cursor-pointer"
                   onClick={() => setMoreinformation(!moreinformation)}
@@ -257,7 +288,9 @@ export default function Addfirmform() {
                         className="text-gray-800 text-base w-[100%]"
                       />
                       {errors.BusinessType && (
-                        <p className="mt-2 text-red-600 text-sm">{errors.BusinessType}</p>
+                        <p className="mt-2 text-red-600 text-sm">
+                          {errors.BusinessType}
+                        </p>
                       )}
                     </div>
                   </div>
@@ -274,7 +307,9 @@ export default function Addfirmform() {
                         className="text-gray-800 text-base w-[100%]"
                       />
                       {errors.BusinessCategory && (
-                        <p className="mt-2 text-red-600 text-sm">{errors.BusinessCategory}</p>
+                        <p className="mt-2 text-red-600 text-sm">
+                          {errors.BusinessCategory}
+                        </p>
                       )}
                     </div>
                   </div>
@@ -291,7 +326,9 @@ export default function Addfirmform() {
                         className="text-gray-800 text-base w-[100%]"
                       />
                       {errors.PinCode && (
-                        <p className="mt-2 text-red-600 text-sm">{errors.PinCode}</p>
+                        <p className="mt-2 text-red-600 text-sm">
+                          {errors.PinCode}
+                        </p>
                       )}
                     </div>
                   </div>
@@ -308,7 +345,9 @@ export default function Addfirmform() {
                         className="text-gray-800 text-base w-[100%]"
                       />
                       {errors.Businessname && (
-                        <p className="mt-2 text-red-600 text-sm">{errors.Businessname}</p>
+                        <p className="mt-2 text-red-600 text-sm">
+                          {errors.Businessname}
+                        </p>
                       )}
                     </div>
                   </div>
@@ -325,7 +364,9 @@ export default function Addfirmform() {
                         className="text-gray-800 text-base w-[100%]"
                       />
                       {errors.billingaddress && (
-                        <p className="mt-2 text-red-600 text-sm">{errors.billingaddress}</p>
+                        <p className="mt-2 text-red-600 text-sm">
+                          {errors.billingaddress}
+                        </p>
                       )}
                     </div>
                   </div>
@@ -365,7 +406,7 @@ export default function Addfirmform() {
                 </div>
               </div>
             )}
-            {moreinformation &&
+            {moreinformation && (
               <div className="flex justify-center cursor-pointer">
                 <div
                   className="bg-[#FF8900] px-8 py-2 my-10 rounded-full text-lg text-white"
@@ -374,12 +415,10 @@ export default function Addfirmform() {
                   {firmid ? "Update" : "Save"}
                 </div>
               </div>
-            }
+            )}
           </>
-
         )}
       </Formik>
     </div>
   );
 }
-

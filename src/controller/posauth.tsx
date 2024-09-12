@@ -1,15 +1,18 @@
 import { Constants } from "@/constants/constants";
 import axios from "@/utils/axios";
 const apiRequest = async (
-  method: 'get' | 'post' | 'put' | 'delete',
+  method: "get" | "post" | "put" | "delete",
   url: string,
   values?: any,
-  responseType?: 'blob'
+  responseType?: "blob"
 ) => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("authToken");
+
   if (!token) {
-    throw new Error('Token is missing');
+    throw new Error("Token is missing");
   }
+  console.log("Token:", token);
+  console.log(method, url, values, responseType, "apiRequest");
 
   try {
     const { data } = await axios({
@@ -19,13 +22,13 @@ const apiRequest = async (
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      responseType: responseType || 'json',
+      responseType: responseType || "json",
     });
 
-    if (responseType === 'blob') {
-      const aTag = document.createElement('a');
+    if (responseType === "blob") {
+      const aTag = document.createElement("a");
       aTag.href = URL.createObjectURL(data);
-      aTag.download = 'filename.pdf'; // You can set a dynamic filename here if needed
+      aTag.download = "filename.pdf"; // You can set a dynamic filename here if needed
       document.body.appendChild(aTag);
       aTag.click();
       document.body.removeChild(aTag);
@@ -37,55 +40,58 @@ const apiRequest = async (
     throw error;
   }
 };
-export const addFirm = (values: any) => apiRequest('post', Constants.firm, values);
+export const addFirm = (values: any) =>
+  apiRequest("post", Constants.firm, values);
 
-export const updateFirm = (values: any, id: any) => apiRequest('put', `${Constants.firm}/${id}`, values);
+export const updateFirm = (values: any, id: any) =>
+  apiRequest("put", `${Constants.firm}/${id}`, values);
 
-export const addFirmUser = (values: any) => apiRequest('post', Constants.firmUser, values);
+export const addFirmUser = (values: any) =>
+  apiRequest("post", Constants.firmUser, values);
 export const myCompany = (id?: any) => {
   const url = id ? `${Constants.firm}/${id}` : Constants.firm;
-  return apiRequest('get', url);
+  return apiRequest("get", url);
 };
 
 export const addFirmParty = (values: any, id: any) => {
   const url = `${Constants.AddfirmParty}?firmId=${id}`;
-  return apiRequest('post', url, values);
+  return apiRequest("post", url, values);
 };
 
 export const getState = () => {
-  return apiRequest('get', Constants.state);
+  return apiRequest("get", Constants.state);
 };
 
 export const getParty = (firmid: any) => {
   const url = `${Constants.GetfirmParty}${firmid}`;
-  return apiRequest('get', url);
+  return apiRequest("get", url);
 };
 
 export const getFirmUser = () => {
-  return apiRequest('get', Constants.firmUser);
+  return apiRequest("get", Constants.firmUser);
 };
 
 export const getPartiesByID = (id: any) => {
   const url = `${Constants.Getpartiesbyfirm}${id}`;
-  return apiRequest('get', url);
+  return apiRequest("get", url);
 };
 
 export const addUnits = (values: any) => {
-  return apiRequest('post', Constants.unit, values);
+  return apiRequest("post", Constants.unit, values);
 };
 
 export const getUnits = () => {
-  return apiRequest('get', Constants.unit);
+  return apiRequest("get", Constants.unit);
 };
 
 export const getProducts = (firmid: any) => {
   const url = `${Constants.getproduct}${firmid}`;
-  return apiRequest('get', url);
+  return apiRequest("get", url);
 };
 
 export const addItems = (values: any) => {
   const url = `${Constants.item}save`;
-  return apiRequest('post', url, values);
+  return apiRequest("post", url, values);
 };
 
 export const itemStockAdjustment = (
@@ -95,210 +101,279 @@ export const itemStockAdjustment = (
   stockAdjustmentType: any
 ) => {
   const url = `${Constants.item}${itemid}/stock/adjustment/${stockAdjustmentType}/firm/${firmid}?adjustmentQuantity=${values.qty}&stockAdjustmentDetails=${values.details}&atPrice=${values.price}`;
-  return apiRequest('post', url);
+  return apiRequest("post", url);
 };
 
 export const getParticularItems = (id: any) => {
   const url = `${Constants.item}${id}`;
-  return apiRequest('get', url);
+  return apiRequest("get", url);
 };
 
 export const addCategory = (categoryName: any, firmId: any) => {
   const url = `${Constants.category}add?categoryName=${categoryName}&firmId=${firmId}`;
-  return apiRequest('post', url);
+  return apiRequest("post", url);
 };
 
 export const getCategory = () => {
-  return apiRequest('get', `${Constants.category}get/all`);
+  return apiRequest("get", `${Constants.category}get/all`);
 };
 
 export const getParticularCategory = (id: any) => {
-  return apiRequest('get', `${Constants.category}get/${id}`);
+  return apiRequest("get", `${Constants.category}get/${id}`);
 };
 
 export const getParticularCategoryById = (id: any) => {
-  return apiRequest('get', `${Constants.category}get/all${id}`);
+  return apiRequest("get", `${Constants.category}get/all${id}`);
 };
 
 export const addSaleCredit = (id: any, values: any) => {
-  return apiRequest('post', `${Constants.saleCredit}${id}`, values, 'blob');
+  return apiRequest("post", `${Constants.saleCredit}${id}`, values, "blob");
 };
 
 export const addSaleOrder = (id: any, values: any) => {
-  return apiRequest('post', `${Constants.SaleOrder}${id}`, values, 'blob');
+  return apiRequest("post", `${Constants.SaleOrder}${id}`, values, "blob");
 };
 
 export const getSaleOrder = (id: any) => {
-  return apiRequest('get', `${Constants.getSaleOrder}${id}`);
+  return apiRequest("get", `${Constants.getSaleOrder}${id}`);
 };
 
 export const addSaleCash = (id: any, values: any) => {
-  return apiRequest('post', `${Constants.saleCash}${id}`, values, 'blob');
+  return apiRequest("post", `${Constants.saleCash}${id}`, values, "blob");
 };
 
 export const getSale = (id: any) => {
-  return apiRequest('get', `${Constants.sale}${id}`);
+  return apiRequest("get", `${Constants.sale}${id}`);
 };
 
 export const addSaleEstimate = (id: any, values: any) => {
-  return apiRequest('post', `${Constants.saleEstimate}${id}`, values, 'blob');
+  return apiRequest("post", `${Constants.saleEstimate}${id}`, values, "blob");
 };
 
 export const addPurchaseOrder = (id: any, values: any) => {
-  return apiRequest('post', `${Constants.purchaseOrder}savepurchaseOrder?firmId=${id}`, values);
+  return apiRequest(
+    "post",
+    `${Constants.purchaseOrder}savepurchaseOrder?firmId=${id}`,
+    values
+  );
 };
 
 export const getEstimate = (id: any) => {
-  return apiRequest('get', `${Constants.getEstimate}${id}`);
+  return apiRequest("get", `${Constants.getEstimate}${id}`);
 };
 
 export const getParticularEstimate = (id: any) => {
-  return apiRequest('get', `${Constants.Estimate}${id}`);
+  return apiRequest("get", `${Constants.Estimate}${id}`);
 };
 
 export const getParticularSaleCash = (id: any) => {
-  return apiRequest('get', `${Constants.GetParticularsaleCash}${id}`);
+  return apiRequest("get", `${Constants.GetParticularsaleCash}${id}`);
 };
 
 export const deleteParticularSaleCash = (id: any) => {
-  return apiRequest('delete', `${Constants.DeleteParticularsaleCash}${id}`);
+  return apiRequest("delete", `${Constants.DeleteParticularsaleCash}${id}`);
 };
 
 export const addDeliveryChallan = (id: any, values: any) => {
-  return apiRequest('post', `${Constants.deliveryChallan}save/${id}`, values);
+  return apiRequest("post", `${Constants.deliveryChallan}save/${id}`, values);
 };
 
 export const getDeliveryChallans = () => {
-  return apiRequest('get', `${Constants.deliveryChallan}all`);
+  return apiRequest("get", `${Constants.deliveryChallan}all`);
 };
 
 export const getParticularDeliveryChallan = (id: any) => {
-  return apiRequest('get', `${Constants.deliveryChallan}${id}`);
+  return apiRequest("get", `${Constants.deliveryChallan}${id}`);
 };
 
 export const addPaymentIn = (values: any) => {
-  return apiRequest('post', `${Constants.paymentin}details/add`, values, 'blob');
+  return apiRequest(
+    "post",
+    `${Constants.paymentin}details/add`,
+    values,
+    "blob"
+  );
 };
 
 export const getPaymentIn = () => {
-  return apiRequest('get', `${Constants.paymentin}all`);
+  return apiRequest("get", `${Constants.paymentin}all`);
 };
 
 export const getParticularPaymentIn = (id: any) => {
-  return apiRequest('get', `${Constants.paymentin}${id}`);
+  return apiRequest("get", `${Constants.paymentin}${id}`);
 };
 
 export const getSaleReturn = (id: any) => {
-  return apiRequest('get', `${Constants.getSalereturn}${id}`);
+  return apiRequest("get", `${Constants.getSalereturn}${id}`);
 };
 
 export const getPaymentOut = (id: any) => {
-  return apiRequest('get', `${Constants.paymentout}getPaymentOutLists?firmId=${id}`);
+  return apiRequest(
+    "get",
+    `${Constants.paymentout}getPaymentOutLists?firmId=${id}`
+  );
 };
 
 export const addPurchase = (id: any, values: any) => {
-  return apiRequest('post', `${Constants.purchase}savePurchase?firmId=${id}`, values);
+  return apiRequest(
+    "post",
+    `${Constants.purchase}savePurchase?firmId=${id}`,
+    values
+  );
 };
 
 export const addPurchaseReturn = (id: any, values: any) => {
-  return apiRequest('post', `${Constants.purchaseReturn}save?firmId=${id}`, values);
+  return apiRequest(
+    "post",
+    `${Constants.purchaseReturn}save?firmId=${id}`,
+    values
+  );
 };
 
 export const getPurchaseBill = (id: any) => {
-  return apiRequest('get', `${Constants.purchase}getPurchaseListsByFirm?firmId=${id}`);
+  return apiRequest(
+    "get",
+    `${Constants.purchase}getPurchaseListsByFirm?firmId=${id}`
+  );
 };
 
 export const getPurchaseOrder = (id: any) => {
-  return apiRequest('get', `${Constants.getpurchaseorder}getPurchaseLists?firmId=${id}`);
+  return apiRequest(
+    "get",
+    `${Constants.getpurchaseorder}getPurchaseLists?firmId=${id}`
+  );
 };
 
 export const getPurchaseReturn = (id: any) => {
-  return apiRequest('get', `${Constants.getpurchasereturn}getDebitLists?firmId=${id}`);
+  return apiRequest(
+    "get",
+    `${Constants.getpurchasereturn}getDebitLists?firmId=${id}`
+  );
 };
 export const addSaleReturn = (id: any, values: any) => {
-  return apiRequest('post', `${Constants.SaleReturn}save?firmId=${id}`, values, 'blob');
+  return apiRequest(
+    "post",
+    `${Constants.SaleReturn}save?firmId=${id}`,
+    values,
+    "blob"
+  );
 };
 
 export const getExpensesCategory = (id: any) => {
-  return apiRequest('get', `${Constants.Expenses}all/expense-category-with-type?firmId=${id}`);
+  return apiRequest(
+    "get",
+    `${Constants.Expenses}all/expense-category-with-type?firmId=${id}`
+  );
 };
 
 export const addExpensesCategory = (id: any, name: any, type: any) => {
-  return apiRequest('post', `${Constants.Expenses}create/expense-category-with-type?firmId=${id}&expenseCategory=${name}&expenseType=${type}`);
+  return apiRequest(
+    "post",
+    `${Constants.Expenses}create/expense-category-with-type?firmId=${id}&expenseCategory=${name}&expenseType=${type}`
+  );
 };
 
-export const addExpensesWithoutGST = (id: any, type: any, values: any, categoryId: any) => {
-  return apiRequest('post', `${Constants.Expenses}create/firm/${id}?expenseType=${type}&categoryId=${categoryId}`, values);
+export const addExpensesWithoutGST = (
+  id: any,
+  type: any,
+  values: any,
+  categoryId: any
+) => {
+  return apiRequest(
+    "post",
+    `${Constants.Expenses}create/firm/${id}?expenseType=${type}&categoryId=${categoryId}`,
+    values
+  );
 };
 
 export const getCash = (id: any) => {
-  return apiRequest('get', `${Constants.cash}all/firm/${id}`);
+  return apiRequest("get", `${Constants.cash}all/firm/${id}`);
 };
 
 export const getCashAmount = (id: any) => {
-  return apiRequest('get', `${Constants.cash}amount/firm/${id}`);
+  return apiRequest("get", `${Constants.cash}amount/firm/${id}`);
 };
 
 export const addBankAccount = (id: any, values: any) => {
-  return apiRequest('post', `${Constants.bankaccount}addBankAccount?firmId=${id}`, values);
+  return apiRequest(
+    "post",
+    `${Constants.bankaccount}addBankAccount?firmId=${id}`,
+    values
+  );
 };
 
 export const getBankAccount = (id: any) => {
-  return apiRequest('get', `${Constants.bankaccount}getByFirm/${id}`);
+  return apiRequest("get", `${Constants.bankaccount}getByFirm/${id}`);
 };
 
 export const getBankAccountById = (id: any) => {
-  return apiRequest('get', `${Constants.bankaccount}byId/${id}`);
+  return apiRequest("get", `${Constants.bankaccount}byId/${id}`);
 };
 
 export const addBankToCash = (values: any) => {
-  return apiRequest('post', `${Constants.banktocash}save`, values);
+  return apiRequest("post", `${Constants.banktocash}save`, values);
 };
 
 export const addCashToBank = (values: any) => {
-  return apiRequest('post', `${Constants.cashtobank}save`, values);
+  return apiRequest("post", `${Constants.cashtobank}save`, values);
 };
 
 export const addBankToBank = (fromid: any, toid: any, values: any) => {
-  return apiRequest('post', `${Constants.banktobank}save/${fromid}/${toid}`, values);
+  return apiRequest(
+    "post",
+    `${Constants.banktobank}save/${fromid}/${toid}`,
+    values
+  );
 };
 
 export const addAdjustmentBank = (id: any, values: any) => {
-  return apiRequest('post', `${Constants.adjusmentbank}save/${id}`, values);
+  return apiRequest("post", `${Constants.adjusmentbank}save/${id}`, values);
 };
 
 export const putBankAccount = (id: any, values: any) => {
-  return apiRequest('put', `${Constants.bankaccount}${id}`, values);
+  return apiRequest("put", `${Constants.bankaccount}${id}`, values);
 };
 
 export const putCategoryName = (id: any, values: any) => {
-  return apiRequest('put', `${Constants.category}update/${id}?categoryName=${values}`);
+  return apiRequest(
+    "put",
+    `${Constants.category}update/${id}?categoryName=${values}`
+  );
 };
 
 export const getExpensesTransaction = (categoryid: any, firmid: any) => {
-  return apiRequest('get', `${Constants.Expenses}category/${categoryid}/firm/${firmid}`);
+  return apiRequest(
+    "get",
+    `${Constants.Expenses}category/${categoryid}/firm/${firmid}`
+  );
 };
 
 export const getItemBySearch = (searchTerm: any, firmid: any) => {
-  return apiRequest('get', `${Constants.item}search?searchTerm=${searchTerm}&firmId=${firmid}`);
+  return apiRequest(
+    "get",
+    `${Constants.item}search?searchTerm=${searchTerm}&firmId=${firmid}`
+  );
 };
 
 export const addService = (values: any) => {
-  return apiRequest('post', `${Constants.Service}save`, values);
+  return apiRequest("post", `${Constants.Service}save`, values);
 };
 
 export const getService = (id: any) => {
-  return apiRequest('get', `${Constants.Service}itemServiceByFirm/${id}`);
+  return apiRequest("get", `${Constants.Service}itemServiceByFirm/${id}`);
 };
 
 export const getParticularService = (id: any) => {
-  return apiRequest('get', `${Constants.Service}${id}`);
+  return apiRequest("get", `${Constants.Service}${id}`);
 };
 
 export const getPartyTransaction = (id: any) => {
-  return apiRequest('get', `${Constants.GetPartyTransaction}${id}`);
+  return apiRequest("get", `${Constants.GetPartyTransaction}${id}`);
 };
 
 export const getPartyTransactionBySearch = (searchTerm: any) => {
-  return apiRequest('get', `${Constants.partyTransaction}search?searchTerm=${searchTerm}`);
+  return apiRequest(
+    "get",
+    `${Constants.partyTransaction}search?searchTerm=${searchTerm}`
+  );
 };

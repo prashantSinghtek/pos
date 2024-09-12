@@ -12,6 +12,8 @@ export default function SideMenu() {
   const { isDrawerCollapsed } = useContext(LayoutContext);
   const router = useRouter();
   let handleSignout = () => {
+    localStorage.clear();
+    localStorage.removeItem("authToken");
     signOut()
       .then(() => {
         window.location.pathname = "/";
