@@ -29,7 +29,7 @@ export default function Saleorder() {
   const [open1, setOpen1] = useState(false);
   const [id1, setId1] = useState()
   const session = useSession();
-  const token = session?.data?.uToken;
+  const token = localStorage.getItem("authToken");
   const firmid = localStorage.getItem("selectedStore");
   const PAGE_SIZE = 10;
 

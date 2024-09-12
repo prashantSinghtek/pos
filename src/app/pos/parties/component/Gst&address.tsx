@@ -19,7 +19,7 @@ const validationSchema = Yup.object().shape({
 export default function Gstaddress({ Gstaddressvalues }: any) {
   const [showenable, setShowenable] = useState(false);
   const session = useSession();
-  const token = session?.data?.uToken;
+  const token = localStorage.getItem("authToken");
   const [selectedstate, setSelectedstate] = useState<any>();
   const [data, setData] = useState<any>([]);
   const [touchedstate, setTouchedstate] = useState({ state: false })

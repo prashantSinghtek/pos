@@ -28,7 +28,7 @@
 
 // export default function AddEstimmate({ product, estimatedata }: any) {
 //     const session = useSession();
-//     const token = session?.data?.uToken;
+//     const token = localStorage.getItem("authToken");
 //     const auth = new pos_controller()
 //     const [parties, setParties] = useState<any>([]);
 //     console.log(">>>>>>>>>>>>>>>>>>>", estimatedata.partiesname)
@@ -372,7 +372,7 @@ const firmid = localStorage.getItem("selectedStore");
 
 export default function AddEstimmate({ product, estimatedata }: any) {
     const session = useSession();
-    const token = session?.data?.uToken;
+    const token = localStorage.getItem("authToken");
     const [parties, setParties] = useState<any>([]);
     const [SelectedParties, setSelectedParties] = useState<any>({
         value: estimatedata?.partiesname,

@@ -12,7 +12,7 @@ import { getFirmUser } from "@/controller/posauth";
 
 export default function Usermanagement() {
   const session = useSession();
-  const token = session?.data?.uToken;
+  const token = localStorage.getItem("authToken");
   // const body = [
   //   {
   //     value1: "prashant agarwal",

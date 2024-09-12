@@ -36,7 +36,7 @@ const validationSchema = Yup.object({
 
 export default function Page() {
   const session = useSession();
-  const token = session?.data?.uToken;
+  const token = localStorage.getItem("authToken");
   const userid = (session as any)?.data?.id;
   const [selectedtab, setSelectedtab] = useState<any>();
   const [partyTransaction, setPartyTrasaction] = useState([]);

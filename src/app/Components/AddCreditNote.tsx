@@ -30,7 +30,7 @@ const firmid = localStorage.getItem("selectedStore");
 export default function AddSaleCredit({ product }: any) {
     console.log("product", product)
     const session = useSession();
-    const token = session?.data?.uToken;
+    const token = localStorage.getItem("authToken");
     useEffect(() => {
         getParty(firmid)
             .then((res) => { console.log(">>>>>>>>>>>", res); setParties(res?.data?.data) })

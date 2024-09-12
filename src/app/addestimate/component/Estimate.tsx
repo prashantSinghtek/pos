@@ -14,7 +14,7 @@ export default function Estimate({res}:any) {
     const [activeTab, setActiveTab] = useState<any>(1);
     const [product, setProduct] = useState()
     const session = useSession();
-    const token = session?.data?.uToken;
+    const token = localStorage.getItem("authToken");
 console.log("=>>>>>>>>>>>>>>>>>",res)
     const addNewTab = () => {
         const newId = tabs.length ? tabs[tabs.length - 1].id + 1 : 1;

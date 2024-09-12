@@ -9,7 +9,7 @@ import { myCompany } from "@/controller/posauth";
 const Mycompany = () => {
   const router = useRouter();
   const session = useSession();
-  const token = session?.data?.uToken;
+  const token = localStorage.getItem("authToken");
   const [data, setData] = useState<any>([]);
   const [selectedfirm, setselectedfirm] = useState();
 console.log("datq",data)

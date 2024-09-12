@@ -9,7 +9,7 @@ import { BsThreeDotsVertical } from 'react-icons/bs';
 export default function page() {
     const firmid = localStorage.getItem("selectedStore");
     const session = useSession();
-    const token = session?.data?.uToken;
+    const token = localStorage.getItem("authToken");
     const auth = new pos_controller()
     const [body, setBody] = useState<any>([]);
     const [selecteduser, setSelecteduser] = useState<any>();

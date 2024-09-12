@@ -40,7 +40,7 @@ export default function Product() {
   const [checkedItems, setCheckedItems] = useState<string[]>([]);
   const firmid = localStorage.getItem("selectedStore");
   const session = useSession();
-  const token = session?.data?.uToken;
+  const token = localStorage.getItem("authToken");
   const auth = new pos_controller()
   const [data, setData] = useState([]);
   const [data1, setData1] = useState<any>();

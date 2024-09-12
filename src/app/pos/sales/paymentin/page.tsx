@@ -23,7 +23,7 @@ export default function Page() {
   const [id,setId] = useState()
   const [id1, setId1] = useState()
   const session = useSession();
-  const token = session?.data?.uToken;
+  const token = localStorage.getItem("authToken");
   const [defaultdata,setDefaultdata] = useState()
 
 

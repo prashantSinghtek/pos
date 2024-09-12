@@ -16,7 +16,7 @@ export default function Stockadd({ selectedproduct }: any) {
     }
     console.log("firmisdv", firmid)
     const session = useSession();
-    const token = session?.data?.uToken;
+    const token = localStorage.getItem("authToken");
     const auth = new pos_controller()
     const submitForm = async (
         values: any,

@@ -16,7 +16,7 @@ export default function Payment({ setOpen,defaultdata }: any) {
     }
 
     const session = useSession();
-    const token = session?.data?.uToken;
+    const token = localStorage.getItem("authToken");
     const [parties, setParties] = useState<any[]>([]);
     const path = usePathname()
     useEffect(() => {

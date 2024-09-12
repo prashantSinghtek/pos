@@ -28,7 +28,7 @@ export default function Service() {
   const Router = useRouter();
   const firmid = localStorage.getItem("selectedStore");
   const session = useSession();
-  const token = session?.data?.uToken;
+  const token = localStorage.getItem("authToken");
   const [service, setService] = useState([]);
   const [Particularservice, setParticularService] = useState<any>([]);
   const [selectedlistitem, setSelectedlistitem] = useState();

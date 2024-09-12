@@ -31,7 +31,7 @@ const firmid = localStorage.getItem("selectedStore");
 export default function AddpurchaseReturn({ product }: any) {
   console.log("product", product)
   const session = useSession();
-  const token = session?.data?.uToken;
+  const token = localStorage.getItem("authToken");
   const auth = new pos_controller()
   useEffect(() => {
     Getparty(token, firmid)

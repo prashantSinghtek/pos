@@ -15,7 +15,7 @@ export default function Page() {
   const [product, setProduct] = useState()
   console.log(product)
   const session = useSession();
-  const token = session?.data?.uToken;
+  const token = localStorage.getItem("authToken");
 
   const addNewTab = () => {
     const newId = tabs.length ? tabs[tabs.length - 1].id + 1 : 1;

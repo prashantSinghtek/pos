@@ -12,7 +12,7 @@ import { myCompany } from "@/controller/posauth";
 export default function BrandSection() {
   const { isDrawerCollapsed } = useContext(LayoutContext);
   const session = useSession();
-  const token = session?.data?.uToken;
+  const token = localStorage.getItem("authToken");
   const [data, setData] = useState<any>([]);
   const firmid = localStorage.getItem("selectedStore");
   useEffect(() => {

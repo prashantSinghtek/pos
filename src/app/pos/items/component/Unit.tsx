@@ -30,7 +30,7 @@ export default function Unit() {
   const [adjustitemmodalopen, setAdjustitemmodalopen] = useState(false);
   const [unit, setUnit] = useState();
   const session = useSession();
-  const token = session?.data?.uToken;
+  const token = localStorage.getItem("authToken");
   const Router = useRouter();
   const [Selectedbank, setSelectedbank] = useState<any>();
   useEffect(() => {

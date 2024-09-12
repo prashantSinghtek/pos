@@ -29,7 +29,7 @@ export default function Product() {
   const session = useSession();
   const [searchTerm, setSearchTerm] = useState("");
   const [searchTermData, setSearchTermData] = useState<any>([]);
-  const token = session?.data?.uToken;
+  const token = localStorage.getItem("authToken");
   const [selectedtab, setSelectedtab] = useState<any>();
   const [selectedlistitem, setSelectedlistitem] = useState();
   const [modalOpenFrom, setModalOpenFrom] = useState("");

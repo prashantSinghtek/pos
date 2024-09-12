@@ -22,7 +22,7 @@ export default function Page() {
   const [selectedtab, setSelectedtab] = useState(1);
   const firmid = localStorage.getItem("selectedStore");
   const session = useSession();
-  const token = session?.data?.uToken;
+  const token = localStorage.getItem("authToken");
   const [ExpensesTranaction, setExpensesTranaction] = useState([]);
   const [Expenses, setExpenses] = useState<any>([]);
   useEffect(() => {

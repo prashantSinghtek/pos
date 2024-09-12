@@ -27,7 +27,7 @@ export default function Product() {
   const [modalOpenFrom, setModalOpenFrom] = useState("");
   const [selectedCategory, setSelectedCategory] = useState();
   console.log(session)
-  const token = session?.data?.uToken;
+  const token = localStorage.getItem("authToken");
   console.log("dfvgbdefg", token)
   const auth = new pos_controller()
   const [selectedtab, setSelectedtab] = useState<any>();

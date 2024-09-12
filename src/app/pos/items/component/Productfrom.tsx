@@ -38,7 +38,7 @@ export default function Productfrom({setProductupdate,selectedproduct}:any) {
   console.log("firmisdv", firmid)
   const [fieldValue, setFieldValue] = useState<any>([]);
   const session = useSession();
-  const token = session?.data?.uToken;
+  const token = localStorage.getItem("authToken");
   const auth = new pos_controller()
   useEffect(() => {
     GetUnits(token).

@@ -1,5 +1,6 @@
 import { Constants } from "@/constants/constants";
 import axios from "@/utils/axios";
+import toast from "react-hot-toast";
 const apiRequest = async (
   method: "get" | "post" | "put" | "delete",
   url: string,
@@ -37,7 +38,9 @@ const apiRequest = async (
 
     return data;
   } catch (error: any) {
-    throw error;
+    console.log(error, "error");
+    toast.error(error?.response?.data?.message);
+    
   }
 };
 export const addFirm = (values: any) =>
