@@ -140,8 +140,7 @@ export default function Addfirmform() {
       const res = firmId
         ? await updateFirm(formData, firmId)
         : await addFirm(formData);
-  
-      actions.resetForm();
+
     } catch (err: any) {
       if (err.inner) {
         const validationErrors = err.inner.reduce((acc: any, error: any) => {
@@ -152,6 +151,27 @@ export default function Addfirmform() {
       }
     } finally {
       actions.setSubmitting(false);
+      myCompany()
+      .then((res) => {
+        setInitialValues({
+          Businessname: res[0].buisnessName || "",
+          Phonenumber: res[0].phoneNumber || "",
+          GSTIN: res[0].gstNumber || "",
+          Email: res[0].email || "",
+          BusinessType: res[0].buisnessType || "",
+          BusinessCategory: res[0].buisnessCategory || "",
+          PinCode: res[0].pinCode || "",
+          state: res[0].state || "",
+          billingaddress: res[0].buisnessAddress || "",
+          Signature: res[0].signaturePath || "",
+          desc: res[0].buisnessDescription,
+          logo: res[0].logoPath || "",
+        });
+        setFirmId(res[0].id);
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
     }
   };
   

@@ -8,20 +8,15 @@ export default function Header() {
   const { data: session } = useSession();
   const path = usePathname();
   const parts = path.split("/");
-
   const lastWords = parts.map((part) => {
     const subParts = part.split("/");
     return subParts[subParts.length - 1];
   });
-console.log(session , "sessionHeader");
-
   const Pagehead = lastWords[lastWords.length - 1];
   const userName = session?.user?.firstName
     ? `${session.user.firstName} ${session.user.lastName}`
     : "Guest";
-
   const userRole = session?.user?.type || "User";
-
   return (
     <div>
       <header className="w-[100%] py-3 bg-opacity-20 flex shadow-sm shadow-gray-300 items-center z-50">
