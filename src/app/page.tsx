@@ -1,24 +1,38 @@
+// pages/index.tsx
 "use client";
-import Image from "next/image";
 import { useSession } from "next-auth/react";
 import Loginpage from "./auth/pos/page";
-import { Toaster } from 'react-hot-toast';
+import { Toaster } from "react-hot-toast";
 import { useEffect } from "react";
-export default function Home() {
-  const { data: session, status } = useSession();            
+import { store } from "@/store"; // Import your Redux store
+import { useDispatch } from "react-redux";
+
+const Home = () => {
+  const { data: session, status } = useSession();
+  const dispatch = useDispatch();
+
   useEffect(() => {
     if (status === "authenticated" && session?.uToken) {
-      // Set the token in localStorage
       localStorage.setItem("authToken", session.uToken);
-    } else if (status === "unauthenticated") {
-  
     }
   }, [session, status]);
+      
+
   
+  useEffect(() => {
+    
+  console.log(store , "store");
+  console.log(store.getState() , "storeOut");
+    return () => {
+      
+    }
+  }, [dispatch])
   return (
     <div className="select-none">
       <Loginpage />
       <Toaster position="top-right" />
     </div>
   );
-}
+};
+
+export default Home;
