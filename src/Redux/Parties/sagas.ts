@@ -20,11 +20,9 @@ function* fetchParties() {
 
 export function* setTestRequest() {
   try {
-   console.log("saga Called");
    
     
   } catch (error: any) {
-    console.log("saga Called Catch");
   }
 }
 export default function* partiesSaga(): Generator {

@@ -11,10 +11,17 @@ export default function Additionalfield() {
     // Add more fields as needed
   ]);
 
-  const handleCheckboxChange = (index:any) => {
-    const updatedFields = [...fields];
-    updatedFields[index].isChecked = !updatedFields[index].isChecked;
-    setFields(updatedFields);
+  // const handleCheckboxChange = (index:any) => {
+  //   const updatedFields = [...fields];
+  //   updatedFields[index].isChecked = !updatedFields[index].isChecked;
+  //   setFields(updatedFields);
+  // };
+
+
+  const handleCheckboxChange = (index : number) => {
+    setFields(prevFields => prevFields.map((field, i) =>
+      i === index ? { ...field, isChecked: !field.isChecked } : field
+    ));
   };
 
   return (

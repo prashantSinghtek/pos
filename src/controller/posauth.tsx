@@ -12,8 +12,7 @@ const apiRequest = async (
   if (!token) {
     throw new Error("Token is missing");
   }
-  console.log("Token:", token);
-  console.log(method, url, values, responseType, "apiRequest");
+
 
   try {
     const { data } = await axios({
