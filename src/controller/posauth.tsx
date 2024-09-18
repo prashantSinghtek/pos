@@ -24,7 +24,6 @@ const apiRequest = async (
       },
       responseType: responseType || "json",
     });
-
     if (responseType === "blob") {
       const aTag = document.createElement("a");
       aTag.href = URL.createObjectURL(data);
@@ -42,6 +41,11 @@ const apiRequest = async (
     
   }
 };
+
+export const addParty = (values: any) =>
+  apiRequest("post", Constants.firm, values);
+
+
 export const addFirm = (values: any) =>
   apiRequest("post", Constants.firm, values);
 
@@ -379,3 +383,6 @@ export const getPartyTransactionBySearch = (searchTerm: any) => {
     `${Constants.partyTransaction}search?searchTerm=${searchTerm}`
   );
 };
+
+
+

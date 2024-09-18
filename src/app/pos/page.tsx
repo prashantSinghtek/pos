@@ -6,7 +6,6 @@ import Chart from "../Components/Chart";
 import CardPrototype from "../Components/CardPrototype";
 import Table from "../Components/Table";
 import { useDispatch, useSelector } from "react-redux";
-import { setTest } from "@/Redux/Parties/reducer";
 import { selectPartiesList } from "@/Redux/Parties/selectors";
 
 function page() {
@@ -20,13 +19,7 @@ function page() {
     "Balance Due",
   ];
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(setTest())
-  
-    return () => {
-      
-    }
-  }, [])
+
   
 
   const listData = useSelector(selectPartiesList)

@@ -2,7 +2,6 @@
 "use client";
 import CardPrototype from "@/app/Components/CardPrototype";
 import List from "@/app/Components/List";
-import Table from "@/app/Components/Table";
 import TextInput from "@/app/Components/Textinput";
 import React, { useEffect, useState } from "react";
 import Partiescard from "./component/partiescard";
@@ -19,35 +18,30 @@ import Gstaddress from "./component/Gst&address";
 import Creditbalance from "./component/Creditbalance";
 import Additionalfield from "./component/Additionalfield";
 import Table2 from "@/app/Components/Table2";
-import { ErrorMessage, Formik } from "formik";
-import * as Yup from "yup";
-
+import {
+  addFirmParty,
+  getPartiesByID,
+  getParty,
+  getPartyTransaction,
+  myCompany,
+} from "@/controller/posauth";
+import { useDispatch, useSelector } from "react-redux";
+import { addParty, updatePartyForm } from "@/Redux/Parties/reducer";
+import { selectPartyForm } from "@/Redux/Parties/selectors";
 import { useSession } from "next-auth/react";
-import { addFirmParty, getPartiesByID, getParty, getPartyTransaction } from "@/controller/posauth";
-// import { PiMapPinAreaBold } from "react-icons/pi";
-
-const validationSchema = Yup.object({
-  partyName: Yup.string().required("Party Name is required"),
-  GSTIN: Yup.string().required("GSTIN is required"),
-  phoneNumber: Yup.string()
-    .required("Phone Number is required")
-    .matches(/^[0-9]{10}$/, "Phone Number must be exactly 10 digits"),
-});
 
 export default function Page() {
-  const session = useSession();
   const token = localStorage.getItem("authToken");
-  const userid = (session as any)?.data?.id;
   const [selectedtab, setSelectedtab] = useState<any>();
   const [partyTransaction, setPartyTrasaction] = useState([]);
-  console.log("selectedtab", selectedtab);
+  const session = useSession();
+  console.log(session, "session");
+
   const [modalopen, setModalopen] = useState(false);
-  const [gstvalues, setGstvalues] = useState<any>();
-  const [creditvalues, setCreditvalues] = useState<any>();
   const [partydata, setPartydata] = useState([]);
-  const [open, setOpen]= useState(false)
+  const [open] = useState(false);
   const [particularParty, setParticularParty] = useState<any>();
-   useEffect(() => {
+  useEffect(() => {
     getPartyTransaction(selectedtab)
       .then((res) => {
         setPartyTrasaction(res);
@@ -59,7 +53,6 @@ export default function Page() {
   }, [token, selectedtab]);
 
   const headerData = ["Type", "Number", "Date", "Total", "Balance", " "];
-
   const bodyData = partyTransaction?.map((item: any) => {
     return {
       value1: item?.type,
@@ -85,58 +78,19 @@ export default function Page() {
     },
   ];
 
-  const onPageChange = (page: any) => {
-    // Your page change logic here
-  };
-  const firmid = localStorage.getItem("selectedStore");
-  const submitForm = async (
-    values: any,
-    { setFieldError, setSubmitting, resetForm }: any
-  ) => {
-    const value = {
-      partyName: values.partyName,
-      gstNumber: values.GSTIN,
-      phoneNum: values.phoneNumber,
-      gstType: gstvalues?.Gsttype,
-      state: gstvalues?.State,
-      email: gstvalues?.email,
-      billingAddress: gstvalues?.Billingaddress,
-      shippingAddress: gstvalues?.Shippingaddress || undefined,
-      openingBalance: creditvalues?.openingbalance,
-      asOfDate: creditvalues?.date,
-      creditLimit: creditvalues?.CreditLimit || undefined,
-      user: {
-        id: userid,
-      },
-    };
-    try {
-      setSubmitting(true);
-     addFirmParty(value,  firmid)
-        .then((res) => {})
-        .catch((err) => {
-          console.log(err);
-        });
-        setOpen(true)
-      resetForm();
-      setModalopen(false);
-    } catch (err) {
-      console.log("Error:", err);
-    } finally {
-      setSubmitting(false);
-    }
-  };
+  const onPageChange = (page: any) => {};
+
+  // useEffect(() => {
+  //   getParty(firmid)
+  //     .then((res: any) => {
+  //       setPartydata(res.data?.data);
+  //       console.log(res, "dffs");
+  //     })
+  //     .catch((err) => console.log(err));
+  // }, [token, firmid, open]);
 
   useEffect(() => {
-   getParty(firmid)
-      .then((res: any) => {
-        setPartydata(res.data?.data);
-        console.log(res, "dffs");
-      })
-      .catch((err) => console.log(err));
-  }, [token, firmid, open]);
-
-  useEffect(() => {
-   getPartiesByID( selectedtab)
+    getPartiesByID(selectedtab)
       .then((res: any) => {
         setParticularParty(res?.data?.data);
         console.log(">>>>>>>>>>partiesp", res);
@@ -144,19 +98,41 @@ export default function Page() {
       .catch((err) => console.log(err));
   }, [token, selectedtab]);
 
-  const count = bodyData?.length; // Assuming count is based on bodyData length
+  const count = bodyData?.length;
   const isFullScreen = true;
-  const content = [
-    <Gstaddress Gstaddressvalues={setGstvalues} />,
-    <Creditbalance creditbalancevalue={setCreditvalues} />,
-    <Additionalfield />,
-  ];
+  const content = [<Gstaddress />, <Creditbalance />, <Additionalfield />];
 
+  const dispatch = useDispatch();
 
+  const handleChange = (field: string, value: string) => {
+    dispatch(
+      updatePartyForm({
+        key: field,
+        value: value,
+      })
+    );
+  };
+
+  const formData = useSelector(selectPartyForm);
+  const [firmId, setFirmId] = useState("");
   useEffect(() => {
-console.log(gstvalues , "gstvalues");
+    myCompany()
+      .then((res) => {
+        setFirmId(res[0].id);
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
+  }, []);
 
-  }, [gstvalues])
+  const handleSubmit = () => {
+    dispatch(
+      addParty({
+        firmId: firmId,
+        callback() {},
+      })
+    );
+  };
   return (
     <>
       <div className="flex justify-between items-center px-1 mt-5">
@@ -284,92 +260,53 @@ console.log(gstvalues , "gstvalues");
       </div>
       <Modal isOpen={modalopen} onClose={() => setModalopen(false)}>
         <>
-          <Formik
-            initialValues={{
-              partyName: "",
-              GSTIN: "",
-              phoneNumber: "",
-            }}
-            validationSchema={validationSchema}
-            onSubmit={submitForm}
-          >
-            {({
-              isSubmitting,
-              handleChange,
-              values,
-              handleSubmit,
-              touched,
-              errors,
-            }) => (
-              <>
-                <div className="flex justify-between mt-5 pb-3 border-b border-groove">
-                  <div className="">Add Parties</div>
-                  <div
-                    className="bg-[#fda80c] rounded-lg px-5 text-white py-2"
-                    onClick={() => handleSubmit()}
-                  >
-                    Save
-                  </div>
-                </div>
-                <div className="flex gap-5 my-5 w-full">
-                  <div className="w-[33%]">
-                    <TextInput
-                      name="partyName"
-                      type="text"
-                      placeholder=""
-                      label="Party Name"
-                      istouched={"Touch"}
-                      value={values.partyName}
-                      onChange={handleChange("partyName")}
-                      onBlur={handleChange("partyName")}
-                      className="text-gray-800 text-base w-[30%]"
-                    />
-                    <ErrorMessage
-                      name="partyName"
-                      component="div"
-                      className="text-red-500 text-sm"
-                    />
-                  </div>
-                  <div className="w-[33%]">
-                    <TextInput
-                      name="GSTIN"
-                      type="text"
-                      placeholder=""
-                      label="GSTIN"
-                      istouched={"Touch"}
-                      value={values.GSTIN}
-                      onChange={handleChange("GSTIN")}
-                      onBlur={handleChange("GSTIN")}
-                      className="text-gray-800 text-base w-[30%]"
-                    />
-                    <ErrorMessage
-                      name="GSTIN"
-                      component="div"
-                      className="text-red-500 text-sm"
-                    />
-                  </div>
-                  <div className="w-[33%]">
-                    <TextInput
-                      name="phoneNumber"
-                      type="tel"
-                      placeholder=""
-                      label="Phone Number"
-                      value={values.phoneNumber}
-                      onChange={handleChange("phoneNumber")}
-                      onBlur={handleChange("phoneNumber")}
-                      istouched={"Touch"}
-                      className="text-gray-800 text-base w-[30%]"
-                    />
-                    <ErrorMessage
-                      name="phoneNumber"
-                      component="div"
-                      className="text-red-500 text-sm"
-                    />
-                  </div>
-                </div>
-              </>
-            )}
-          </Formik>
+          <div className="flex justify-between mt-5 pb-3 border-b border-groove">
+            <div className="">Add Parties</div>
+            <div
+              className="bg-[#fda80c] rounded-lg px-5 text-white py-2"
+              onClick={handleSubmit}
+            >
+              Save
+            </div>
+          </div>
+          <div className="flex gap-5 my-5 w-full">
+            <div className="w-[33%]">
+              <TextInput
+                name="partyName"
+                type="text"
+                placeholder=""
+                label="Party Name"
+                istouched="Touch"
+                value={formData.partyName}
+                onChange={(e) => handleChange("partyName", e.target.value)}
+                className="text-gray-800 text-base w-[30%]"
+              />
+            </div>
+            <div className="w-[33%]">
+              <TextInput
+                name="gstNumber"
+                type="text"
+                placeholder=""
+                label="GSTIN"
+                istouched="Touch"
+                value={formData.gstNumber}
+                onChange={(e) => handleChange("gstNumber", e.target.value)}
+                className="text-gray-800 text-base w-[30%]"
+              />
+            </div>
+            <div className="w-[33%]">
+              <TextInput
+                name="phoneNum"
+                type="tel"
+                placeholder=""
+                label="Phone Number"
+                istouched="Touch"
+                value={formData.phoneNum}
+                onChange={(e) => handleChange("phoneNum", e.target.value)}
+                className="text-gray-800 text-base w-[30%]"
+              />
+            </div>
+          </div>
           <Tabs heading={heading} content={content} />
         </>
       </Modal>

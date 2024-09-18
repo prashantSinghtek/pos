@@ -38,6 +38,8 @@ export default function Addfirmform() {
   useEffect(() => {
     myCompany()
       .then((res) => {
+        console.log(res , "resmyCompany");
+        
         setInitialValues({
           Businessname: res[0].buisnessName || "",
           Phonenumber: res[0].phoneNumber || "",

@@ -1,90 +1,49 @@
 import TextInput from "@/app/Components/Textinput";
+import { updatePartyForm } from "@/Redux/Parties/reducer";
+import { selectPartyForm } from "@/Redux/Parties/selectors";
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Additionalfield() {
-  const [isChecked, setIsChecked] = useState(false);
-  const [fields, setFields] = useState([
-    { name: "Additionfield01", label: "Addition Field 01", isChecked: false, value: "" },
-    { name: "Additionfield02", label: "Addition Field 02", isChecked: false, value: "" },
-    { name: "Additionfield03", label: "Addition Field 03", isChecked: false, value: "" },
-    { name: "Additionfield04", label: "Addition Field 04", isChecked: false, value: "" },
-    // Add more fields as needed
-  ]);
+  const dispatch = useDispatch();
+  const formState = useSelector(selectPartyForm);
 
-  // const handleCheckboxChange = (index:any) => {
-  //   const updatedFields = [...fields];
-  //   updatedFields[index].isChecked = !updatedFields[index].isChecked;
-  //   setFields(updatedFields);
-  // };
-
-
-  const handleCheckboxChange = (index : number) => {
-    setFields(prevFields => prevFields.map((field, i) =>
-      i === index ? { ...field, isChecked: !field.isChecked } : field
-    ));
+  const handleChange = (field: string, value: any) => {
+    dispatch(updatePartyForm({ key: field, value }));
   };
 
   return (
     <>
-      {fields.map((item, index) => (
-        <div className="flex flex-col" key={index}>
-          <div className="flex gap-5 my-4 w-full">
-            <div className="flex items-end py-3">
-              <input
-                type="checkbox"
-                checked={item.isChecked}
-                onChange={() => handleCheckboxChange(index)}
-                className="w-[20px] h-[20px]"
-              />
-            </div>
+      {[
+        { field: "additionalFieldOne", value: "valueOne" },
+        { field: "additionalFieldTwo", value: "valueTwo" },
+        { field: "additionalFieldThree", value: "valueThree" },
+        { field: "additionalfieldFour", value: "valueFour" },
+      ].map((item, index) => (
+        <div key={index} className="my-4">
+          {/* Text input */}
+          <TextInput
+            name={item.field}
+            type="text"
+            placeholder=""
+            label={`Additional Field ${index + 1}`}
+            value={formState[item.field as keyof typeof formState]}
+            onChange={(e) => handleChange(item.field, e.target.value)}
+            className="text-gray-800 text-base w-full"
+            istouched={undefined}
+          />
 
-            <div className="w-[33%]">
-              <TextInput
-                name={item.name}
-                type="text"
-                placeholder=""
-                label={item.label}
-                value={item.value}
-                onChange={(e) => {
-                  const updatedFields = [...fields];
-                  updatedFields[index].value = e.target.value;
-                  setFields(updatedFields);
-                }}
-                istouched={"Touch"}
-                className="text-gray-800 text-base w-[30%]"
-              />
-            </div>
-            {item.isChecked && (
-              <div className="w-[33%] mt-4">
-                <TextInput
-                  name="date"
-                  type="text"
-                  placeholder={`Value of ${item.value}`}
-                  label=""
-                  istouched={"Touch"}
-                  className="text-gray-800 text-base w-[30%]"
-                />
-              </div>
-            )}
-          </div>
-          <div className="text-[#2D9CDB] px-10 flex gap-2">
-            <span>Show In Print</span>
-            <label className="flex cursor-pointer select-none items-center">
-              <div className="relative">
-                <input
-                  type="checkbox"
-                  checked={isChecked}
-                  onChange={() => setIsChecked(!isChecked)}
-                  className="sr-only"
-                />
-                <div className="block h-6 w-10 rounded-full border border-[#2D9CDB] bg-white"></div>
-                <div
-                  className={`dot bg-[#2D9CDB] absolute duration-100 top-1 h-4 w-4 rounded-full transition ${
-                    isChecked ? "right-1" : "left-1"
-                  }`}
-                ></div>
-              </div>
-            </label>
+          {/* Checkbox */}
+          <div className="flex items-center gap-4 my-4">
+            <label>{`Value ${index + 1}`}</label>
+            <input
+              type="checkbox"
+              checked={
+                formState[item.value as keyof typeof formState] as boolean
+              }
+              onChange={(e) => handleChange(item.value, e.target.checked)}
+              className="w-[20px] h-[20px]"
+            />
           </div>
         </div>
       ))}
