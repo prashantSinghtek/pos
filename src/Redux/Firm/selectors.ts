@@ -1,6 +1,3 @@
 import { RootState } from "@/types";
-
-
-// Selector to get the parties list
-export const selectPartiesList = (state: RootState) => state.parties.list;
-
+import { initialState } from "./types";
+export const selectUserInfo = (state: any) => state.firm.userDetailForm

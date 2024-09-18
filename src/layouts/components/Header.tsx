@@ -3,9 +3,12 @@ import { IoChatboxEllipsesOutline } from "react-icons/io5";
 import { useSession } from "next-auth/react";
 import BrandSection from "./BrandSection";
 import { usePathname } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
+import { selectUserInfo } from "@/Redux/Firm/selectors";
+import { useEffect } from "react";
+import { setUserDetailForm } from "@/Redux/Firm/reducer";
 
 export default function Header() {
-  const { data: session } = useSession();
   const path = usePathname();
   const parts = path.split("/");
   const lastWords = parts.map((part) => {
@@ -13,10 +16,24 @@ export default function Header() {
     return subParts[subParts.length - 1];
   });
   const Pagehead = lastWords[lastWords.length - 1];
-  const userName = session?.user?.firstName
-    ? `${session.user.firstName} ${session.user.lastName}`
-    : "Guest";
-  const userRole = session?.user?.type || "User";
+  const userinfo = useSelector(selectUserInfo);
+  const { data: session } = useSession();
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (session && session.user) {
+      dispatch(
+        setUserDetailForm({
+          FirstName: session.user.firstName,
+          LastName: session.user.lastName,
+          Email: session.user.email,
+          PhoneNumber: session.user.id,
+          Role: session.user.type,
+        })
+      );
+    }
+
+    return () => {};
+  }, [session?.user , session?.uToken]);
   return (
     <div>
       <header className="w-[100%] py-3 bg-opacity-20 flex shadow-sm shadow-gray-300 items-center z-50">
@@ -25,7 +42,9 @@ export default function Header() {
         </div>
         <div className="flex w-full items-center justify-between">
           <div className="text-[22px] font-medium px-2">
-            {Pagehead.toUpperCase() === "POS" ? "DASHBOARD" : Pagehead.toUpperCase()}
+            {Pagehead.toUpperCase() === "POS"
+              ? "DASHBOARD"
+              : Pagehead.toUpperCase()}
           </div>
           <div className="px-3 flex space-x-1">
             <div className="flex items-center gap-[6px]">
@@ -40,9 +59,9 @@ export default function Header() {
 
                 <div className="text-left mr-2">
                   <div className="text-[14px] text-primary font-bold capitalize">
-                    {userName}
+                    {userinfo?.FirstName} {userinfo?.LastName}
                   </div>
-                  <div className="text-xs text-gray-500">{userRole}</div>
+                  <div className="text-xs text-gray-500">{userinfo?.Email}</div>
                 </div>
               </div>
             </div>

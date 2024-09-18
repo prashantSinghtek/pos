@@ -1,14 +1,19 @@
-"use client";
+'use client';
+
 import { Formik } from "formik";
 import * as Yup from "yup";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import TextInput from "@/app/Components/Textinput";
 import { AiFillGooglePlusCircle } from "react-icons/ai";
 import { IoArrowBackCircleOutline } from "react-icons/io5";
-import { signIn } from "next-auth/react";
+import { getSession, signIn } from "next-auth/react";
 import { toast } from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { setUserDetailForm } from "@/Redux/Firm/reducer";
+import { useRouter } from 'next/navigation';
+
 interface schema {
   email: string;
   password: string;
@@ -22,6 +27,8 @@ const validationSchema = Yup.object().shape({
 });
 
 export default function LoginForm() {
+  const dispatch = useDispatch();
+  const router = useRouter()
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
 
@@ -33,27 +40,44 @@ export default function LoginForm() {
     { setFieldError, setSubmitting }: any
   ) => {
     setSubmitting(true);
-    setLoading(true);
-    const result = await signIn("login", {
-      redirect: false,
-      email: values.email,
-      password: values.password,
-    });
+    try {
+      const result = await signIn("login", {
+        redirect: false,
+        email: values.email,
+        password: values.password,
+      });
 
-    if (result?.error) {
-      setFieldError("email", result?.error);
+      if (result?.error) {
+        setFieldError("email", result?.error);
+        toast.error(result.error);
+      } else {
+        const session = await getSession();
+        if (session && session.user) {
+          console.log(session.user, "session.user");
+          dispatch(
+            setUserDetailForm({
+              FirstName: session.user.firstName,
+              LastName: session.user.lastName,
+              Email: session.user.email,
+              PhoneNumber: session.user.id,
+              Role: session.user.type,
+            })
+          );
+        } 
+        toast.success("Logged in successfully!");
+        router.push("/pos");
+      
+      }
+    } catch (error) {
+      console.error("An unexpected error occurred:", error);
+      toast.error("An unexpected error occurred.");
+    } finally {
       setSubmitting(false);
       setLoading(false);
-      toast.error(result.error);
-    } else {
-      console.log(result ,"result" );
-      setSubmitting(false);
-      toast.success("Logged in successfully!");
-      window.location.href = "/pos";
     }
   };
-  const words = `sign in to continue!`;
 
+  // window.location.href = "/pos";
   return (
     <div className="w-screen h-screen">
       <div className="flex bg-white">
@@ -135,7 +159,7 @@ export default function LoginForm() {
                           )}
                         </div>
                       </div>
-                      {errors?.email && touched?.email && (
+                      {errors?.password && touched?.password && (
                         <p className="text-xs text-red-500">
                           {errors.password}
                         </p>
@@ -175,11 +199,10 @@ export default function LoginForm() {
                       <AiFillGooglePlusCircle size={30} />
                     </div>
                     <div className="flex items-center justify-center gap-1 text-sm text-gray-500">
-                      If You Dont Have Account ?
+                      If You Don't Have an Account?
                       <span className="text-sm text-blue-500 underline font-semibold hover:text-[#FF8900]">
                         <Link href={"/auth/pos/signup"}>
-                          <>Sign Up</>
-                        </Link>
+                          <>Sign Up</></Link>
                       </span>
                     </div>
                   </div>

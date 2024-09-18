@@ -7,11 +7,9 @@ import axios, { AxiosResponse } from 'axios';
 
 export function* setTestRequest() {
   try {
-   console.log("saga Called");
    
     
   } catch (error: any) {
-    console.log("saga Called Catch");
   }
 }
 export default function* firmSaga(): Generator {
