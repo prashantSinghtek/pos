@@ -21,13 +21,12 @@ import Table2 from "@/app/Components/Table2";
 import {
   addFirmParty,
   getPartiesByID,
-  getParty,
   getPartyTransaction,
   myCompany,
 } from "@/controller/posauth";
 import { useDispatch, useSelector } from "react-redux";
-import { addParty, updatePartyForm } from "@/Redux/Parties/reducer";
-import { selectPartyForm } from "@/Redux/Parties/selectors";
+import { addParty, getParty, updatePartyForm } from "@/Redux/Parties/reducer";
+import { selectPartiesList, selectPartyForm } from "@/Redux/Parties/selectors";
 import { useSession } from "next-auth/react";
 
 export default function Page() {
@@ -133,6 +132,16 @@ export default function Page() {
       })
     );
   };
+  useEffect(() => {
+    dispatch(
+      getParty({
+        firmId: firmId,
+        callback() {},
+      })
+    );
+    return () => {};
+  }, [firmId]);
+  const list = useSelector(selectPartiesList)
   return (
     <>
       <div className="flex justify-between items-center px-1 mt-5">
@@ -176,7 +185,7 @@ export default function Page() {
               <div>Amount</div>
             </div>
             <List
-              listdata={partydata}
+              listdata={list}
               onselected={(id: number) => {
                 setSelectedtab(id);
               }}

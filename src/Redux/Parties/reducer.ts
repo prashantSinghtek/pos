@@ -22,9 +22,22 @@ const partiesSlice = createSlice({
         firmId: any;
         callback: () => void;
       }>
-    ) => {}
+    ) => {},
+    getParty: (
+      state,
+      action: PayloadAction<{
+        firmId: any;
+        callback: () => void;
+      }>
+    ) => {},
+    setPartyList: (
+      state,
+      action: PayloadAction<Array<partiesFormInterface>>
+    ) => {
+      state.partiesList = action.payload;
+    },
   },
 });
 
-export const { setUserDetailForm  , updatePartyForm , addParty} = partiesSlice.actions;
+export const { setUserDetailForm  , updatePartyForm , addParty , getParty , setPartyList} = partiesSlice.actions;
 export default partiesSlice.reducer; // Ensure that you're exporting the reducer

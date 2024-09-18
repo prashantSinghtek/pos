@@ -7,6 +7,8 @@ const List = ({ listdata, onselected, page, setSelectedbank, setModalopen, setMo
   const path = usePathname()
   const [open, setOpen] = useState(false)
   const [selected, setSelected] = useState()
+  console.log(listdata , "listdata");
+  
   return (
     <div className="flex flex-col space-y-4 px-4 mt-3">
 

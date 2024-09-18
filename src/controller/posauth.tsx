@@ -68,7 +68,7 @@ export const getState = () => {
   return apiRequest("get", Constants.state);
 };
 
-export const getParty = (firmid: any) => {
+export const getPartyList = (firmid: any) => {
   const url = `${Constants.GetfirmParty}${firmid}`;
   return apiRequest("get", url);
 };
