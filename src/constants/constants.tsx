@@ -8,7 +8,8 @@ export class Constants {
   static AddfirmParty = `${BASE_MAIN}api/Party/add`;
   static GetPartyTransaction = `${BASE_MAIN}api/Party/getPartyTransaction/`;
   static GetfirmParty = `${BASE_MAIN}api/Party/getPartiesLists?firmId=`;
-  static Getpartiesbyfirm = `${BASE_MAIN}api/Party/get/by/id?partyId=  `;
+  static GetPartyDetail = `${BASE_MAIN}api/Party/getPartyDashboard?firmId=`;
+  static Getpartiesbyfirm = `${BASE_MAIN}api/Party/get/by/id?partyId=`;
   static state = `${BASE_MAIN}api/dropdown/State`;
   static unit = `${BASE_MAIN}api/dropdown/ProductUnit`;
   static item = `${BASE_MAIN}api/Item/`;

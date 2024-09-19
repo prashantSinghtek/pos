@@ -22,10 +22,16 @@ import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { addFirmParty, getPartiesByID, myCompany } from "@/controller/posauth";
 import { useDispatch, useSelector } from "react-redux";
-import { addParty, getParty, updatePartyForm } from "@/Redux/Parties/reducer";
+import {
+  addParty,
+  getParty,
+  getPartyDetail,
+  updatePartyForm,
+} from "@/Redux/Parties/reducer";
 import {
   selectIsShowSaveButton,
   selectPartiesList,
+  selectPartyDashboardData,
   selectPartyForm,
   selectTransactionList,
 } from "@/Redux/Parties/selectors";
@@ -54,7 +60,15 @@ export default function Page() {
   const [partyTransaction, setPartyTrasaction] = useState([]);
   const [modalopen, setModalopen] = useState(false);
   const [particularParty, setParticularParty] = useState<any>();
-  const headerData = ["S. No.", "Balance", "Date", "Number",  "Total",  "Type" , ""];
+  const headerData = [
+    "S. No.",
+    "Balance",
+    "Date",
+    "Number",
+    "Total",
+    "Type",
+    "",
+  ];
   const bodyData = partyTransaction?.map((item: any) => {
     return {
       value1: item?.type,
@@ -141,37 +155,9 @@ export default function Page() {
         callback() {},
       })
     );
-    if (firmId && selectedtab) {
-      dispatch(
-        getPartyTransaction({
-          partieId: selectedtab,
-          firmId: firmId,
-          callback() {},
-        })
-      );
-    }
-
     return () => {};
-  }, [firmId, selectedtab]);
-  useEffect(() => {
-    dispatch(
-      getParty({
-        firmId: firmId,
-        callback() {},
-      })
-    );
-    if (firmId && selectedtab) {
-      dispatch(
-        getPartyTransaction({
-          partieId: selectedtab,
-          firmId: firmId,
-          callback() {},
-        })
-      );
-    }
+  }, [firmId]);
 
-    return () => {};
-  }, [firmId, selectedtab]);
   useEffect(() => {
     dispatch(
       getParty({
@@ -190,6 +176,12 @@ export default function Page() {
           callback() {},
         })
       );
+      dispatch(
+        getPartyDetail({
+          partieId: selectedtab,
+          callback() {},
+        })
+      );
     }
 
     return () => {};
@@ -197,6 +189,7 @@ export default function Page() {
   const list = useSelector(selectPartiesList);
   const showButtonButton = useSelector(selectIsShowSaveButton);
   const transactionList = useSelector(selectTransactionList);
+  const dashboardData = useSelector(selectPartyDashboardData);
   return (
     <>
       <div className="flex justify-between items-center px-1 mt-5">
@@ -255,26 +248,22 @@ export default function Page() {
                   icon={<IoPersonOutline />}
                   title={"Name"}
                   value={
-                    particularParty?.partyName
-                      ? particularParty?.partyName
-                      : "NA"
+                    dashboardData?.partyName ? dashboardData?.partyName : "NA"
                   }
                 />
                 <Partiescard
                   icon={<RiPagesLine />}
                   title={"GSTIN"}
                   value={
-                    particularParty?.gstNumber
-                      ? particularParty?.gstNumber
-                      : "NA"
+                    dashboardData?.gstNumber ? dashboardData?.gstNumber : "NA"
                   }
                 />
                 <Partiescard
                   icon={<IoMdCard />}
                   title={"No Credit Limit set"}
                   value={
-                    particularParty?.creditLimit
-                      ? particularParty?.creditLimit
+                    dashboardData?.CreditLimit
+                      ? dashboardData?.CreditLimit
                       : "NA"
                   }
                 />
@@ -282,15 +271,15 @@ export default function Page() {
                   icon={<PiMapPinBold />}
                   title={"Address"}
                   value={
-                    particularParty?.billingAddress
-                      ? particularParty?.billingAddress
+                    dashboardData?.billingAddress
+                      ? dashboardData?.billingAddress
                       : "NA"
                   }
                 />
                 <Partiescard
                   icon={<MdOutlineEmail />}
                   title={"Email"}
-                  value={particularParty?.email ? particularParty?.email : "NA"}
+                  value={dashboardData?.email ? dashboardData?.email : "NA"}
                 />
               </div>
             </CardPrototype>

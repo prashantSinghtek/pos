@@ -34,6 +34,7 @@ export interface CombinedInitialState {
   partiesList: partiesFormInterface[];
   isShowSaveButton : boolean;
   transactionList : transactionInterface[];
+  partyDashboardData : partiesFormInterface
 }
 
 
@@ -64,5 +65,29 @@ export const initialState: CombinedInitialState = {
   },
   partiesList: [],
   isShowSaveButton: false,
-  transactionList :[]
+  transactionList :[],
+  partyDashboardData : {
+    partyName: "",
+    gstNumber: "",
+    phoneNum: "",
+    gstType: "",
+    state: "",
+    email: "",
+    billingAddress: "",
+    shippingAddress: "",
+    openingBalance: 0,
+    asOfDate: "",
+    additionalFieldOne: "",
+    additionalFieldTwo: "",
+    additionalFieldThree: "",
+    additionalfieldFour: "",
+    valueOne: false,
+    valueTwo: false,
+    valueThree: false,
+    valueFour: false,
+    showenable: false,
+    isChecked: false,
+    date: undefined,
+    CreditLimit: 0
+  }
 };
