@@ -1,6 +1,10 @@
 // Redux/Parties/reducer.ts (or partiesSlice.ts)
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { initialState, partiesFormInterface } from "./types";
+import {
+  initialState,
+  partiesFormInterface,
+  transactionInterface,
+} from "./types";
 import { set } from "lodash";
 const partiesSlice = createSlice({
   name: "parties",
@@ -33,14 +37,37 @@ const partiesSlice = createSlice({
         callback: () => void;
       }>
     ) => {},
+    getPartyTransaction: (
+      state,
+      action: PayloadAction<{
+        partieId: any;
+        firmId: any;
+        callback: () => void;
+      }>
+    ) => {},
     setPartyList: (
       state,
       action: PayloadAction<Array<partiesFormInterface>>
     ) => {
       state.partiesList = action.payload;
     },
+    setTrasactionList: (
+      state,
+      action: PayloadAction<Array<transactionInterface>>
+    ) => {
+      state.transactionList = action.payload;
+    },
   },
 });
 
-export const { setUserDetailForm  , updatePartyForm , addParty , getParty , setPartyList , setIsShowSaveButton} = partiesSlice.actions;
+export const {
+  setUserDetailForm,
+  updatePartyForm,
+  addParty,
+  getParty,
+  setPartyList,
+  setIsShowSaveButton,
+  getPartyTransaction,
+  setTrasactionList
+} = partiesSlice.actions;
 export default partiesSlice.reducer; // Ensure that you're exporting the reducer

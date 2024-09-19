@@ -20,21 +20,18 @@ import Additionalfield from "./component/Additionalfield";
 import Table2 from "@/app/Components/Table2";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import {
-  addFirmParty,
-  getPartiesByID,
-  getPartyTransaction,
-  myCompany,
-} from "@/controller/posauth";
+import { addFirmParty, getPartiesByID, myCompany } from "@/controller/posauth";
 import { useDispatch, useSelector } from "react-redux";
 import { addParty, getParty, updatePartyForm } from "@/Redux/Parties/reducer";
 import {
   selectIsShowSaveButton,
   selectPartiesList,
   selectPartyForm,
+  selectTransactionList,
 } from "@/Redux/Parties/selectors";
 import { useSession } from "next-auth/react";
 import { partiesFormInterface } from "@/Redux/Parties/types";
+import { getPartyTransaction } from "../../../Redux/Parties/reducer";
 const validationSchema = Yup.object({
   partyName: Yup.string()
     .matches(/^[a-zA-Z\s]+$/, "Party Name can only contain letters and spaces")
@@ -55,23 +52,9 @@ export default function Page() {
   const token = localStorage.getItem("authToken");
   const [selectedtab, setSelectedtab] = useState<any>();
   const [partyTransaction, setPartyTrasaction] = useState([]);
-  const session = useSession();
   const [modalopen, setModalopen] = useState(false);
-  const [partydata, setPartydata] = useState([]);
-  const [open] = useState(false);
   const [particularParty, setParticularParty] = useState<any>();
-  useEffect(() => {
-    getPartyTransaction(selectedtab)
-      .then((res) => {
-        setPartyTrasaction(res);
-        console.log("-->>>", res);
-      })
-      .catch((err) => {
-        console.log(">>>>", err);
-      });
-  }, [token, selectedtab]);
-
-  const headerData = ["Type", "Number", "Date", "Total", "Balance", " "];
+  const headerData = ["S. No.", "Balance", "Date", "Number",  "Total",  "Type" , ""];
   const bodyData = partyTransaction?.map((item: any) => {
     return {
       value1: item?.type,
@@ -158,11 +141,62 @@ export default function Page() {
         callback() {},
       })
     );
+    if (firmId && selectedtab) {
+      dispatch(
+        getPartyTransaction({
+          partieId: selectedtab,
+          firmId: firmId,
+          callback() {},
+        })
+      );
+    }
+
+    return () => {};
+  }, [firmId, selectedtab]);
+  useEffect(() => {
+    dispatch(
+      getParty({
+        firmId: firmId,
+        callback() {},
+      })
+    );
+    if (firmId && selectedtab) {
+      dispatch(
+        getPartyTransaction({
+          partieId: selectedtab,
+          firmId: firmId,
+          callback() {},
+        })
+      );
+    }
+
+    return () => {};
+  }, [firmId, selectedtab]);
+  useEffect(() => {
+    dispatch(
+      getParty({
+        firmId: firmId,
+        callback() {},
+      })
+    );
     return () => {};
   }, [firmId]);
+  useEffect(() => {
+    if (firmId && selectedtab) {
+      dispatch(
+        getPartyTransaction({
+          partieId: selectedtab,
+          firmId: firmId,
+          callback() {},
+        })
+      );
+    }
+
+    return () => {};
+  }, [firmId, selectedtab]);
   const list = useSelector(selectPartiesList);
   const showButtonButton = useSelector(selectIsShowSaveButton);
-  
+  const transactionList = useSelector(selectTransactionList);
   return (
     <>
       <div className="flex justify-between items-center px-1 mt-5">
@@ -279,7 +313,7 @@ export default function Page() {
           <div>
             <Table2
               headerData={headerData}
-              bodyData={bodyData}
+              bodyData={transactionList}
               onPageChange={onPageChange}
               count={count}
               isFullScreen={isFullScreen}

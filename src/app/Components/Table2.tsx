@@ -3,6 +3,7 @@ import { usePathname } from "next/navigation";
 import { CiFilter } from "react-icons/ci";
 import { MdOutlineFilterAlt } from "react-icons/md";
 import { HiDotsVertical } from "react-icons/hi";
+import { transactionInterface } from "@/Redux/Parties/types";
 
 interface Filters {
   [key: string]: string;
@@ -16,8 +17,7 @@ const Table2 = ({ headerData, bodyData, onPageChange, count }: any) => {
     {}
   );
   const startIndex = (currentPage - 1) * PAGE_SIZE;
-  const endIndex = startIndex + PAGE_SIZE;
-  const currentDisplayedData = bodyData?.slice(startIndex, endIndex);
+  // const endIndex = startIndex + PAGE_SIZE;
   const totalPages = Math.ceil(count / PAGE_SIZE);
   const itemStartIndex = startIndex + 1;
   const itemEndIndex = Math.min(startIndex + PAGE_SIZE, bodyData?.length);
@@ -25,10 +25,11 @@ const Table2 = ({ headerData, bodyData, onPageChange, count }: any) => {
   const shouldShowBorder = !(path === "/pos");
 
   const headerRegex = (headerName: any) => new RegExp(`^${headerName}$`, "i");
-  const containerClasses = `w-full my-5 ${shouldShowBorder
+  const containerClasses = `w-full my-5 ${
+    shouldShowBorder
       ? "border border-gray-300 rounded-xl shadow-md "
       : "rounded-md"
-    }  overflow-x-auto   pb-[10px] bg-white border border-gray-300 `;
+  }  overflow-x-auto   pb-[10px] bg-white border border-gray-300 `;
 
   const onPageChanged = (page: number) => {
     setCurrentPage(page);
@@ -69,20 +70,22 @@ const Table2 = ({ headerData, bodyData, onPageChange, count }: any) => {
     }));
   };
 
-
-
   return (
     <div>
-      <div className={`${containerClasses} w-full`} style={{
-        overflowX: "auto",
-        scrollbarWidth: "thin",
-        scrollbarColor: "transparent transparent",
-      }}>
+      <div
+        className={`${containerClasses} w-full`}
+        style={{
+          overflowX: "auto",
+          scrollbarWidth: "thin",
+          scrollbarColor: "transparent transparent",
+        }}
+      >
         <table className="w-full">
           {/* Header */}
           <thead
-            className={`rounded-t-lg w-[100%] ${shouldShowBorder ? "bg-[#FFF1EC]" : " bg-[#FFF1EC] "
-              }`}
+            className={`rounded-t-lg w-[100%] ${
+              shouldShowBorder ? "bg-[#FFF1EC]" : " bg-[#FFF1EC] "
+            }`}
           >
             <tr>
               {headerData.map((header: string, index: number) => (
@@ -90,13 +93,10 @@ const Table2 = ({ headerData, bodyData, onPageChange, count }: any) => {
                   key={index}
                   className="py-3 text-[13px] text-gray-800 px-4 whitespace-nowrap text-left lg:px-6 uppercase relative"
                 >
-
                   {header}
                   {/* Filter component */}
                   <div className="absolute 2xl:right-7 lg:right-0 top-0 h-full flex items-center">
-                    {
-                      header.length > 0 &&
-
+                    {header.length > 0 && (
                       <button
                         title="fd"
                         className="focus:outline-none text-[#2D9CDB]"
@@ -104,7 +104,7 @@ const Table2 = ({ headerData, bodyData, onPageChange, count }: any) => {
                       >
                         <MdOutlineFilterAlt size={20} />
                       </button>
-                    }
+                    )}
                     {/* Filter collapse */}
                     {isFilterOpen[header] && (
                       <div className="absolute top-full -left-12 mt-2 w-[200px] bg-white border border-gray-300 rounded-lg shadow-lg z-10">
@@ -143,58 +143,43 @@ const Table2 = ({ headerData, bodyData, onPageChange, count }: any) => {
             </tr>
           </thead>
           {/* Body */}
-          <tbody className="w-full">
-            {/* Apply filters to displayed data */}
-            {applyFilters(currentDisplayedData)?.map((item: any, index: any) => (
-              <tr
-                key={index}
-                className={`font-light border-y border-gray-200 ${index % 2 === 1 ? "bg-gray-100 rounded-full" : ""
+          {bodyData.length ? (
+            <tbody className="w-full">
+              {bodyData?.map((item: transactionInterface, index: any) => (
+                <tr
+                  key={index}
+                  className={`font-light border-y border-gray-200 ${
+                    index % 2 === 1 ? "bg-gray-100 rounded-full" : ""
                   }`}
-              >
-                {/* Render table data */}
-                <td className="text-sm text-gray-700 text-center py-1">
-                  {item.value1}
-                </td>
-                <td className="text-sm text-gray-700 text-center  py-1">
-                  {item.value2}
-                </td>
-                <td className="text-sm text-gray-700 text-center py-1">
-                  {item.value3}
-                </td>
-                <td className="text-sm text-gray-700 text-center py-1">
-                  {item.value4}
-                </td>
-                <td className="text-sm text-gray-700 text-center py-1">
-                  {item.value5}
-                </td>
-                <td className="text-sm text-gray-700 text-center py-1">
-                  {item.value6}
-                </td>
-                <td className="text-sm text-gray-700 text-center py-1 ">
-                  {item.value7}
-                </td>
-                <td className="text-sm text-gray-700 text-center py-1 ">
-                  <HiDotsVertical />
-                </td>
-
-                {/* You can uncomment and modify this section to render data based on the header */}
-                {/* {headerRegex("S.no.").test(header) ? (currentPage - 1) * 10 + index + 1 : 
-          headerRegex("Created On").test(header) ? moment(item?.createdAt).format("DD-MM-YYYY") :
-          headerRegex("Last Updated").test(header) ? moment(item?.updatedAt).format("DD-MM-YYYY") : ""} */}
-                {/* {headerData.map((header: string, idx: number) => (
-                  <td
-                    key={idx}
-                    className={`lg:px-6 text-sm text-gray-700 py-4 ${
-                      header === "Created On" || header === "Last Updated"
-                        ? "text-center"
-                        : ""
-                    }`}
-                  >
+                >
+                  <td className="text-sm text-gray-700 text-center py-1">
+                    {index + 1}
                   </td>
-                ))} */}
-              </tr>
-            ))}
-          </tbody>
+                  <td className="text-sm text-gray-700 text-center py-1">
+                    {item.balance}
+                  </td>
+                  <td className="text-sm text-gray-700 text-center  py-1">
+                    {item.date}
+                  </td>
+                  <td className="text-sm text-gray-700 text-center py-1">
+                    {item.number}
+                  </td>
+                  <td className="text-sm text-gray-700 text-center py-1">
+                    {item.total}
+                  </td>
+                  <td className="text-sm text-gray-700 text-center py-1">
+                    {item.type}
+                  </td>
+
+                  <td className="text-sm text-gray-700 text-center py-1 ">
+                    <HiDotsVertical />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          ) : (
+            <p className="mt-10">No Data Found</p>
+          )}
         </table>
         {/* Pagination */}
         <nav

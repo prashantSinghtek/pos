@@ -372,8 +372,8 @@ export const getParticularService = (id: any) => {
   return apiRequest("get", `${Constants.Service}${id}`);
 };
 
-export const getPartyTransaction = (id: any) => {
-  return apiRequest("get", `${Constants.GetPartyTransaction}${id}`);
+export const getPartyTransactionApi = (partieId:any , id: any) => {
+  return apiRequest("get", `${Constants.GetPartyTransaction}${partieId}?firmId=${id}`);
 };
 
 export const getPartyTransactionBySearch = (searchTerm: any) => {

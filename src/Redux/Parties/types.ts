@@ -22,12 +22,21 @@ export interface partiesFormInterface {
   valueThree: boolean;
   valueFour: boolean;
 }
-
+export interface transactionInterface {
+  type: string;
+  number: string;
+  date: string;
+  balance: number;
+  total: number;
+}
 export interface CombinedInitialState {
   partiesForm: partiesFormInterface;
   partiesList: partiesFormInterface[];
   isShowSaveButton : boolean;
+  transactionList : transactionInterface[];
 }
+
+
 export const initialState: CombinedInitialState = {
   partiesForm: {
     partyName: "",
@@ -55,4 +64,5 @@ export const initialState: CombinedInitialState = {
   },
   partiesList: [],
   isShowSaveButton: false,
+  transactionList :[]
 };
