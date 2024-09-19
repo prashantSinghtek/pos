@@ -36,8 +36,6 @@ export function* getPartyRequest(action: {
   }
   try {
     const response: any = yield call(getPartyList, action.payload.firmId);
-    console.log(response, "dffs");
-
     yield put(setPartyList(response.data));
     if (response && !response.data.status) {
       return;

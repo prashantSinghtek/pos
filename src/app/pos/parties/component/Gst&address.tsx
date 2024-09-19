@@ -8,18 +8,29 @@ import { selectPartyForm } from "@/Redux/Parties/selectors";
 import { useDispatch, useSelector } from "react-redux";
 import { updatePartyForm } from "@/Redux/Parties/reducer";
 import Select from "react-select";
+import { Formik, Field, Form, ErrorMessage } from "formik";
+import { partiesFormInterface } from "@/Redux/Parties/types";
+
 interface OptionType {
   value: string;
   label: string;
 }
-export default function Gstaddress() {
+interface FormValues {
+  gstType: string;
+  state: string;
+  email: string;
+  billingAddress: string;
+  shippingAddress: string;
+  showenable: any;
+}
+export default function Gstaddress({ setShowButton }: any) {
   const [data, setData] = useState<any>([]);
-
   const [gsttype] = useState<any>([
     "unregistered/consumer",
     "registered business regular",
     "registered business composition",
   ]);
+
   const gsttypeoption = gsttype?.map((option: any) => ({
     value: option.toUpperCase(),
     label: option.toUpperCase(),
@@ -30,16 +41,16 @@ export default function Gstaddress() {
     label: option?.name.toUpperCase(),
   }));
 
-  console.log(data, "dataState");
-
   const dispatch = useDispatch();
+  const formState = useSelector(selectPartyForm);
+
+  useEffect(() => {
+    getState();
+    return () => {};
+  }, []);
+
   const handleChange = (field: string, value: any) => {
-    dispatch(
-      updatePartyForm({
-        key: field,
-        value: value,
-      })
-    );
+    dispatch(updatePartyForm({ key: field, value: value }));
   };
 
   const handleSelectChange = (field: string, option: OptionType | null) => {
@@ -52,88 +63,151 @@ export default function Gstaddress() {
       );
     }
   };
-  useEffect(() => {
-    getState();
-    return () => {};
-  }, []);
 
-  const formState = useSelector(selectPartyForm);
+  const validationSchema = Yup.object({
+    email: Yup.string()
+      .email("Invalid email format")
+      .required("Email is required"),
+    billingAddress: Yup.string().required("Billing Address is required"),
+    gstType: Yup.string().required("GST Type is required"),
+  });
+
   return (
-    <div>
-      <form>
-        <div className="flex gap-5 my-5 w-full">
-          <div className="w-[33%] flex flex-col space-y-2">
-            <div className="text-[#808080]">GST Type</div>
-            <Select
-              options={gsttypeoption}
-              placeholder=""
-              value={gsttypeoption.find(
-                (opt: { value: string }) => opt.value === formState.gstType
+    <Formik
+      initialValues={formState}
+      validationSchema={validationSchema}
+      onSubmit={(values: partiesFormInterface) => {
+        handleChange("gstType", values.gstType);
+        handleChange("state", values.state);
+        handleChange("email", values.email);
+        handleChange("billingAddress", values.billingAddress);
+        handleChange("shippingAddress", values.shippingAddress);
+        setShowButton(true);
+      }}
+    >
+      {({ setFieldValue, values }) => (
+        <Form>
+          <div className="flex gap-5 my-5 w-full">
+            <div className="w-[33%] flex flex-col space-y-2">
+              <div className="text-[#808080]">GST Type</div>
+              <Field name="gstType">
+                {({ field, form }: any) => (
+                  <Select
+                    options={gsttypeoption}
+                    placeholder=""
+                    value={gsttypeoption.find(
+                      (opt: { value: string }) => opt.value === field.value
+                    )}
+                    onChange={(option) => {
+                      // handleSelectChange("gstType", option as OptionType);
+                      form.setFieldValue(
+                        "gstType",
+                        (option as OptionType)?.value
+                      );
+                    }}
+                    className="outline-none font-medium font-optima text-primary text-sm"
+                  />
+                )}
+              </Field>
+              <ErrorMessage
+                name="gstType"
+                component="div"
+                className="text-red-500 text-sm"
+              />
+            </div>
+            <div className="w-[33%] flex flex-col space-y-2">
+              <div className="text-[#808080]">State</div>
+              <Field name="state">
+                {({ field }: any) => (
+                  <Select
+                    options={stateoption}
+                    placeholder=""
+                    value={stateoption?.find(
+                      (opt: { value: string }) => opt.value === values.state
+                    )}
+                    onChange={(option) =>
+                      handleSelectChange("state", option as OptionType)
+                    }
+                    className="outline-none font-medium font-optima text-primary text-sm"
+                  />
+                )}
+              </Field>
+            </div>
+            <div className="w-[33%]">
+              <Field name="email">
+                {({ field }: any) => (
+                  <TextInput
+                    {...field}
+                    type="email"
+                    placeholder=""
+                    label="Email"
+                    className="text-gray-800 text-base w-[30%]"
+                    istouched={undefined}
+                  />
+                )}
+              </Field>
+              <ErrorMessage
+                name="email"
+                component="div"
+                className="text-red-500 text-sm"
+              />
+            </div>
+          </div>
+          <div>
+            <Field name="billingAddress">
+              {({ field }: any) => (
+                <Textarea
+                  {...field}
+                  placeholder=""
+                  label="Billing Address"
+                  className="text-gray-800 text-base w-[30%]"
+                  istouched={undefined}
+                />
               )}
-              onChange={(option) =>
-                handleSelectChange("gstType", option as OptionType)
-              }
-              className="outline-none font-medium font-optima text-primary text-sm"
+            </Field>
+            <ErrorMessage
+              name="billingAddress"
+              component="div"
+              className="text-red-500 text-sm"
             />
           </div>
-          <div className="w-[33%] flex flex-col space-y-2">
-            <div className="text-[#808080]">State</div>
-            <Select
-              options={stateoption}
-              placeholder=""
-              value={stateoption?.find(
-                (opt: { value: string }) => opt.value === formState.state
-              )}
-              onChange={(option) =>
-                handleSelectChange("state", option as OptionType)
-              }
-              className="outline-none font-medium font-optima text-primary text-sm"
-            />
+          <div
+            className="flex gap-[2px] items-center text-[#2D9CDB] my-3 cursor-pointer"
+            onClick={() => setFieldValue("showenable", !values.showenable)}
+          >
+            <IoMdAdd />
+            {values.showenable
+              ? "Disable Shipping Address"
+              : "Enable Shipping Address"}
           </div>
-          <div className="w-[33%]">
-            <TextInput
-              name="email"
-              type="email"
-              value={formState.email}
-              onChange={(e) => handleChange("email", e.target.value)}
-              label="Email"
-              className="text-gray-800 text-base w-[30%]"
-              istouched={undefined}
-            />
-          </div>
-        </div>
-        <div>
-          <Textarea
-            name="billingAddress"
-            value={formState.billingAddress}
-            onChange={(e) => handleChange("billingAddress", e.target.value)}
-            label="Billing Address"
-            className="text-gray-800 text-base w-[30%]"
-            istouched={undefined}
-          />
-        </div>
-        <div
-          className="flex gap-[2px] items-center text-[#2D9CDB] my-3 cursor-pointer"
-          onClick={() => handleChange("showenable", !formState.showenable)}
-        >
-          <IoMdAdd />
-          {formState.showenable
-            ? "Disable Shipping Address"
-            : "Enable Shipping Address"}
-        </div>
-        {formState.showenable && (
-          <div className="mb-5">
-            <Textarea
-              name="shippingAddress"
-              value={formState.shippingAddress}
-              onChange={(e) => handleChange("shippingAddress", e.target.value)}
-              label="Shipping Address"
-              className="text-gray-800 text-base w-[30%]"
-              istouched={undefined}
-            />
-          </div>
-        )}
-      </form>
-    </div>
+          {values.showenable && (
+            <div className="mb-5">
+              <Field name="shippingAddress">
+                {({ field }: any) => (
+                  <Textarea
+                    {...field}
+                    placeholder=""
+                    label="Shipping Address"
+                    className="text-gray-800 text-base w-[30%]"
+                    istouched={undefined}
+                  />
+                )}
+              </Field>
+              <ErrorMessage
+                name="shippingAddress"
+                component="div"
+                className="text-red-500 text-sm"
+              />
+            </div>
+          )}
+          <button
+            type="submit"
+            className="bg-[#fda80c] rounded-lg px-5 py-2 text-white"
+          >
+            Save GST and Address
+          </button>
+        </Form>
+      )}
+    </Formik>
   );
 }

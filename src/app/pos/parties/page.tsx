@@ -18,6 +18,8 @@ import Gstaddress from "./component/Gst&address";
 import Creditbalance from "./component/Creditbalance";
 import Additionalfield from "./component/Additionalfield";
 import Table2 from "@/app/Components/Table2";
+import { Formik, Field, Form, ErrorMessage } from "formik";
+import * as Yup from "yup";
 import {
   addFirmParty,
   getPartiesByID,
@@ -26,16 +28,34 @@ import {
 } from "@/controller/posauth";
 import { useDispatch, useSelector } from "react-redux";
 import { addParty, getParty, updatePartyForm } from "@/Redux/Parties/reducer";
-import { selectPartiesList, selectPartyForm } from "@/Redux/Parties/selectors";
+import {
+  selectIsShowSaveButton,
+  selectPartiesList,
+  selectPartyForm,
+} from "@/Redux/Parties/selectors";
 import { useSession } from "next-auth/react";
+import { partiesFormInterface } from "@/Redux/Parties/types";
+const validationSchema = Yup.object({
+  partyName: Yup.string()
+    .matches(/^[a-zA-Z\s]+$/, "Party Name can only contain letters and spaces")
+    .required("Party Name is required"),
 
+  gstNumber: Yup.string()
+    .matches(
+      /^[A-Z0-9]{15}$/,
+      "GSTIN must be a 15-character alphanumeric string"
+    )
+    .required("GSTIN is required"),
+
+  phoneNum: Yup.string()
+    .matches(/^\d{10}$/, "Phone Number must be a 10-digit number")
+    .required("Phone Number is required"),
+});
 export default function Page() {
   const token = localStorage.getItem("authToken");
   const [selectedtab, setSelectedtab] = useState<any>();
   const [partyTransaction, setPartyTrasaction] = useState([]);
   const session = useSession();
-  console.log(session, "session");
-
   const [modalopen, setModalopen] = useState(false);
   const [partydata, setPartydata] = useState([]);
   const [open] = useState(false);
@@ -78,16 +98,6 @@ export default function Page() {
   ];
 
   const onPageChange = (page: any) => {};
-
-  // useEffect(() => {
-  //   getParty(firmid)
-  //     .then((res: any) => {
-  //       setPartydata(res.data?.data);
-  //       console.log(res, "dffs");
-  //     })
-  //     .catch((err) => console.log(err));
-  // }, [token, firmid, open]);
-
   useEffect(() => {
     getPartiesByID(selectedtab)
       .then((res: any) => {
@@ -99,17 +109,28 @@ export default function Page() {
 
   const count = bodyData?.length;
   const isFullScreen = true;
-  const content = [<Gstaddress />, <Creditbalance />, <Additionalfield />];
+
+  const [showButton, setShowButton] = useState(false);
+  const [gstValidate, setGstValidate] = useState(false);
+  const [creditvalidate, setCreditvalidate] = useState(false);
+  const [additionalvalidate, setAdditionalvalidate] = useState(false);
+  const content = [
+    <Gstaddress setShowButton={setGstValidate} />,
+    <Creditbalance setShowButton={setCreditvalidate} />,
+    <Additionalfield setShowButton={setAdditionalvalidate} />,
+  ];
+
+  useEffect(() => {
+    if (gstValidate && creditvalidate && additionalvalidate) {
+      setShowButton(true);
+    }
+    return () => {};
+  }, [gstValidate, creditvalidate, additionalvalidate]);
 
   const dispatch = useDispatch();
 
-  const handleChange = (field: string, value: string) => {
-    dispatch(
-      updatePartyForm({
-        key: field,
-        value: value,
-      })
-    );
+  const handleChange = (field: string, value: any) => {
+    dispatch(updatePartyForm({ key: field, value: value }));
   };
 
   const formData = useSelector(selectPartyForm);
@@ -119,9 +140,7 @@ export default function Page() {
       .then((res) => {
         setFirmId(res[0].id);
       })
-      .catch((err) => {
-        console.log("error", err);
-      });
+      .catch((err) => {});
   }, []);
 
   const handleSubmit = () => {
@@ -141,7 +160,9 @@ export default function Page() {
     );
     return () => {};
   }, [firmId]);
-  const list = useSelector(selectPartiesList)
+  const list = useSelector(selectPartiesList);
+  const showButtonButton = useSelector(selectIsShowSaveButton);
+  
   return (
     <>
       <div className="flex justify-between items-center px-1 mt-5">
@@ -269,53 +290,92 @@ export default function Page() {
       </div>
       <Modal isOpen={modalopen} onClose={() => setModalopen(false)}>
         <>
-          <div className="flex justify-between mt-5 pb-3 border-b border-groove">
-            <div className="">Add Parties</div>
-            <div
-              className="bg-[#fda80c] rounded-lg px-5 text-white py-2"
-              onClick={handleSubmit}
-            >
-              Save
-            </div>
-          </div>
-          <div className="flex gap-5 my-5 w-full">
-            <div className="w-[33%]">
-              <TextInput
-                name="partyName"
-                type="text"
-                placeholder=""
-                label="Party Name"
-                istouched="Touch"
-                value={formData.partyName}
-                onChange={(e) => handleChange("partyName", e.target.value)}
-                className="text-gray-800 text-base w-[30%]"
-              />
-            </div>
-            <div className="w-[33%]">
-              <TextInput
-                name="gstNumber"
-                type="text"
-                placeholder=""
-                label="GSTIN"
-                istouched="Touch"
-                value={formData.gstNumber}
-                onChange={(e) => handleChange("gstNumber", e.target.value)}
-                className="text-gray-800 text-base w-[30%]"
-              />
-            </div>
-            <div className="w-[33%]">
-              <TextInput
-                name="phoneNum"
-                type="tel"
-                placeholder=""
-                label="Phone Number"
-                istouched="Touch"
-                value={formData.phoneNum}
-                onChange={(e) => handleChange("phoneNum", e.target.value)}
-                className="text-gray-800 text-base w-[30%]"
-              />
-            </div>
-          </div>
+          <Formik
+            initialValues={formData}
+            validationSchema={validationSchema}
+            onSubmit={(values: partiesFormInterface) => {
+              handleChange("partyName", values.partyName);
+              handleChange("gstNumber", values.gstNumber);
+              handleChange("phoneNum", values.phoneNum);
+              handleSubmit();
+            }}
+          >
+            {() => (
+              <Form>
+                <div className="flex justify-between mt-5 pb-3 border-b border-groove">
+                  <div className="">Add Parties</div>
+                  {showButton && (
+                    <button
+                      type="submit"
+                      className="bg-[#fda80c] rounded-lg px-5 py-2 text-white"
+                    >
+                      Save
+                    </button>
+                  )}
+                </div>
+                <div className="flex gap-5 my-5 w-full">
+                  <div className="w-[33%]">
+                    <Field name="partyName">
+                      {({ field }: any) => (
+                        <TextInput
+                          {...field}
+                          type="text"
+                          placeholder=""
+                          label="Party Name"
+                          istouched="Touch"
+                          className="text-gray-800 text-base w-full"
+                        />
+                      )}
+                    </Field>
+                    <ErrorMessage
+                      name="partyName"
+                      component="div"
+                      className="text-red-500 text-sm"
+                    />
+                  </div>
+                  <div className="w-[33%]">
+                    <Field name="gstNumber">
+                      {({ field }: any) => (
+                        <TextInput
+                          {...field}
+                          type="text"
+                          placeholder=""
+                          label="GSTIN"
+                          istouched="Touch"
+                          className="text-gray-800 text-base w-full"
+                        />
+                      )}
+                    </Field>
+                    <ErrorMessage
+                      name="gstNumber"
+                      component="div"
+                      className="text-red-500 text-sm"
+                    />
+                  </div>
+                  <div className="w-[33%]">
+                    <Field name="phoneNum">
+                      {({ field }: any) => (
+                        <TextInput
+                          {...field}
+                          type="tel"
+                          placeholder=""
+                          label="Phone Number"
+                          istouched="Touch"
+                          className="text-gray-800 text-base w-full"
+                        />
+                      )}
+                    </Field>
+                    <ErrorMessage
+                      name="phoneNum"
+                      component="div"
+                      className="text-red-500 text-sm"
+                    />
+                  </div>
+                </div>
+                {/* Add other form sections like Tabs here if needed */}
+              </Form>
+            )}
+          </Formik>
           <Tabs heading={heading} content={content} />
         </>
       </Modal>

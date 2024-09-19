@@ -108,7 +108,7 @@ export const authOptions: NextAuthOptions = {
             message: userData?.data?.message,
           };
         } catch (error: any) {
-          console.log("error", error);
+
           throw new Error(
             error.response && error.response.data.message
               ? error.response.data.message

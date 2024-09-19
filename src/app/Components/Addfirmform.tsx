@@ -57,7 +57,6 @@ export default function Addfirmform() {
         setFirmId(res[0].id);
       })
       .catch((err) => {
-        console.log("error", err);
       });
   }, []);
 
@@ -172,7 +171,6 @@ export default function Addfirmform() {
         setFirmId(res[0].id);
       })
       .catch((err) => {
-        console.log("error", err);
       });
     }
   };

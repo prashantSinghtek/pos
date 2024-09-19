@@ -6,6 +6,9 @@ const partiesSlice = createSlice({
   name: "parties",
   initialState,
   reducers: {
+    setIsShowSaveButton: (state, action: PayloadAction<boolean>) => {
+      state.isShowSaveButton = action.payload;
+    },
     setUserDetailForm: (state, action: PayloadAction<partiesFormInterface>) => {
       state.partiesForm = action.payload;
     },
@@ -39,5 +42,5 @@ const partiesSlice = createSlice({
   },
 });
 
-export const { setUserDetailForm  , updatePartyForm , addParty , getParty , setPartyList} = partiesSlice.actions;
+export const { setUserDetailForm  , updatePartyForm , addParty , getParty , setPartyList , setIsShowSaveButton} = partiesSlice.actions;
 export default partiesSlice.reducer; // Ensure that you're exporting the reducer

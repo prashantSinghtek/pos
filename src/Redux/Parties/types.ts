@@ -26,6 +26,7 @@ export interface partiesFormInterface {
 export interface CombinedInitialState {
   partiesForm: partiesFormInterface;
   partiesList: partiesFormInterface[];
+  isShowSaveButton : boolean;
 }
 export const initialState: CombinedInitialState = {
   partiesForm: {
@@ -52,5 +53,6 @@ export const initialState: CombinedInitialState = {
     date: undefined,
     CreditLimit: 0
   },
-  partiesList: []
+  partiesList: [],
+  isShowSaveButton: false,
 };
