@@ -27,6 +27,7 @@ import {
   getParty,
   getPartyDetail,
   setFirmId,
+  updateParty,
   updatePartyForm,
 } from "@/Redux/Parties/reducer";
 import {
@@ -37,7 +38,6 @@ import {
   selectPartyForm,
   selectTransactionList,
 } from "@/Redux/Parties/selectors";
-import { useSession } from "next-auth/react";
 import { partiesFormInterface } from "@/Redux/Parties/types";
 import { getPartyTransaction } from "../../../Redux/Parties/reducer";
 const validationSchema = Yup.object({
@@ -107,13 +107,13 @@ export default function Page() {
     <Creditbalance setShowButton={setCreditvalidate} />,
     <Additionalfield setShowButton={setAdditionalvalidate} />,
   ];
-
+  const formData = useSelector(selectPartyForm);
   useEffect(() => {
-    if (gstValidate && creditvalidate && additionalvalidate) {
+    if ((gstValidate && creditvalidate && additionalvalidate) || formData.id) {
       setShowButton(true);
     }
     return () => {};
-  }, [gstValidate, creditvalidate, additionalvalidate]);
+  }, [gstValidate, creditvalidate, additionalvalidate, formData.id]);
 
   const dispatch = useDispatch();
 
@@ -121,7 +121,6 @@ export default function Page() {
     dispatch(updatePartyForm({ key: field, value: value }));
   };
 
-  const formData = useSelector(selectPartyForm);
   const firmId = useSelector(selectFirmId);
   useEffect(() => {
     myCompany()
@@ -132,12 +131,30 @@ export default function Page() {
   }, []);
 
   const handleSubmit = () => {
-    dispatch(
-      addParty({
-        firmId: firmId,
-        callback() {},
-      })
-    );
+    if (formData.id) {
+      dispatch(
+        updateParty({
+          partieId: selectedtab,
+          firmId: firmId,
+          callback() {
+            setModalopen(false)
+            dispatch(
+              getParty({
+                firmId: firmId,
+                callback() {},
+              })
+            );
+          },
+        })
+      );
+    } else {
+      dispatch(
+        addParty({
+          firmId: firmId,
+          callback() {},
+        })
+      );
+    }
   };
   useEffect(() => {
     dispatch(
@@ -314,7 +331,7 @@ export default function Page() {
                       type="submit"
                       className="bg-[#fda80c] rounded-lg px-5 py-2 text-white"
                     >
-                      Save
+                      {formData.id ? "Update" : "Add"}
                     </button>
                   )}
                 </div>

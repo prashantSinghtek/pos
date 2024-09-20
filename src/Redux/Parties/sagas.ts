@@ -17,6 +17,7 @@ import {
   getPartyList,
   getPartyTransactionApi,
   getPartyTransactionBySearch,
+  updatePartyAPI,
 } from "@/controller/posauth";
 import {
   addParty,
@@ -24,9 +25,11 @@ import {
   getParty,
   getPartyDetail,
   getPartyTransaction,
+  setPartieDetailForm,
   setPartiesDashboardData,
   setPartyList,
   setTrasactionList,
+  updateParty,
 } from "./reducer";
 
 interface Party {
@@ -58,11 +61,11 @@ export function* getPartyRequest(action: {
     return;
   }
   yield delay(1000);
-    const response: any = yield call(getPartyList, action.payload.firmId);
-    yield put(setPartyList(response.data));
-    if (action.payload.callback) {
-      action.payload.callback();
-    }
+  const response: any = yield call(getPartyList, action.payload.firmId);
+  yield put(setPartyList(response.data));
+  if (action.payload.callback) {
+    action.payload.callback();
+  }
 }
 export function* getPartyTransactionRequest(action: {
   payload: { partieId: string; firmId: string; callback: any };
@@ -71,16 +74,16 @@ export function* getPartyTransactionRequest(action: {
     return;
   }
   yield delay(1000);
-    const response: any = yield call(
-      getPartyTransactionApi,
-      action.payload.partieId,
-      action.payload.firmId
-    );
-    yield put(setTrasactionList(response.data.resultedData));
-    console.log(response, "response");
-    if (action.payload.callback) {
-      action.payload.callback();
-    }
+  const response: any = yield call(
+    getPartyTransactionApi,
+    action.payload.partieId,
+    action.payload.firmId
+  );
+  yield put(setTrasactionList(response.data.resultedData));
+  console.log(response, "response");
+  if (action.payload.callback) {
+    action.payload.callback();
+  }
 }
 export function* getPartyDetailRequest(action: {
   payload: { partieId: string; callback: any };
@@ -91,6 +94,7 @@ export function* getPartyDetailRequest(action: {
   yield delay(1000);
   const response: any = yield call(getPartyDetailAPI, action.payload.partieId);
   yield put(setPartiesDashboardData(response.data));
+  yield put(setPartieDetailForm(response.data));
   if (action.payload.callback) {
     action.payload.callback();
   }
@@ -107,11 +111,29 @@ export function* deletePartyByIdRequest(action: {
     action.payload.callback();
   }
 }
+export function* updatePartyRequest(action: {
+  payload: { partieId: string; firmId: string; callback: any };
+}): Generator<any, void, any> {
+  if (action.payload.firmId.length === 0) {
+    return;
+  }
+  const form: partiesFormInterface = yield select(selectPartyForm);
+  yield delay(1000);
+  yield call(
+    updatePartyAPI,
+    action.payload.partieId,
+    action.payload.firmId,
+    form
+  );
+  if (action.payload.callback) {
+    action.payload.callback();
+  }
+}
 export default function* partiesSaga(): Generator {
   yield takeLatest(addParty, addPartyRequest);
   yield takeLatest(getParty, getPartyRequest);
   yield takeLatest(getPartyTransaction, getPartyTransactionRequest);
   yield takeLatest(getPartyDetail, getPartyDetailRequest);
   yield takeLatest(deletePartyById, deletePartyByIdRequest);
-  
+  yield takeLatest(updateParty, updatePartyRequest);
 }

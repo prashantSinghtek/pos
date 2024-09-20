@@ -401,6 +401,9 @@ export const getPartyTransactionBySearch = (searchTerm: any) => {
     `${Constants.partyTransaction}search?searchTerm=${searchTerm}`
   );
 };
+export const updatePartyAPI = (partieId: any, id: any, values: any) => {
+  return apiRequest("put", `${Constants.UpdateParty}${partieId}`, values);
+};
 
 export const deletePartyByIdAPI = (id: any) => {
   return apiRequest("delete", `${Constants.DeleteParty}${id}`);

@@ -13,7 +13,7 @@ const partiesSlice = createSlice({
     setIsShowSaveButton: (state, action: PayloadAction<boolean>) => {
       state.isShowSaveButton = action.payload;
     },
-    setUserDetailForm: (state, action: PayloadAction<partiesFormInterface>) => {
+    setPartieDetailForm: (state, action: PayloadAction<partiesFormInterface>) => {
       state.partiesForm = action.payload;
     },
     setPartiesDashboardData: (state, action: PayloadAction<partiesFormInterface>) => {
@@ -36,6 +36,14 @@ const partiesSlice = createSlice({
     getParty: (
       state,
       action: PayloadAction<{
+        firmId: any;
+        callback: () => void;
+      }>
+    ) => {},
+    updateParty: (
+      state,
+      action: PayloadAction<{
+        partieId: any;
         firmId: any;
         callback: () => void;
       }>
@@ -82,7 +90,7 @@ const partiesSlice = createSlice({
 });
 
 export const {
-  setUserDetailForm,
+  setPartieDetailForm,
   updatePartyForm,
   addParty,
   getParty,
@@ -93,6 +101,7 @@ export const {
   getPartyDetail,
   setPartiesDashboardData,
   deletePartyById,
-  setFirmId
+  setFirmId,
+  updateParty
 } = partiesSlice.actions;
 export default partiesSlice.reducer; // Ensure that you're exporting the reducer

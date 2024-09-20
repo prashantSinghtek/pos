@@ -1,5 +1,6 @@
 export interface partiesFormInterface {
   isChecked: any;
+  id:string
   date: any;
   CreditLimit: number;
   showenable: any;
@@ -41,6 +42,7 @@ export interface CombinedInitialState {
 
 export const initialState: CombinedInitialState = {
   partiesForm: {
+     id: "",
     partyName: "",
     gstNumber: "",
     phoneNum: "",
@@ -68,6 +70,7 @@ export const initialState: CombinedInitialState = {
   isShowSaveButton: false,
   transactionList :[],
   partyDashboardData : {
+    id: "",
     partyName: "",
     gstNumber: "",
     phoneNum: "",

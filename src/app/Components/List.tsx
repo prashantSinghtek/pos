@@ -72,9 +72,9 @@ const List = ({
                   </div>
                   <div className="relative">
                     <div
-                      onClick={() => {
-                        setOpen(!open);
+                      onClick={() => { 
                         setSelected(item?.id);
+                        setOpen(!open);
                       }}
                     >
                       <PiDotsThreeOutlineVerticalFill />
