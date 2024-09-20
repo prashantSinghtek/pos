@@ -46,4 +46,5 @@ export class Constants {
   static banktobank = `${BASE_MAIN}api/BankToBankTrasfer/`;
   static adjusmentbank = `${BASE_MAIN}api/BankAdjustmentEntry/`;
   static partyTransaction = `${BASE_MAIN}api/party-transactions/`;
+  static DeleteParty = `${BASE_MAIN}api/Party/deleteParties?partyId=`;
 }

@@ -2,6 +2,9 @@ import { usePathname } from "next/navigation";
 import React, { useState } from "react";
 import { PiDotsThreeOutlineVerticalFill } from "react-icons/pi";
 import DeleteConfirmationModal from "./deleteConfirmationModel";
+import { useDispatch, useSelector } from "react-redux";
+import { deletePartyById, getParty } from "@/Redux/Parties/reducer";
+import { selectFirmId } from "@/Redux/Parties/selectors";
 
 const List = ({
   listdata,
@@ -14,11 +17,26 @@ const List = ({
   const path = usePathname();
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState();
-  const [openDeleteModel, setOpenDeleteModel] = useState(false)
+  const [openDeleteModel, setOpenDeleteModel] = useState(false);
   const handleClose = () => setOpenDeleteModel(false);
+  const dispatch = useDispatch();
+  const firmId = useSelector(selectFirmId);
   const deleteParty = () => {
-    
-    setOpenDeleteModel(false)
+    dispatch(
+      deletePartyById({
+        partieId: selected,
+        callback() {
+          dispatch(
+            getParty({
+              firmId: firmId,
+              callback() {
+                setOpenDeleteModel(false);
+              },
+            })
+          );
+        },
+      })
+    );
   };
   return (
     <>
@@ -65,9 +83,7 @@ const List = ({
                       <div className="absolute p-1 px-3 text-sm z-50 flex flex-col gap-1 bg-white shadow-lg border border-gray-500 rounded-xl top-4 right-0">
                         <div
                           onClick={() => {
-                            setSelectedbank(item?.id);
                             setModalopen(true);
-                            setModalOpenFrom("FromList");
                           }}
                         >
                           View/Edit

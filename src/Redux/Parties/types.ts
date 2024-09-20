@@ -34,7 +34,8 @@ export interface CombinedInitialState {
   partiesList: partiesFormInterface[];
   isShowSaveButton : boolean;
   transactionList : transactionInterface[];
-  partyDashboardData : partiesFormInterface
+  partyDashboardData : partiesFormInterface;
+  firmId :string
 }
 
 
@@ -89,5 +90,6 @@ export const initialState: CombinedInitialState = {
     isChecked: false,
     date: undefined,
     CreditLimit: 0
-  }
+  },
+  firmId: ""
 };

@@ -401,3 +401,7 @@ export const getPartyTransactionBySearch = (searchTerm: any) => {
     `${Constants.partyTransaction}search?searchTerm=${searchTerm}`
   );
 };
+
+export const deletePartyByIdAPI = (id: any) => {
+  return apiRequest("delete", `${Constants.DeleteParty}${id}`);
+};

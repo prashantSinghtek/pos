@@ -55,6 +55,13 @@ const partiesSlice = createSlice({
         callback: () => void;
       }>
     ) => {},
+    deletePartyById: (
+      state,
+      action: PayloadAction<{
+        partieId: any;
+        callback: () => void;
+      }>
+    ) => {},
     setPartyList: (
       state,
       action: PayloadAction<Array<partiesFormInterface>>
@@ -67,6 +74,10 @@ const partiesSlice = createSlice({
     ) => {
       state.transactionList = action.payload;
     },
+    setFirmId: (state, action: PayloadAction<string>) => {
+      state.firmId = action.payload;
+    },
+    
   },
 });
 
@@ -80,6 +91,8 @@ export const {
   getPartyTransaction,
   setTrasactionList,
   getPartyDetail,
-  setPartiesDashboardData
+  setPartiesDashboardData,
+  deletePartyById,
+  setFirmId
 } = partiesSlice.actions;
 export default partiesSlice.reducer; // Ensure that you're exporting the reducer

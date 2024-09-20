@@ -26,9 +26,11 @@ import {
   addParty,
   getParty,
   getPartyDetail,
+  setFirmId,
   updatePartyForm,
 } from "@/Redux/Parties/reducer";
 import {
+  selectFirmId,
   selectIsShowSaveButton,
   selectPartiesList,
   selectPartyDashboardData,
@@ -120,11 +122,11 @@ export default function Page() {
   };
 
   const formData = useSelector(selectPartyForm);
-  const [firmId, setFirmId] = useState("");
+  const firmId = useSelector(selectFirmId);
   useEffect(() => {
     myCompany()
       .then((res) => {
-        setFirmId(res[0].id);
+        dispatch(setFirmId(res[0].id));
       })
       .catch((err) => {});
   }, []);
@@ -213,6 +215,7 @@ export default function Page() {
             </div>
             <List
               listdata={list}
+              setModalopen={setModalopen}
               onselected={(id: number) => {
                 setSelectedtab(id);
               }}

@@ -7,3 +7,4 @@ export const selectPartyForm = (state: RootState) => state.parties.partiesForm;
 export const selectIsShowSaveButton = (state: RootState) => state.parties.isShowSaveButton;
 export const selectTransactionList = (state: RootState) => state.parties.transactionList;
 export const selectPartyDashboardData = (state: RootState) => state.parties.partyDashboardData;
+export const selectFirmId = (state: RootState) => state.parties.firmId;

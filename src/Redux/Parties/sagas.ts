@@ -12,6 +12,7 @@ import { selectPartyForm } from "./selectors";
 import { partiesFormInterface } from "./types";
 import {
   addFirmParty,
+  deletePartyByIdAPI,
   getPartyDetailAPI,
   getPartyList,
   getPartyTransactionApi,
@@ -19,6 +20,7 @@ import {
 } from "@/controller/posauth";
 import {
   addParty,
+  deletePartyById,
   getParty,
   getPartyDetail,
   getPartyTransaction,
@@ -89,7 +91,18 @@ export function* getPartyDetailRequest(action: {
   yield delay(1000);
   const response: any = yield call(getPartyDetailAPI, action.payload.partieId);
   yield put(setPartiesDashboardData(response.data));
-  console.log(response, "getPartyTransactionBySearch");
+  if (action.payload.callback) {
+    action.payload.callback();
+  }
+}
+export function* deletePartyByIdRequest(action: {
+  payload: { partieId: string; callback: any };
+}): Generator<any, void, any> {
+  if (action.payload.partieId.length === 0) {
+    return;
+  }
+  yield delay(1000);
+  yield call(deletePartyByIdAPI, action.payload.partieId);
   if (action.payload.callback) {
     action.payload.callback();
   }
@@ -99,4 +112,6 @@ export default function* partiesSaga(): Generator {
   yield takeLatest(getParty, getPartyRequest);
   yield takeLatest(getPartyTransaction, getPartyTransactionRequest);
   yield takeLatest(getPartyDetail, getPartyDetailRequest);
+  yield takeLatest(deletePartyById, deletePartyByIdRequest);
+  
 }
