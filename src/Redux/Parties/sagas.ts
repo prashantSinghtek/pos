@@ -56,18 +56,11 @@ export function* getPartyRequest(action: {
     return;
   }
   yield delay(1000);
-  try {
     const response: any = yield call(getPartyList, action.payload.firmId);
     yield put(setPartyList(response.data));
-    if (response && !response.data.status) {
-      return;
-    }
     if (action.payload.callback) {
       action.payload.callback();
     }
-  } catch (error) {
-    console.error("Error updating firm party:", error);
-  }
 }
 export function* getPartyTransactionRequest(action: {
   payload: { partieId: string; firmId: string; callback: any };
@@ -76,7 +69,6 @@ export function* getPartyTransactionRequest(action: {
     return;
   }
   yield delay(1000);
-  try {
     const response: any = yield call(
       getPartyTransactionApi,
       action.payload.partieId,
@@ -84,16 +76,9 @@ export function* getPartyTransactionRequest(action: {
     );
     yield put(setTrasactionList(response.data.resultedData));
     console.log(response, "response");
-
-    if (response && !response.data.status) {
-      return;
-    }
     if (action.payload.callback) {
       action.payload.callback();
     }
-  } catch (error) {
-    console.error("Error updating firm party:", error);
-  }
 }
 export function* getPartyDetailRequest(action: {
   payload: { partieId: string; callback: any };
@@ -102,22 +87,11 @@ export function* getPartyDetailRequest(action: {
     return;
   }
   yield delay(1000);
-  try {
-    const response: any = yield call(
-      getPartyDetailAPI,
-      action.payload.partieId
-    );
-    yield put(setPartiesDashboardData(response.data));
-    console.log(response, "getPartyTransactionBySearch");
-
-    if (response && !response.data.status) {
-      return;
-    }
-    if (action.payload.callback) {
-      action.payload.callback();
-    }
-  } catch (error) {
-    console.error("Error updating firm party:", error);
+  const response: any = yield call(getPartyDetailAPI, action.payload.partieId);
+  yield put(setPartiesDashboardData(response.data));
+  console.log(response, "getPartyTransactionBySearch");
+  if (action.payload.callback) {
+    action.payload.callback();
   }
 }
 export default function* partiesSaga(): Generator {

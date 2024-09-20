@@ -20,7 +20,7 @@ import Additionalfield from "./component/Additionalfield";
 import Table2 from "@/app/Components/Table2";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { addFirmParty, getPartiesByID, myCompany } from "@/controller/posauth";
+import { myCompany } from "@/controller/posauth";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addParty,
@@ -55,11 +55,9 @@ const validationSchema = Yup.object({
     .required("Phone Number is required"),
 });
 export default function Page() {
-  const token = localStorage.getItem("authToken");
   const [selectedtab, setSelectedtab] = useState<any>();
   const [partyTransaction, setPartyTrasaction] = useState([]);
   const [modalopen, setModalopen] = useState(false);
-  const [particularParty, setParticularParty] = useState<any>();
   const headerData = [
     "S. No.",
     "Balance",
@@ -95,15 +93,6 @@ export default function Page() {
   ];
 
   const onPageChange = (page: any) => {};
-  useEffect(() => {
-    getPartiesByID(selectedtab)
-      .then((res: any) => {
-        setParticularParty(res?.data?.data);
-        console.log(">>>>>>>>>>partiesp", res);
-      })
-      .catch((err) => console.log(err));
-  }, [token, selectedtab]);
-
   const count = bodyData?.length;
   const isFullScreen = true;
 
@@ -159,15 +148,6 @@ export default function Page() {
   }, [firmId]);
 
   useEffect(() => {
-    dispatch(
-      getParty({
-        firmId: firmId,
-        callback() {},
-      })
-    );
-    return () => {};
-  }, [firmId]);
-  useEffect(() => {
     if (firmId && selectedtab) {
       dispatch(
         getPartyTransaction({
@@ -185,9 +165,8 @@ export default function Page() {
     }
 
     return () => {};
-  }, [firmId, selectedtab]);
+  }, [selectedtab]);
   const list = useSelector(selectPartiesList);
-  const showButtonButton = useSelector(selectIsShowSaveButton);
   const transactionList = useSelector(selectTransactionList);
   const dashboardData = useSelector(selectPartyDashboardData);
   return (

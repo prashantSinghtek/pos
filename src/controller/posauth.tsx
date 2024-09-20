@@ -1,5 +1,6 @@
 import { Constants } from "@/constants/constants";
 import axios from "@/utils/axios";
+import { signOut } from "next-auth/react";
 import toast from "react-hot-toast";
 const apiRequest = async (
   method: "get" | "post" | "put" | "delete",
@@ -12,7 +13,6 @@ const apiRequest = async (
   if (!token) {
     throw new Error("Token is missing");
   }
-
 
   try {
     const { data } = await axios({
@@ -33,17 +33,29 @@ const apiRequest = async (
       document.body.removeChild(aTag);
       return URL.createObjectURL(data);
     }
-
+    if (!data && !data.data.status) {
+      return;
+    }
     return data;
   } catch (error: any) {
+    if (error?.response.status == 401) {
+      sessionStorage.clear();
+      localStorage.clear();
+      signOut()
+        .then(() => {
+          window.location.pathname = "/";
+        })
+        .catch((error) => {
+          console.error("Error during signout:", error);
+        });
+      return;
+    }
     toast.error(error?.response?.data?.message);
-    
   }
 };
 
 export const addParty = (values: any) =>
   apiRequest("post", Constants.firm, values);
-
 
 export const addFirm = (values: any) =>
   apiRequest("post", Constants.firm, values);
@@ -376,9 +388,11 @@ export const getPartyDetailAPI = (id: any) => {
   return apiRequest("get", `${Constants.Getpartiesbyfirm}${id}`);
 };
 
-
-export const getPartyTransactionApi = (partieId:any , id: any) => {
-  return apiRequest("get", `${Constants.GetPartyTransaction}${partieId}?firmId=${id}`);
+export const getPartyTransactionApi = (partieId: any, id: any) => {
+  return apiRequest(
+    "get",
+    `${Constants.GetPartyTransaction}${partieId}?firmId=${id}`
+  );
 };
 
 export const getPartyTransactionBySearch = (searchTerm: any) => {
@@ -387,6 +401,3 @@ export const getPartyTransactionBySearch = (searchTerm: any) => {
     `${Constants.partyTransaction}search?searchTerm=${searchTerm}`
   );
 };
-
-
-
