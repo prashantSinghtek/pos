@@ -70,6 +70,14 @@ const Table2 = ({ headerData, bodyData, onPageChange, count }: any) => {
     }));
   };
 
+  const filtersOptions: { [key: string]: string[] } = {
+    balance: ["Low", "Medium", "High"],
+    date: ["Today", "Yesterday", "Last Week"],
+    number: ["1", "2", "3", "4", "5"],
+    total: ["Small", "Medium", "Large"],
+    type: ["Expense", "Income", "Transfer"],
+  };
+
   return (
     <div>
       <div
@@ -81,22 +89,27 @@ const Table2 = ({ headerData, bodyData, onPageChange, count }: any) => {
         }}
       >
         <table className="w-full">
-          {/* Header */}
           <thead
             className={`rounded-t-lg w-[100%] ${
               shouldShowBorder ? "bg-[#FFF1EC]" : " bg-[#FFF1EC] "
             }`}
           >
             <tr>
+              {/* Serial Number Header */}
+              <th className="py-3 text-[13px] text-gray-800 px-4 whitespace-nowrap text-left lg:px-6 uppercase relative">
+              S. No.
+              </th>
+
+              {/* Other Headers */}
               {headerData.map((header: string, index: number) => (
                 <th
                   key={index}
                   className="py-3 text-[13px] text-gray-800 px-4 whitespace-nowrap text-left lg:px-6 uppercase relative"
                 >
                   {header}
-                  {/* Filter component */}
-                  <div className="absolute 2xl:right-7 lg:right-0 top-0 h-full flex items-center">
-                    {header.length > 0 && (
+                  {/* Conditionally render the filter button only for non-serial columns */}
+                  {header.toLowerCase() !== "serial no" && (
+                    <div className="absolute 2xl:right-7 lg:right-0 top-0 h-full flex items-center">
                       <button
                         title="fd"
                         className="focus:outline-none text-[#2D9CDB]"
@@ -104,44 +117,46 @@ const Table2 = ({ headerData, bodyData, onPageChange, count }: any) => {
                       >
                         <MdOutlineFilterAlt size={20} />
                       </button>
-                    )}
-                    {/* Filter collapse */}
-                    {isFilterOpen[header] && (
-                      <div className="absolute top-full -left-12 mt-2 w-[200px] bg-white border border-gray-300 rounded-lg shadow-lg z-10">
-                        {/* Selector filter */}
-                        <div className="p-2">
-                          <label className="block mb-1 text-sm font-semibold">
-                            Select Filter
-                          </label>
-                          <select
-                            title="f"
-                            className="w-full px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
-                            value={filters[header] || ""}
-                            onChange={(e) =>
-                              handleFilterChange(header, e.target.value)
-                            }
-                          >
-                            <option value="">Select...</option>
-                            {Array.from(
-                              new Set(
-                                bodyData.map(
-                                  (item: any) => item[header.toLowerCase()]
+
+                      {/* Filter collapse */}
+                      {isFilterOpen[header] && (
+                        <div className="absolute top-full -left-12 mt-2 w-[200px] bg-white border border-gray-300 rounded-lg shadow-lg z-10">
+                          {/* Selector filter */}
+                          <div className="p-2">
+                            <label className="block mb-1 text-sm font-semibold">
+                              Select Filter
+                            </label>
+                            <select
+                              title="f"
+                              className="w-full px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                              value={filters[header] || ""}
+                              onChange={(e) =>
+                                handleFilterChange(header, e.target.value)
+                              }
+                            >
+                              <option value="">Select...</option>
+                              {Array.from(
+                                new Set(
+                                  bodyData.map(
+                                    (item: any) => item[header.toLowerCase()]
+                                  )
                                 )
-                              )
-                            ).map((value: any, index: any) => (
-                              <option key={index} value={value}>
-                                {value}
-                              </option>
-                            ))}
-                          </select>
+                              ).map((value: any, index: any) => (
+                                <option key={index} value={value}>
+                                  {value}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
                         </div>
-                      </div>
-                    )}
-                  </div>
+                      )}
+                    </div>
+                  )}
                 </th>
               ))}
             </tr>
           </thead>
+
           {/* Body */}
           {bodyData.length ? (
             <tbody className="w-full">

@@ -61,7 +61,6 @@ export default function Page() {
   const [partyTransaction, setPartyTrasaction] = useState([]);
   const [modalopen, setModalopen] = useState(false);
   const headerData = [
-    "S. No.",
     "Balance",
     "Date",
     "Number",
