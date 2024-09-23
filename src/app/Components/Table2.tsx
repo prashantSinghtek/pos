@@ -156,7 +156,7 @@ const Table2 = ({ headerData, bodyData, onPageChange, count }: any) => {
                       </button>
                       {openFilter === header && (
                         <div
-                          className="absolute top-full -left-12 mt-2 w-[100px] bg-white border border-gray-300 shadow-lg z-10"
+                          className="absolute top-full -left-12 mt-2 w-[150px] bg-white border border-gray-300 shadow-lg z-10"
                           style={{
                             display: "grid",
                           }}
