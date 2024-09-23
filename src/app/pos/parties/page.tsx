@@ -60,14 +60,7 @@ export default function Page() {
   const [selectedtab, setSelectedtab] = useState<any>();
   const [partyTransaction, setPartyTrasaction] = useState([]);
   const [modalopen, setModalopen] = useState(false);
-  const headerData = [
-    "Balance",
-    "Date",
-    "Number",
-    "Total",
-    "Type",
-    "",
-  ];
+  const headerData = ["Type", "Number", "Date", "Total", "Balance"];
   const bodyData = partyTransaction?.map((item: any) => {
     return {
       value1: item?.type,
@@ -136,7 +129,7 @@ export default function Page() {
           partieId: selectedtab,
           firmId: firmId,
           callback() {
-            setModalopen(false)
+            setModalopen(false);
             dispatch(
               getParty({
                 firmId: firmId,

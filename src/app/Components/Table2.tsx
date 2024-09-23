@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { usePathname } from "next/navigation";
-import { CiFilter } from "react-icons/ci";
 import { MdOutlineFilterAlt } from "react-icons/md";
 import { HiDotsVertical } from "react-icons/hi";
 import { transactionInterface } from "@/Redux/Parties/types";
@@ -13,11 +12,10 @@ const Table2 = ({ headerData, bodyData, onPageChange, count }: any) => {
   const PAGE_SIZE = 10;
   const [currentPage, setCurrentPage] = useState(1);
   const [filters, setFilters] = useState<Filters>({});
-  const [isFilterOpen, setIsFilterOpen] = useState<{ [key: string]: boolean }>(
-    {}
-  );
+  const [textFilters, setTextFilters] = useState<Filters>({});
+  const [openFilter, setOpenFilter] = useState<string | null>(null); // Single open filter
+
   const startIndex = (currentPage - 1) * PAGE_SIZE;
-  // const endIndex = startIndex + PAGE_SIZE;
   const totalPages = Math.ceil(count / PAGE_SIZE);
   const itemStartIndex = startIndex + 1;
   const itemEndIndex = Math.min(startIndex + PAGE_SIZE, bodyData?.length);
@@ -27,15 +25,16 @@ const Table2 = ({ headerData, bodyData, onPageChange, count }: any) => {
   const headerRegex = (headerName: any) => new RegExp(`^${headerName}$`, "i");
   const containerClasses = `w-full my-5 ${
     shouldShowBorder
-      ? "border border-gray-300 rounded-xl shadow-md "
+      ? "border border-gray-300 rounded-xl shadow-md"
       : "rounded-md"
-  }  overflow-x-auto   pb-[10px] bg-white border border-gray-300 `;
+  } overflow-x-auto pb-[10px] bg-white border border-gray-300`;
 
   const onPageChanged = (page: number) => {
     setCurrentPage(page);
     onPageChange(page);
   };
 
+  // Handles filter change for dropdowns and date input
   const handleFilterChange = (columnName: string, value: string) => {
     setFilters({
       ...filters,
@@ -43,12 +42,23 @@ const Table2 = ({ headerData, bodyData, onPageChange, count }: any) => {
     });
   };
 
+  // Handles filter change for text inputs
+  const handleTextFilterChange = (columnName: string, value: string) => {
+    setTextFilters({
+      ...textFilters,
+      [columnName]: value,
+    });
+  };
+
   const applyFilters = (data: any[]) => {
-    if (!Object.keys(filters).length) return data;
+    if (!Object.keys(filters).length && !Object.keys(textFilters).length)
+      return data;
 
     return data.filter((item) => {
       for (let key in filters) {
         const filterValue = filters[key];
+        const textFilterValue = textFilters[key];
+
         if (
           filterValue &&
           !item[key]
@@ -58,195 +68,225 @@ const Table2 = ({ headerData, bodyData, onPageChange, count }: any) => {
         ) {
           return false;
         }
+
+        if (
+          textFilterValue &&
+          !item[key]
+            ?.toString()
+            .toLowerCase()
+            .includes(textFilterValue.toLowerCase())
+        ) {
+          return false;
+        }
       }
       return true;
     });
   };
 
   const toggleFilterCollapse = (header: string) => {
-    setIsFilterOpen((prev) => ({
-      ...prev,
-      [header]: !prev[header],
-    }));
+    // If the current header is already open, close it. Otherwise, set it as open
+    setOpenFilter((prev) => (prev === header ? null : header));
   };
 
   const filtersOptions: { [key: string]: string[] } = {
-    balance: ["Low", "Medium", "High"],
-    date: ["Today", "Yesterday", "Last Week"],
-    number: ["1", "2", "3", "4", "5"],
-    total: ["Small", "Medium", "Large"],
-    type: ["Expense", "Income", "Transfer"],
+    type: [
+      "sale",
+      "sale (e-invoice)",
+      "purchase",
+      "add adjustment",
+      "reduce adjustment",
+      "opening stock",
+      "manufacture",
+      "consumption",
+      "delivery challan",
+      "estimate",
+      "credit note",
+      "credit note (e-invoice)",
+      "sale order",
+      "purchase order",
+      "debit note",
+      "party to party (received)",
+      "party to party (paid)",
+      "sale (cancelled)",
+    ],
+    number: ["cantains", "exact match"],
+    date: ["equal to", "greater than", "less than", "rang"],
+    total: ["equal to", "greater than", "less than"],
+    balance: ["equal to", "greater than", "less than"],
   };
 
   return (
     <div>
       <div
-        className={`${containerClasses} w-full`}
+        className={containerClasses}
         style={{
           overflowX: "auto",
           scrollbarWidth: "thin",
           scrollbarColor: "transparent transparent",
         }}
       >
-        <table className="w-full">
+        <table
+          className="w-full "
+          style={{
+            minHeight: "200px",
+          }}
+        >
           <thead
             className={`rounded-t-lg w-[100%] ${
-              shouldShowBorder ? "bg-[#FFF1EC]" : " bg-[#FFF1EC] "
+              shouldShowBorder ? "bg-[#FFF1EC]" : " bg-[#FFF1EC]"
             }`}
           >
             <tr>
-              {/* Serial Number Header */}
-              <th className="py-3 text-[13px] text-gray-800 px-4 whitespace-nowrap text-left lg:px-6 uppercase relative">
-              S. No.
+              <th className="py-3 text-[13px] text-gray-800  whitespace-nowrap text-center  uppercase relative w-10">
+                S. No.
               </th>
-
-              {/* Other Headers */}
               {headerData.map((header: string, index: number) => (
                 <th
                   key={index}
-                  className="py-3 text-[13px] text-gray-800 px-4 whitespace-nowrap text-left lg:px-6 uppercase relative"
+                  className="py-3 text-[13px] text-gray-800  whitespace-nowrap text-center  uppercase relative"
                 >
                   {header}
-                  {/* Conditionally render the filter button only for non-serial columns */}
                   {header.toLowerCase() !== "serial no" && (
-                    <div className="absolute 2xl:right-7 lg:right-0 top-0 h-full flex items-center">
+                    <div className="absolute 2xl:right-5 lg:right-0 top-0 h-full flex items-center">
                       <button
-                        title="fd"
                         className="focus:outline-none text-[#2D9CDB]"
                         onClick={() => toggleFilterCollapse(header)}
                       >
                         <MdOutlineFilterAlt size={20} />
                       </button>
-
-                      {/* Filter collapse */}
-                      {isFilterOpen[header] && (
-                        <div className="absolute top-full -left-12 mt-2 w-[200px] bg-white border border-gray-300 rounded-lg shadow-lg z-10">
-                          {/* Selector filter */}
-                          <div className="p-2">
-                            <label className="block mb-1 text-sm font-semibold">
-                              Select Filter
-                            </label>
-                            <select
-                              title="f"
-                              className="w-full px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                      {openFilter === header && (
+                        <div
+                          className="absolute top-full -left-12 mt-2 w-[100px] bg-white border border-gray-300 shadow-lg z-10"
+                          style={{
+                            display: "grid",
+                          }}
+                        >
+                          {header.toLowerCase() === "date" ? (
+                            <input
+                              type="date"
+                              className="w-full px-2 py-1 border-none focus:outline-none focus:ring-0 text-[10px]"
                               value={filters[header] || ""}
                               onChange={(e) =>
                                 handleFilterChange(header, e.target.value)
                               }
-                            >
-                              <option value="">Select...</option>
-                              {Array.from(
-                                new Set(
-                                  bodyData.map(
-                                    (item: any) => item[header.toLowerCase()]
+                            />
+                          ) : (
+                            <input
+                              type="text"
+                              className="w-full px-2 py-1 border-none focus:outline-none focus:ring-0 text-[11px]"
+                              placeholder={`Search ${header}`}
+                              value={textFilters[header] || ""}
+                              onChange={(e) =>
+                                handleTextFilterChange(header, e.target.value)
+                              }
+                            />
+                          )}
+
+                          <select
+                            className="w-full px-2 py-1 border-none  focus:outline-none focus:border-none text-[11px] focus:ring-0"
+                            value={filters[header] || ""}
+                            onChange={(e) =>
+                              handleFilterChange(header, e.target.value)
+                            }
+                          >
+                            <option value="">Select...</option>
+                            {filtersOptions[header.toLowerCase()]
+                              ? filtersOptions[header.toLowerCase()].map(
+                                  (option: string, idx: number) => (
+                                    <option key={idx} value={option}>
+                                      {option}
+                                    </option>
                                   )
                                 )
-                              ).map((value: any, index: any) => (
-                                <option key={index} value={value}>
-                                  {value}
-                                </option>
-                              ))}
-                            </select>
-                          </div>
+                              : Array.from(
+                                  new Set(
+                                    bodyData.map(
+                                      (item: any) => item[header.toLowerCase()]
+                                    )
+                                  )
+                                ).map((value: any, idx: any) => (
+                                  <option key={idx} value={value}>
+                                    {value}
+                                  </option>
+                                ))}
+                          </select>
                         </div>
                       )}
                     </div>
                   )}
                 </th>
               ))}
+              <th className="py-3 text-[13px] text-gray-800  whitespace-nowrap text-center  uppercase relative ">
+                Action
+              </th>
             </tr>
           </thead>
-
-          {/* Body */}
+          {/* const headerData = ["Type", "Number", "Date", "Total", "Balance"]; */}
           {bodyData.length ? (
             <tbody className="w-full">
-              {bodyData?.map((item: transactionInterface, index: any) => (
-                <tr
-                  key={index}
-                  className={`font-light border-y border-gray-200 ${
-                    index % 2 === 1 ? "bg-gray-100 rounded-full" : ""
-                  }`}
-                >
-                  <td className="text-sm text-gray-700 text-center py-1">
-                    {index + 1}
-                  </td>
-                  <td className="text-sm text-gray-700 text-center py-1">
-                    {item.balance}
-                  </td>
-                  <td className="text-sm text-gray-700 text-center  py-1">
-                    {item.date}
-                  </td>
-                  <td className="text-sm text-gray-700 text-center py-1">
-                    {item.number}
-                  </td>
-                  <td className="text-sm text-gray-700 text-center py-1">
-                    {item.total}
-                  </td>
-                  <td className="text-sm text-gray-700 text-center py-1">
-                    {item.type}
-                  </td>
+              {applyFilters(bodyData)?.map(
+                (item: transactionInterface, index: any) => (
+                  <tr
+                    key={index}
+                    className={`font-light border-y border-gray-200 ${
+                      index % 2 === 1 ? "bg-gray-100 rounded-full" : ""
+                    }`}
+                  >
+                    <td className="text-sm text-gray-700 text-center py-1">
+                      {index + 1}
+                    </td>
+                    <td className="text-sm text-gray-700 text-center py-1">
+                      {item.type}
+                    </td>
+                    <td className="text-sm text-gray-700 text-center py-1">
+                      {item.number}
+                    </td>
 
-                  <td className="text-sm text-gray-700 text-center py-1 ">
-                    <HiDotsVertical />
-                  </td>
-                </tr>
-              ))}
+                    <td className="text-sm text-gray-700 text-center py-1">
+                      {item.date}
+                    </td>
+
+                    <td className="text-sm text-gray-700 text-center py-1">
+                      {item.total}
+                    </td>
+                    <td className="text-sm text-gray-700 text-center py-1">
+                      {item.balance}
+                    </td>
+                    <td className="text-sm text-gray-700 text-center py-1">
+                      <HiDotsVertical />
+                    </td>
+                  </tr>
+                )
+              )}
             </tbody>
           ) : (
-            <p className="mt-10">No Data Found</p>
+            <tbody className="w-full"> </tbody>
           )}
         </table>
-        {/* Pagination */}
         <nav
           className="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4 px-3"
           aria-label="Table navigation"
         >
-          {/* Pagination Info */}
-          <span className="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">
-            Showing{" "}
-            <span className="font-semibold text-gray-500 ">
-              {itemStartIndex}-{itemEndIndex}
-            </span>{" "}
-            of <span className="font-semibold text-gray-500 ">{count}</span>
+          <span className="text-sm font-normal text-gray-500">
+            Showing <span className="font-semibold">{itemStartIndex}</span> to{" "}
+            <span className="font-semibold">{itemEndIndex}</span> of{" "}
+            <span className="font-semibold">{count}</span> entries
           </span>
-          {/* Pagination Buttons */}
-          <ul className="inline-flex -space-x-px rtl:space-x-reverse text-sm h-14">
-            {/* Previous Button */}
-            <li>
-              <button
-                onClick={() => onPageChanged(currentPage - 1)}
-                disabled={currentPage === 1}
-                className="flex items-center justify-center px-3 h-10 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-[#FFF1EC] hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-              >
-                Previous
-              </button>
-            </li>
-            {/* Page Buttons */}
+          <ul className="inline-flex -space-x-px pagination">
             {Array.from({ length: totalPages }, (_, index) => (
               <li key={index}>
                 <button
-                  onClick={() => setCurrentPage(index + 1)}
-                  disabled={currentPage === index + 1}
-                  className={
+                  className={` ${
                     currentPage === index + 1
-                      ? "flex items-center justify-center px-3 h-10 leading-tight text-gray-800 bg-[#FFF1EC] border border-gray-300 hover:bg-[#FF8900] cursor-pointer dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                      : "flex items-center justify-center px-3 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                  }
+                      ? "active-page-class"
+                      : "inactive-page-class"
+                  }`}
+                  onClick={() => onPageChanged(index + 1)}
                 >
                   {index + 1}
                 </button>
               </li>
             ))}
-            {/* Next Button */}
-            <li>
-              <button
-                onClick={() => onPageChanged(currentPage + 1)}
-                disabled={currentPage === totalPages}
-                className="flex items-center justify-center px-3 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-[#FFF1EC] hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-              >
-                Next
-              </button>
-            </li>
           </ul>
         </nav>
       </div>
