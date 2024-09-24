@@ -19,6 +19,10 @@ const partiesSlice = createSlice({
     setPartiesDashboardData: (state, action: PayloadAction<partiesFormInterface>) => {
       state.partyDashboardData = action.payload;
     },
+    setSearch: (state, action: PayloadAction<string>) => {
+      state.search = action.payload;
+    },
+    
     updatePartyForm: (
       state,
       action: PayloadAction<{ key: string; value: any }>
@@ -52,7 +56,7 @@ const partiesSlice = createSlice({
       state,
       action: PayloadAction<{
         partieId: any;
-        firmId: any;
+        search: string;
         callback: () => void;
       }>
     ) => {},
@@ -90,6 +94,7 @@ const partiesSlice = createSlice({
 });
 
 export const {
+  setSearch,
   setPartieDetailForm,
   updatePartyForm,
   addParty,

@@ -8,3 +8,5 @@ export const selectIsShowSaveButton = (state: RootState) => state.parties.isShow
 export const selectTransactionList = (state: RootState) => state.parties.transactionList;
 export const selectPartyDashboardData = (state: RootState) => state.parties.partyDashboardData;
 export const selectFirmId = (state: RootState) => state.parties.firmId;
+export const selectSearch = (state: RootState) => state.parties.search;
+

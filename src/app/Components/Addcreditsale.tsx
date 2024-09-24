@@ -12,7 +12,7 @@ import { customStyles } from "./Customstyle";
 
 import Table from "./Addsaletable";
 import PaymentType from "./PaymentType";
-import { addSaleCredit, getParty, getState } from "@/controller/posauth";
+import { addSaleCredit,  getState } from "@/controller/posauth";
 
 const validationSchema = Yup.object({
   partiesName: Yup.string().required("Required"),
@@ -32,13 +32,13 @@ export default function AddCreditSale({ product }: any) {
   console.log("product", product)
   const session = useSession();
   const token = localStorage.getItem("authToken");
-  useEffect(() => {
-    getParty(firmid)
-      .then((res) => { console.log(">>>>>>>>>>>", res); setParties(res?.data?.data) })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [token, firmid]);
+  // useEffect(() => {
+  //   getParty(firmid)
+  //     .then((res) => { console.log(">>>>>>>>>>>", res); setParties(res?.data?.data) })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }, [token, firmid]);
   const [parties, setParties] = useState<any>([]);
   const allparties = parties?.map((option: any) => ({
     value: option?.partyName?.toUpperCase(),

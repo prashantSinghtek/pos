@@ -27,6 +27,7 @@ import {
   getParty,
   getPartyDetail,
   setFirmId,
+  setSearch,
   updateParty,
   updatePartyForm,
 } from "@/Redux/Parties/reducer";
@@ -36,6 +37,7 @@ import {
   selectPartiesList,
   selectPartyDashboardData,
   selectPartyForm,
+  selectSearch,
   selectTransactionList,
 } from "@/Redux/Parties/selectors";
 import { partiesFormInterface } from "@/Redux/Parties/types";
@@ -57,10 +59,13 @@ const validationSchema = Yup.object({
     .required("Phone Number is required"),
 });
 export default function Page() {
-  const [selectedtab, setSelectedtab] = useState<any>();
+  const [selectParty, setSelectParty] = useState<any>();
   const [partyTransaction, setPartyTrasaction] = useState([]);
   const [modalopen, setModalopen] = useState(false);
-  const headerData = ["Type", "Number", "Date", "Total", "Balance"];
+
+
+
+  const headerData = ["Type", "Bill Number", "Date", "Total", "Balance Due"];
   const bodyData = partyTransaction?.map((item: any) => {
     return {
       value1: item?.type,
@@ -126,7 +131,7 @@ export default function Page() {
     if (formData.id) {
       dispatch(
         updateParty({
-          partieId: selectedtab,
+          partieId: selectParty,
           firmId: firmId,
           callback() {
             setModalopen(false);
@@ -158,28 +163,31 @@ export default function Page() {
     return () => {};
   }, [firmId]);
 
+  const list = useSelector(selectPartiesList);
+  const transactionList = useSelector(selectTransactionList);
+  const dashboardData = useSelector(selectPartyDashboardData);
+  const search = useSelector(selectSearch);
+
+  
   useEffect(() => {
-    if (firmId && selectedtab) {
+    if (selectParty) {   
       dispatch(
         getPartyTransaction({
-          partieId: selectedtab,
-          firmId: firmId,
+          partieId: selectParty,
+          search: search,
           callback() {},
         })
       );
       dispatch(
         getPartyDetail({
-          partieId: selectedtab,
+          partieId: selectParty,
           callback() {},
         })
       );
     }
 
     return () => {};
-  }, [selectedtab]);
-  const list = useSelector(selectPartiesList);
-  const transactionList = useSelector(selectTransactionList);
-  const dashboardData = useSelector(selectPartyDashboardData);
+  }, [selectParty , search]);
   return (
     <>
       <div className="flex justify-between items-center px-1 mt-5">
@@ -226,7 +234,7 @@ export default function Page() {
               listdata={list}
               setModalopen={setModalopen}
               onselected={(id: number) => {
-                setSelectedtab(id);
+                setSelectParty(id);
               }}
             />
           </div>
@@ -281,6 +289,10 @@ export default function Page() {
             <div className="w-[300px]">
               <TextInput
                 name="search"
+                value={search}
+                onChange={(e) => {
+                  dispatch(setSearch(e.target.value));
+                }}
                 type="text"
                 placeholder="Search By"
                 label=""

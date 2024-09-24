@@ -68,18 +68,18 @@ export function* getPartyRequest(action: {
   }
 }
 export function* getPartyTransactionRequest(action: {
-  payload: { partieId: string; firmId: string; callback: any };
+  payload: { partieId: string; search: string; callback: any };
 }): Generator<any, void, any> {
-  if (action.payload.firmId.length === 0) {
+  if (action.payload.partieId.length === 0) {
     return;
   }
   yield delay(1000);
   const response: any = yield call(
     getPartyTransactionApi,
     action.payload.partieId,
-    action.payload.firmId
+    action.payload.search
   );
-  yield put(setTrasactionList(response.data.resultedData));
+  yield put(setTrasactionList(response.data));
   console.log(response, "response");
   if (action.payload.callback) {
     action.payload.callback();

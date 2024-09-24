@@ -89,9 +89,9 @@ const Table2 = ({ headerData, bodyData, onPageChange, count }: any) => {
   };
 
   const filtersOptions: { [key: string]: string[] } = {
-    type: [
+    Type: [
       "sale",
-      "sale (e-invoice)",
+      "sale (e-0invoice)",
       "purchase",
       "add adjustment",
       "reduce adjustment",
@@ -109,12 +109,11 @@ const Table2 = ({ headerData, bodyData, onPageChange, count }: any) => {
       "party to party (paid)",
       "sale (cancelled)",
     ],
-    number: ["cantains", "exact match"],
-    date: ["equal to", "greater than", "less than", "rang"],
-    total: ["equal to", "greater than", "less than"],
-    balance: ["equal to", "greater than", "less than"],
+    Bill_Number: ["cantains", "exact match"],
+    Date: ["equal to", "greater than", "less than", "rang"],
+    Total: ["equal to", "greater than", "less than"],
+    Balance_Due: ["equal to", "greater than", "less than"],
   };
-
   return (
     <div>
       <div
@@ -190,8 +189,8 @@ const Table2 = ({ headerData, bodyData, onPageChange, count }: any) => {
                             }
                           >
                             <option value="">Select...</option>
-                            {filtersOptions[header.toLowerCase()]
-                              ? filtersOptions[header.toLowerCase()].map(
+                            {filtersOptions[header.replace(" ", "_")]
+                              ? filtersOptions[header.replace(" ", "_")].map(
                                   (option: string, idx: number) => (
                                     <option key={idx} value={option}>
                                       {option}
@@ -217,7 +216,6 @@ const Table2 = ({ headerData, bodyData, onPageChange, count }: any) => {
                 </th>
               ))}
               <th className="py-3 text-[13px] text-gray-800  whitespace-nowrap text-center  uppercase relative ">
-                Action
               </th>
             </tr>
           </thead>
@@ -236,21 +234,21 @@ const Table2 = ({ headerData, bodyData, onPageChange, count }: any) => {
                       {index + 1}
                     </td>
                     <td className="text-sm text-gray-700 text-center py-1">
-                      {item.type}
+                      {item.operationType}
                     </td>
                     <td className="text-sm text-gray-700 text-center py-1">
-                      {item.number}
-                    </td>
-
-                    <td className="text-sm text-gray-700 text-center py-1">
-                      {item.date}
+                      {item.billNumber}
                     </td>
 
                     <td className="text-sm text-gray-700 text-center py-1">
-                      {item.total}
+                      {item.dateOfTransaction}
+                    </td>
+
+                    <td className="text-sm text-gray-700 text-center py-1">
+                      {item.totalAmount}
                     </td>
                     <td className="text-sm text-gray-700 text-center py-1">
-                      {item.balance}
+                      {item.balanceDue}
                     </td>
                     <td className="text-sm text-gray-700 text-center py-1">
                       <HiDotsVertical />

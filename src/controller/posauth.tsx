@@ -388,10 +388,10 @@ export const getPartyDetailAPI = (id: any) => {
   return apiRequest("get", `${Constants.Getpartiesbyfirm}${id}`);
 };
 
-export const getPartyTransactionApi = (partieId: any, id: any) => {
+export const getPartyTransactionApi = (partieId: any, search: any) => {
   return apiRequest(
     "get",
-    `${Constants.GetPartyTransaction}${partieId}?firmId=${id}`
+    `${Constants.GetPartyTransaction}${partieId}/search?searchTerm=${search}`
   );
 };
 

@@ -1,6 +1,6 @@
 export interface partiesFormInterface {
   isChecked: any;
-  id:string
+  id: string;
   date: any;
   CreditLimit: number;
   showenable: any;
@@ -12,7 +12,7 @@ export interface partiesFormInterface {
   email: string;
   billingAddress: string;
   shippingAddress: string;
-  openingBalance: number
+  openingBalance: number;
   asOfDate: string;
   additionalFieldOne: string;
   additionalFieldTwo: string;
@@ -24,52 +24,27 @@ export interface partiesFormInterface {
   valueFour: boolean;
 }
 export interface transactionInterface {
-  type: string;
-  number: string;
-  date: string;
-  balance: number;
-  total: number;
+  id: number;
+  billNumber: string;
+  dateOfTransaction:string;
+  totalAmount: number;
+  balanceDue: number;
+  operationType: string;
+  operationId: number;
+  deleted: false;
 }
 export interface CombinedInitialState {
   partiesForm: partiesFormInterface;
   partiesList: partiesFormInterface[];
-  isShowSaveButton : boolean;
-  transactionList : transactionInterface[];
-  partyDashboardData : partiesFormInterface;
-  firmId :string
+  isShowSaveButton: boolean;
+  transactionList: transactionInterface[];
+  partyDashboardData: partiesFormInterface;
+  firmId: string;
+  search: string;
 }
-
 
 export const initialState: CombinedInitialState = {
   partiesForm: {
-     id: "",
-    partyName: "",
-    gstNumber: "",
-    phoneNum: "",
-    gstType: "",
-    state: "",
-    email: "",
-    billingAddress: "",
-    shippingAddress: "",
-    openingBalance: 0,
-    asOfDate: "",
-    additionalFieldOne: "",
-    additionalFieldTwo: "",
-    additionalFieldThree: "",
-    additionalfieldFour: "",
-    valueOne: false,
-    valueTwo: false,
-    valueThree: false,
-    valueFour: false,
-    showenable: false,
-    isChecked: false,
-    date: undefined,
-    CreditLimit: 0
-  },
-  partiesList: [],
-  isShowSaveButton: false,
-  transactionList :[],
-  partyDashboardData : {
     id: "",
     partyName: "",
     gstNumber: "",
@@ -92,7 +67,36 @@ export const initialState: CombinedInitialState = {
     showenable: false,
     isChecked: false,
     date: undefined,
-    CreditLimit: 0
+    CreditLimit: 0,
   },
-  firmId: ""
+  partiesList: [],
+  isShowSaveButton: false,
+  transactionList: [],
+  partyDashboardData: {
+    id: "",
+    partyName: "",
+    gstNumber: "",
+    phoneNum: "",
+    gstType: "",
+    state: "",
+    email: "",
+    billingAddress: "",
+    shippingAddress: "",
+    openingBalance: 0,
+    asOfDate: "",
+    additionalFieldOne: "",
+    additionalFieldTwo: "",
+    additionalFieldThree: "",
+    additionalfieldFour: "",
+    valueOne: false,
+    valueTwo: false,
+    valueThree: false,
+    valueFour: false,
+    showenable: false,
+    isChecked: false,
+    date: undefined,
+    CreditLimit: 0,
+  },
+  firmId: "",
+  search: "",
 };

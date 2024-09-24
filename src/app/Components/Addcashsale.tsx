@@ -11,7 +11,7 @@ import Select from "react-select";
 import { customStyles } from "./Customstyle";
 
 import Table from "./Addsaletable";
-import { addSaleCash, getParty, getState } from "@/controller/posauth";
+import { addSaleCash,  getState } from "@/controller/posauth";
 
 const validationSchema = Yup.object({
   partiesName: Yup.string().required("Required"),
@@ -31,13 +31,13 @@ export default function AddCashSale({ product ,defaultSelectedproduct}: any) {
 
   const session = useSession();
   const token = localStorage.getItem("authToken");
-  useEffect(() => {
-    getParty(firmid)
-      .then((res) => { console.log(">>>>>>>>>>>", res); setParties(res?.data?.data) })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [token, firmid]);
+  // useEffect(() => {
+  //   getParty(firmid)
+  //     .then((res) => { console.log(">>>>>>>>>>>", res); setParties(res?.data?.data) })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }, [token, firmid]);
   const [parties, setParties] = useState<any>([]);
   
   

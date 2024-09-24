@@ -6,7 +6,7 @@ export class Constants {
   static updatefirm = `${BASE_MAIN}api/Firm/firm`;
   static firmUser = `${BASE_MAIN}api/StaffData/staffRole`;
   static AddfirmParty = `${BASE_MAIN}api/Party/add`;
-  static GetPartyTransaction = `${BASE_MAIN}api/Party/getPartyTransaction/`;
+  static GetPartyTransaction = `${BASE_MAIN}api/party-transactions/party/`;
   static GetfirmParty = `${BASE_MAIN}api/Party/getPartiesLists?firmId=`;
   static GetPartyDetail = `${BASE_MAIN}api/Party/getPartyDashboard?firmId=`;
   static Getpartiesbyfirm = `${BASE_MAIN}api/Party/get/by/id?partyId=`;
