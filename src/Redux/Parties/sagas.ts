@@ -13,6 +13,7 @@ import { partiesFormInterface } from "./types";
 import {
   addFirmParty,
   deletePartyByIdAPI,
+  DeleteTransaction,
   getPartyDetailAPI,
   getPartyList,
   getPartyTransactionApi,
@@ -22,6 +23,7 @@ import {
 import {
   addParty,
   deletePartyById,
+  DeleteTransactionAction,
   getParty,
   getPartyDetail,
   getPartyTransaction,
@@ -129,11 +131,24 @@ export function* updatePartyRequest(action: {
     action.payload.callback();
   }
 }
+
+export function* DeleteTransactionRequest(action: {
+  payload: { transactionId: string; callback: any };
+}): Generator<any, void, any> {
+  if (action.payload.transactionId.length === 0) {
+    return;
+  }
+  yield delay(1000);
+  yield call(DeleteTransaction, action.payload.transactionId);
+  if (action.payload.callback) {
+    action.payload.callback();
+  }
+}
 export default function* partiesSaga(): Generator {
   yield takeLatest(addParty, addPartyRequest);
   yield takeLatest(getParty, getPartyRequest);
   yield takeLatest(getPartyTransaction, getPartyTransactionRequest);
   yield takeLatest(getPartyDetail, getPartyDetailRequest);
-  yield takeLatest(deletePartyById, deletePartyByIdRequest);
+  yield takeLatest(DeleteTransactionAction, DeleteTransactionRequest);
   yield takeLatest(updateParty, updatePartyRequest);
 }

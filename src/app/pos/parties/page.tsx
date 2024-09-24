@@ -190,7 +190,7 @@ export default function Page() {
   }, [selectParty , search]);
   return (
     <>
-      <div className="flex justify-between items-center px-1 mt-5">
+      <div className="flex justify-between items-center px-1 mt-5 h-full">
         <div className="flex gap-3 w-[50%] items-center">
           <div className="w-[35%]">
             <TextInput
@@ -304,6 +304,7 @@ export default function Page() {
 
           <div>
             <Table2
+            selectParty={selectParty}
               headerData={headerData}
               bodyData={transactionList}
               onPageChange={onPageChange}

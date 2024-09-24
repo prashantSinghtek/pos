@@ -57,7 +57,7 @@ const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
           sx={{ mt: 2, mb: 4 }}
           variant="body1"
         >
-          Are you sure you want to delete this party? This action cannot be
+          Are you sure you want to delete. ? This action cannot be
           undone.
         </Typography>
         <Stack direction="row" spacing={2} justifyContent="flex-end">

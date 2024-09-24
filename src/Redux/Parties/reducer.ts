@@ -74,6 +74,13 @@ const partiesSlice = createSlice({
         callback: () => void;
       }>
     ) => {},
+    DeleteTransactionAction: (
+      state,
+      action: PayloadAction<{
+        transactionId: any;
+        callback: () => void;
+      }>
+    ) => {},
     setPartyList: (
       state,
       action: PayloadAction<Array<partiesFormInterface>>
@@ -106,6 +113,7 @@ export const {
   getPartyDetail,
   setPartiesDashboardData,
   deletePartyById,
+  DeleteTransactionAction,
   setFirmId,
   updateParty
 } = partiesSlice.actions;

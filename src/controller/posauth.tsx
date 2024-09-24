@@ -408,3 +408,8 @@ export const updatePartyAPI = (partieId: any, id: any, values: any) => {
 export const deletePartyByIdAPI = (id: any) => {
   return apiRequest("delete", `${Constants.DeleteParty}${id}`);
 };
+
+
+export const DeleteTransaction = (id: any) => {
+  return apiRequest("delete", `${Constants.DeleteTransaction}${id}`);
+};

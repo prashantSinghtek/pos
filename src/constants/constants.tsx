@@ -48,4 +48,5 @@ export class Constants {
   static partyTransaction = `${BASE_MAIN}api/party-transactions/`;
   static DeleteParty = `${BASE_MAIN}api/Party/deleteParties?partyId=`;
   static UpdateParty = `${BASE_MAIN}api/Party/update/`;
+  static DeleteTransaction = `${BASE_MAIN}api/party-transactions/`;
 }
