@@ -29,7 +29,7 @@ export default function Product() {
   console.log(session)
   const token = localStorage.getItem("authToken");
   console.log("dfvgbdefg", token)
-  const auth = new pos_controller()
+  // const auth = new pos_controller()
   const [selectedtab, setSelectedtab] = useState<any>();
   const [modalopen, setModalopen] = useState(false);
   const [category, setCategory] = useState()
@@ -45,8 +45,8 @@ export default function Product() {
     console.log("Form values:", values);
     try {
       setSubmitting(true);
-      const res = await Addcategory(values.Categoryname, token, firmid)
-      console.log("defv", res)
+      // const res = await Addcategory(values.Categoryname, token, firmid)
+      // console.log("defv", res)
       resetForm();
       setModalopen(false)
     } catch (err) {
@@ -63,8 +63,8 @@ export default function Product() {
     console.log("Form values:", values);
     try {
       setSubmitting(true);
-      const res = await PutCategoryName(token, selectedtab,values.Categoryname)
-      console.log("defv", res)
+      // const res = await PutCategoryName(token, selectedtab,values.Categoryname)
+      // console.log("defv", res)
       resetForm();
       setModalopen(false)
     } catch (err) {
@@ -75,11 +75,11 @@ export default function Product() {
   };
 
   useEffect(() => {
-    Getcategory(token).then((res: any) => { setCategory(res.data) }).catch((err) => console.log("ctegory", err))
+    // Getcategory(token).then((res: any) => { setCategory(res.data) }).catch((err) => console.log("ctegory", err))
   }, [token])
 
   useEffect(() => {
-    GetParticularCategory(token,selectedtab).then((res: any) => { setParticularcategory(res.data)}).catch((err) => console.log("ctegory", err))
+    // GetParticularCategory(token,selectedtab).then((res: any) => { setParticularcategory(res.data)}).catch((err) => console.log("ctegory", err))
   }, [token,selectedtab])
 
   const header = [

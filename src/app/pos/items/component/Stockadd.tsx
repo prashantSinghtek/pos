@@ -1,5 +1,4 @@
 import TextInput from '@/app/Components/Textinput';
-import pos_controller from '@/controller/posauth';
 import { Formik } from 'formik';
 import { useSession } from 'next-auth/react';
 import React from 'react'
@@ -17,7 +16,7 @@ export default function Stockadd({ selectedproduct }: any) {
     console.log("firmisdv", firmid)
     const session = useSession();
     const token = localStorage.getItem("authToken");
-    const auth = new pos_controller()
+    // const auth = new pos_controller()
     const submitForm = async (
         values: any,
         { setFieldError, setSubmitting, resetForm }: any
@@ -25,8 +24,8 @@ export default function Stockadd({ selectedproduct }: any) {
         console.log("Form values:", values);
         try {
             setSubmitting(true);
-            const res = await ItemStockAdjustment(values, token, selectedproduct.item.id, firmid, "add")
-            console.log(res)
+            // const res = await ItemStockAdjustment(values, token, selectedproduct.item.id, firmid, "add")
+            // console.log(res)
             resetForm();
         } catch (err) {
             console.log("Error:", err);

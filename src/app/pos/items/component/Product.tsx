@@ -69,7 +69,7 @@ export default function Product() {
   useEffect(() => {
     getItemBySearch(searchTerm, firmid)
       .then((res) => {
-        setSearchTermData(res?.data);
+        // setSearchTermData(res?.data);
       })
       .catch((err) => console.log(err));
   }, [token, firmid, searchTerm]);

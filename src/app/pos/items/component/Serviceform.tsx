@@ -32,22 +32,22 @@ export default function Productfrom({setProductupdate,selectedproduct}:any) {
   const [unit, setUnit] = useState<any>([]);
   const [category, setCategory] = useState([])
   const firmid = localStorage.getItem("selectedStore");
-  if (!firmid) {
-    throw Error("vfdbkn")
-  }
+  // if (!firmid) {
+  //   throw Error("vfdbkn")
+  // }
   console.log("firmisdv", firmid)
   const [fieldValue, setFieldValue] = useState<any>([]);
   const session = useSession();
   const token = localStorage.getItem("authToken");
-  const auth = new pos_controller()
-  useEffect(() => {
-    GetUnits(token).
-      then((res) => setUnit(res)).catch((err) => console.log(err, "unit error"))
-  }, [token])
+  // const auth = new pos_controller()
+  // useEffect(() => {
+  //   GetUnits(token).
+  //     then((res) => setUnit(res)).catch((err) => console.log(err, "unit error"))
+  // }, [token])
 
-  useEffect(() => {
-    Getcategory(token).then((res) => { console.log("category", res); setCategory(res.data) }).catch((err) => console.log("ctegory", err))
-  }, [token])
+  // useEffect(() => {
+  //   Getcategory(token).then((res) => { console.log("category", res); setCategory(res.data) }).catch((err) => console.log("ctegory", err))
+  // }, [token])
 
 
   // const handleImageChange = (newFiles: FileList | null) => {
@@ -133,15 +133,15 @@ export default function Productfrom({setProductupdate,selectedproduct}:any) {
       formData.append("wholeSalePriceTaxType", pricevalue.wholesalepricewithgst);
       formData.append("wholeSaleQuantity", pricevalue.quantity);
       formData.append("tax", pricevalue.tax);
-      formData.append("firmId", firmid);
+      // formData.append("firmId", firmid);
       fieldValue.forEach((file: any, index: any) => {
         formData.append(`imagePath`, file);
       });
      
 
       console.log(">>>>>>>>>>", formData)
-      const res = await AddService(formData, token)
-      console.log("res_addservice", res)
+      // const res = await AddService(formData, token)
+      // console.log("res_addservice", res)
       setProductupdate(true)
 
       resetForm();
