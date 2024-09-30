@@ -259,7 +259,7 @@ export default function Productfrom({setProductupdate,selectedproduct}:any) {
                       type="file"
                       id="fileInput"
                       name="Signature"
-                      onChange={(e) => handleImageChange(e.target.files)}
+                      onChange={(e) => handleImageChange(e.target.files)}   
                       className="border-dashed border-2 rounded-md px-3 py-2 text-center border-[#FF6E3F] bg-[#FEE8E1] text-[#FF6E3F]"
                       aria-labelledby="fileInput"
                     />

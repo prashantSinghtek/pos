@@ -3,10 +3,17 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   initialState,
 } from "./types";
+import { set } from "lodash";
 const itemSlice = createSlice({
   name: "item",
   initialState,
   reducers: {
+    updateServiceForm: (
+      state,
+      action: PayloadAction<{ key: string; value: any }>
+    ) => {
+      set(state, `serviceForm.${action.payload.key}`, action.payload.value);
+    },
   
   },
 });
