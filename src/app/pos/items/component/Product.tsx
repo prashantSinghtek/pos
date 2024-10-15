@@ -292,8 +292,7 @@ export default function Product() {
               <Serviceform />
             ) : (
               <Productfrom
-                setProductupdate={setProductupdate}
-                selectedproduct={selectedproduct}
+ 
               />
             )}
           </>
@@ -336,7 +335,7 @@ export default function Product() {
             {isChecked == true ? (
               <Serviceform />
             ) : (
-              <Productfrom setProductupdate={setProductupdate} />
+              <Productfrom />
             )}
           </>
         )}

@@ -369,7 +369,7 @@ export default function Pricing() {
             {/* Submit Button */}
             <div className="w-full mt-4">
               <button
-                className="text-white bg-blue-500 px-6 py-2 rounded"
+                 className="bg-[#FF8900] my-5 w-fit rounded-lg px-5 text-white py-2"
                 onClick={() => handleSubmit()}
               >
                 Submit
