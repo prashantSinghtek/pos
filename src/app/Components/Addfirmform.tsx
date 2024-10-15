@@ -1,11 +1,11 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { FiUploadCloud } from "react-icons/fi";
 import TextInput from "./Textinput";
 import { IoMdAdd } from "react-icons/io";
 import Textarea from "./Textarea";
 import { Formik } from "formik";
-import { addFirm, myCompany, updateFirm } from "@/controller/posauth";
+import { addFirm, getUnit, myCompany, updateFirm } from "@/controller/posauth";
 import { useSession } from "next-auth/react";
 import * as Yup from "yup";
 import { BASE_MAIN } from "../config/Constant";
@@ -56,9 +56,11 @@ export default function Addfirmform() {
         });
         setFirmId(res[0].id);
       })
-      .catch((err) => {
+      .catch((err :any) => {
       });
   }, []);
+
+
 
   const handleImageChange = (newFiles: FileList | null) => {
     if (newFiles) {
@@ -80,11 +82,7 @@ export default function Addfirmform() {
       .required("Phone number is required")
       .matches(/^\d{10}$/, "Phone number is invalid"),
     GSTIN: Yup.string()
-      .required("GSTIN is required")
-      .matches(
-        /^([0-9]{2})([A-Z]{5})([0-9]{4})([A-Z]{1})([1-9A-Z]{1})([Z]{1})([0-9A-Z]{1})$/,
-        "GSTIN is invalid"
-      ),
+      .required("GSTIN is required"),
     Email: Yup.string().required("Email is required").email("Email is invalid"),
     BusinessType: Yup.string().required("Business type is required"),
     BusinessCategory: Yup.string().required("Business category is required"),

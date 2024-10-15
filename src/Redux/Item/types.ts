@@ -1,4 +1,5 @@
 export interface ServiceItem {
+  id : string;
   serviceName: string; // Name of the service
   serviceHSN: string; // HSN code of the service
   serviceCode: string; // Service code
@@ -16,11 +17,43 @@ export interface ServiceItem {
   imagePath: File | string; // Image file or path
 }
 
+
+export interface ProductFormInterface {
+  id:string
+  itemName: string;
+  itemHsn: string;
+  itemCode: string;
+  unit: string;
+  salePrice: string;
+  discountOnSalePrice: string;
+  wholeSalePrice: string;
+  quantity: string;
+  purchasePrice: string;
+  tax: string;
+  openingQuantity: string;
+  atPrice: string;
+  asOfDate: string;
+  minStockToMaintain: string;
+  location: string;
+  firmId: string;
+  discountOnSalePriceType: string;
+  wholeSalePriceTaxType: string;
+  salePriceType: string;
+  purchasePriceTaxType: string;
+  salePriceTaxType: string;
+  categoryIds: string;
+  path: File | null; // assuming it's a file type since an image is uploaded
+  itemAmount: string;
+  discountAmount: string;
+}
+
 export interface CombinedInitialState {
   serviceForm: ServiceItem;
+  itemProductForm: ProductFormInterface;
 }
 export const initialState: CombinedInitialState = {
   serviceForm: {
+    id :"",
     serviceName: "",
     serviceHSN: "",
     serviceCode: "",
@@ -37,4 +70,32 @@ export const initialState: CombinedInitialState = {
     firmId: "",
     imagePath: "",
   },
+  itemProductForm:{
+    id: "",
+    itemName: "",
+    itemHsn: "",
+    itemCode: "",
+    unit: "",
+    salePrice: "",
+    discountOnSalePrice: "",
+    wholeSalePrice: "",
+    quantity: "",
+    purchasePrice: "",
+    tax: "",
+    openingQuantity: "",
+    atPrice: "",
+    asOfDate: "",
+    minStockToMaintain: "",
+    location: "",
+    firmId: "",
+    discountOnSalePriceType: "",
+    wholeSalePriceTaxType: "",
+    salePriceType: "",
+    purchasePriceTaxType: "",
+    salePriceTaxType: "",
+    categoryIds: "",
+    path: null,
+    itemAmount: "",
+    discountAmount: ""
+  }
 };

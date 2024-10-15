@@ -3,6 +3,9 @@ import { BASE_MAIN } from "@/app/config/Constant";
 export class Constants {
   static X_API_KEY = "X API Key";
   static firm = `${BASE_MAIN}api/Firm/firm`;
+  
+  static Getunit = `${BASE_MAIN}api/Item/getSelectunit`;
+
   static updatefirm = `${BASE_MAIN}api/Firm/firm`;
   static firmUser = `${BASE_MAIN}api/StaffData/staffRole`;
   static AddfirmParty = `${BASE_MAIN}api/Party/add`;

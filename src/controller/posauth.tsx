@@ -69,6 +69,11 @@ export const myCompany = (id?: any) => {
   const url = id ? `${Constants.firm}/${id}` : Constants.firm;
   return apiRequest("get", url);
 };
+export const getUnit = (id?: any) => {
+  const url =  `${Constants.Getunit}?firmId=${id}`;
+  return apiRequest("get", url);
+};
+
 
 export const addFirmParty = (values: any, id: any) => {
   const url = `${Constants.AddfirmParty}?firmId=${id}`;

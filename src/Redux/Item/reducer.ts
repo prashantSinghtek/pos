@@ -19,6 +19,6 @@ const itemSlice = createSlice({
 });
 
 export const {
-
+  updateServiceForm
 } = itemSlice.actions;
 export default itemSlice.reducer; // Ensure that you're exporting the reducer

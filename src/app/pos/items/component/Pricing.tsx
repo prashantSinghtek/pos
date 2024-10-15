@@ -5,13 +5,15 @@ import { FiMinus } from "react-icons/fi";
 import { IoMdAdd } from "react-icons/io";
 import Select from "react-select";
 
-export default function Pricing({setPricevalue}:any) {
+export default function Pricing({ setPricevalue }: any) {
   const [gst, setGst] = useState<any>(["Without GST", "With GST"]);
   const [selectedgstOption, setSelectedgstOptions] = useState<any>();
-  console.log("selectedgstOption",selectedgstOption)
-  const [selecteddiscountgstOption, setSelectedDiscountgstOptions] = useState<any>();
-  const [selectedpurchasegstOption, setSelectedPurchasegstOptions] = useState<any>();
-  
+  console.log("selectedgstOption", selectedgstOption);
+  const [selecteddiscountgstOption, setSelectedDiscountgstOptions] =
+    useState<any>();
+  const [selectedpurchasegstOption, setSelectedPurchasegstOptions] =
+    useState<any>();
+
   const [touchedgst, setTouchedgst] = useState({ state: false });
   const [discount, setDiscount] = useState<any>(["Percentage", "Amount"]);
   const [selecteddiscountOption, setSelecteddiscountOptions] = useState<any>();
@@ -31,7 +33,6 @@ export default function Pricing({setPricevalue}:any) {
   const handleChangedPurchasegst = (selectedOption: any) => {
     setSelectedPurchasegstOptions(selectedOption);
   };
-
 
   const statediscount = discount?.map((option: any) => ({
     value: option.toUpperCase(),
@@ -66,22 +67,20 @@ export default function Pricing({setPricevalue}:any) {
     console.log("Form values:", values);
     try {
       setSubmitting(true);
-      const value ={
+      const value = {
         saleprice: values.salePrice,
         discountprice: values.discountPrice,
         wholesaleprice: values.WholeSalePrice,
-        quantity:values.Quantity,
-        tax:values.Tax,
-        purchaseprice:values.Purchaseprice,
+        quantity: values.Quantity,
+        tax: values.Tax,
+        purchaseprice: values.Purchaseprice,
         salepricewithgst: selectedgstOption?.value,
         wholesalepricewithgst: selecteddiscountgstOption?.value,
         purchasepricewithgst: selectedpurchasegstOption?.value,
-        dicounttype:selecteddiscountOption?.value,
-      }
-      console.log(value)
-      setPricevalue(value)
-
-
+        dicounttype: selecteddiscountOption?.value,
+      };
+      console.log(value);
+      setPricevalue(value);
 
       resetForm();
     } catch (err) {
@@ -92,14 +91,26 @@ export default function Pricing({setPricevalue}:any) {
   };
   return (
     <div>
-      <Formik initialValues={{ salePrice: "", discountPrice: "", WholeSalePrice: "", Quantity: "",Tax:"",Purchaseprice:"" }} onSubmit={submitForm} validationSchema={""}>
+      <Formik
+        initialValues={{
+          salePrice: "",
+          discountPrice: "",
+          WholeSalePrice: "",
+          Quantity: "",
+          Tax: "",
+          Purchaseprice: "",
+        }}
+        onSubmit={submitForm}
+        validationSchema={""}
+      >
         {({ handleChange, handleSubmit, values, errors, touched }: any) => {
           return (
             <>
-              <div className="my-3">Sale price</div>
-              <div className="flex">
-                <div className="w-[60%]">
-                  <div className="w-[70%]  flex items-end">
+              {/* <div className="my-3">Sale price</div> */}
+              <div className="flex space-x-2 w-full mt-4">
+                {/* First Row */}
+                <div className="w-full">
+                  <div className="w-full flex items-end">
                     <TextInput
                       name="salePrice"
                       type="text"
@@ -109,7 +120,7 @@ export default function Pricing({setPricevalue}:any) {
                       value={values.salePrice}
                       onChange={handleChange("salePrice")}
                       onBlur={handleChange("salePrice")}
-                      className="text-gray-800 text-base w-[30%]"
+                      className="text-gray-800 text-base w-[85%]" // Increased width
                     />
                     <Select
                       options={stateOptions}
@@ -120,12 +131,14 @@ export default function Pricing({setPricevalue}:any) {
                         setTouchedgst({ ...touchedgst, state: true })
                       }
                       styles={customStyles}
-                      className="w-[30%]  bg-[#E1F2FB]  outline-none font-medium font-optima  text-primary text-sm focus-within:outline-gray-200 focus-within:outline focus-within:outline-2"
+                      className="w-[20%] ml-4 bg-[#E1F2FB] outline-none font-medium text-primary text-sm focus-within:outline-gray-200 focus-within:outline-2"
                     />
                   </div>
                 </div>
-                <div className="w-[60%]">
-                  <div className="w-[70%]  flex items-end">
+
+                {/* Second Row */}
+                <div className="w-full">
+                  <div className="w-full flex items-end">
                     <TextInput
                       name="discountPrice"
                       type="text"
@@ -135,7 +148,7 @@ export default function Pricing({setPricevalue}:any) {
                       value={values.discountPrice}
                       onChange={handleChange("discountPrice")}
                       onBlur={handleChange("discountPrice")}
-                      className="text-gray-800 text-base w-[30%]"
+                      className="text-gray-800 text-base w-[85%]" // Increased width
                     />
                     <Select
                       options={statediscount}
@@ -146,11 +159,12 @@ export default function Pricing({setPricevalue}:any) {
                         setToucheddiscount({ ...toucheddiscount, state: true })
                       }
                       styles={customStyles}
-                      className="w-[30%]  bg-[#E1F2FB]  outline-none font-medium font-optima  text-primary text-sm focus-within:outline-gray-200 focus-within:outline focus-within:outline-2"
+                      className="w-[20%] ml-4 bg-[#E1F2FB] outline-none font-medium text-primary text-sm focus-within:outline-gray-200 focus-within:outline-2"
                     />
                   </div>
                 </div>
               </div>
+
               <div
                 className="py-3 flex gap-[2px] items-center text-[#2D9CDB] cursor-pointer"
                 onClick={() => setShowfield(!showfield)}
@@ -160,10 +174,11 @@ export default function Pricing({setPricevalue}:any) {
               </div>
               {showfield && (
                 <>
-                  <div className="my-3">Whole Sale Price</div>
-                  <div className="flex">
-                    <div className="w-[60%]">
-                      <div className="w-[70%]  flex items-end">
+                  {/* <div className="my-3">Whole Sale Price</div> */}
+                  <div className="flex space-x-4 w-full">
+                    {/* Whole Sale Price Row */}
+                    <div className="w-full">
+                      <div className="w-full flex items-end">
                         <TextInput
                           name="WholeSalePrice"
                           type="text"
@@ -173,7 +188,7 @@ export default function Pricing({setPricevalue}:any) {
                           value={values.WholeSalePrice}
                           onChange={handleChange("WholeSalePrice")}
                           onBlur={handleChange("WholeSalePrice")}
-                          className="text-gray-800 text-base w-[30%]"
+                          className="text-gray-800 text-base w-[70%]" // Adjusted width
                         />
                         <Select
                           options={stateOptions}
@@ -184,12 +199,14 @@ export default function Pricing({setPricevalue}:any) {
                             setTouchedgst({ ...touchedgst, state: true })
                           }
                           styles={customStyles}
-                          className="w-[30%]  bg-[#E1F2FB]  outline-none font-medium font-optima  text-primary text-sm focus-within:outline-gray-200 focus-within:outline focus-within:outline-2"
+                          className="w-[30%] ml-4 bg-[#E1F2FB] outline-none font-medium text-primary text-sm focus-within:outline-gray-200 focus-within:outline-2"
                         />
                       </div>
                     </div>
-                    <div className="w-[60%]">
-                      <div className="w-[70%]  flex items-end">
+
+                    {/* Quantity Row */}
+                    <div className="w-full">
+                      <div className="w-full flex items-end">
                         <TextInput
                           name="Quantity"
                           type="text"
@@ -199,61 +216,60 @@ export default function Pricing({setPricevalue}:any) {
                           value={values.Quantity}
                           onChange={handleChange("Quantity")}
                           onBlur={handleChange("Quantity")}
-                          className="text-gray-800 text-base w-[30%]"
+                          className="text-gray-800 text-base w-[100%]" // Full width for Quantity
                         />
                       </div>
                     </div>
                   </div>
                 </>
               )}
-              <div>
-                <>
-                  <div className="my-3">Purchase Price</div>
-                  <div className="flex">
-                    <div className="w-[60%]">
-                      <div className="w-[70%]  flex items-end">
-                        <TextInput
-                          name="Purchaseprice"
-                          type="text"
-                          placeholder=""
-                          label="purchase Price"
-                          istouched={true}
-                          value={values.Purchaseprice}
-                          onChange={handleChange("Purchaseprice")}
-                          onBlur={handleChange("Purchaseprice")}
-                          className="text-gray-800 text-base w-[30%]"
-                        />
-                        <Select
-                          options={stateOptions}
-                          placeholder={"with GST"}
-                          value={selectedpurchasegstOption}
-                          onChange={handleChangedPurchasegst}
-                          onBlur={() =>
-                            setTouchedgst({ ...touchedgst, state: true })
-                          }
-                          styles={customStyles}
-                          className="w-[30%]  bg-[#E1F2FB]  outline-none font-medium font-optima  text-primary text-sm focus-within:outline-gray-200 focus-within:outline focus-within:outline-2"
-                        />
-                      </div>
-                    </div>
-                    <div className="w-[60%]">
-                      <div className="w-[70%]  flex items-end">
-                        <TextInput
-                          name="Tax"
-                          type="text"
-                          placeholder=""
-                          label="Tax"
-                          value={values.Tax}
-                          onChange={handleChange("Tax")}
-                          onBlur={handleChange("Tax")}
-                          istouched={true}
-                          className="text-gray-800 text-base w-[30%]"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </>
-              </div>
+            <div className="my-3">
+  <div className="flex space-x-4 w-full">
+    {/* Purchase Price Row */}
+    <div className="w-full">
+      <div className="w-full flex items-end">
+        <TextInput
+          name="Purchaseprice"
+          type="text"
+          placeholder=""
+          label="Purchase Price"
+          istouched={true}
+          value={values.Purchaseprice}
+          onChange={handleChange("Purchaseprice")}
+          onBlur={handleChange("Purchaseprice")}
+          className="text-gray-800 text-base w-[70%]" // Adjusted width
+        />
+        <Select
+          options={stateOptions}
+          placeholder={"with GST"}
+          value={selectedpurchasegstOption}
+          onChange={handleChangedPurchasegst}
+          onBlur={() => setTouchedgst({ ...touchedgst, state: true })}
+          styles={customStyles}
+          className="w-[30%] ml-4 bg-[#E1F2FB] outline-none font-medium text-primary text-sm focus-within:outline-gray-200 focus-within:outline-2"
+        />
+      </div>
+    </div>
+
+    {/* Tax Row */}
+    <div className="w-full">
+      <div className="w-full flex items-end">
+        <TextInput
+          name="Tax"
+          type="text"
+          placeholder=""
+          label="Tax"
+          istouched={true}
+          value={values.Tax}
+          onChange={handleChange("Tax")}
+          onBlur={handleChange("Tax")}
+          className="text-gray-800 text-base w-[100%]" // Full width for Tax
+        />
+      </div>
+    </div>
+  </div>
+</div>
+
               <div
                 className="bg-[#FF8900] my-5 w-fit rounded-lg px-5 text-white py-2"
                 onClick={() => handleSubmit()}

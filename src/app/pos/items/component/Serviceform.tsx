@@ -1,71 +1,54 @@
-/* eslint-disable react/jsx-key */
 import Tabs from "@/app/Components/Tabs";
 import TextInput from "@/app/Components/Textinput";
-import React, { useEffect, useState } from "react";
-import { IoSettings } from "react-icons/io5";
+import React, { useState } from "react";
 import { RiDropboxFill } from "react-icons/ri";
 import Pricing from "./Pricing";
-import Stock from "./Stock";
-import Modal from "@/app/Components/Modal";
 import { customStyles } from "@/app/Components/Customstyle";
 import Select from "react-select";
-import { Formik } from "formik";
-import { useSession } from "next-auth/react";
+import { ErrorMessage, Field, Formik } from "formik";
+import { useDispatch, useSelector } from "react-redux";
+import { selectServiceForm } from "@/Redux/Item/selectors";
+import * as Yup from "yup";
+import { updateServiceForm } from "@/Redux/Item/reducer";
 
-
-
-
-interface CustomFile {
-  name: string;
-  type: string;
-  size: number;
-  lastModified: number;
-  content: ArrayBuffer;
-}
-
-export default function Productfrom({setProductupdate,selectedproduct}:any) {
-  const [pricevalue, setPricevalue] = useState<any>();
-  const [stockvalue, setStockvalue] = useState<any>();
+export default function ProductForm({
+  setProductupdate,
+  selectedproduct,
+}: any) {
+  const [pricevalue, setPricevalue] = useState<any>({});
   const [productcodevalue, setProductcodevalue] = useState("");
-  const [selectedunit, setSelectedUnit] = useState<any>([ selectedproduct?.service?.unit]);
-  const [selectedcategory, setSelectedcategory] = useState<any>([]);
-  const [unit, setUnit] = useState<any>([]);
-  const [category, setCategory] = useState([])
-  const firmid = localStorage.getItem("selectedStore");
-  // if (!firmid) {
-  //   throw Error("vfdbkn")
-  // }
-  console.log("firmisdv", firmid)
-  const [fieldValue, setFieldValue] = useState<any>([]);
-  const session = useSession();
-  const token = localStorage.getItem("authToken");
-  // const auth = new pos_controller()
-  // useEffect(() => {
-  //   GetUnits(token).
-  //     then((res) => setUnit(res)).catch((err) => console.log(err, "unit error"))
-  // }, [token])
+  const [selectedunit, setSelectedUnit] = useState<any>(
+    selectedproduct?.service?.unit || null
+  );
+  const [selectedcategory, setSelectedCategory] = useState<any>(null);
+  const [unit, setUnit] = useState<any[]>([]);
+  const [category, setCategory] = useState<any[]>([]);
+  const [fieldValue, setFieldValue] = useState<File[]>([]);
 
-  // useEffect(() => {
-  //   Getcategory(token).then((res) => { console.log("category", res); setCategory(res.data) }).catch((err) => console.log("ctegory", err))
-  // }, [token])
-
-
-  // const handleImageChange = (newFiles: FileList | null) => {
-  //   if (newFiles) {
-  //     const filesArray = Array.from(newFiles).map(async (file) => ({
-  //       name: file.name,
-  //       type: file.type,
-  //       size: file.size,
-  //       lastModified: file.lastModified,
-  //       content: await file.arrayBuffer(),
-  //     }));
-  //     Promise.all(filesArray).then(setFieldValue);
-  //   }
-  // };
+  // Correct usage
   const handleImageChange = (newFiles: FileList | null) => {
     if (newFiles) {
       setFieldValue(Array.from(newFiles));
     }
+  };
+  const dispatch = useDispatch();
+  const formData = useSelector(selectServiceForm);
+
+  // Function to generate random service code and return it
+  const generateRandomNumber = () => {
+    const randomNum = Math.floor(Math.random() * 9000000000) + 1000000000;
+    setProductcodevalue(randomNum.toString());
+    return randomNum.toString(); // Return the random code as a string
+  };
+
+  // Handle unit selection change
+  const handleUnitChange = (selectedOption: any) => {
+    setSelectedUnit(selectedOption);
+  };
+
+  // Handle category selection change
+  const handleCategoryChange = (selectedOption: any) => {
+    setSelectedCategory(selectedOption);
   };
 
   const allcategory = category?.map((option: any) => ({
@@ -79,201 +62,188 @@ export default function Productfrom({setProductupdate,selectedproduct}:any) {
     label: option.name.toUpperCase(),
     id: option.id,
   }));
-  function generateRandomNumber() {
-    const randomNum = Math.floor(Math.random() * 9000000000) + 1000000000;
-    setProductcodevalue(randomNum.toString());
-    console.log(randomNum);
-  }
-  const handleChangedunit = (selectedOption: any) => {
-    console.log("selectedOption", selectedOption);
-    setSelectedUnit(selectedOption.value);
-  };
-  const handleChangedCategory = (selectedOption: any) => {
-    console.log("selectedOption", selectedOption);
-    setSelectedcategory(selectedOption.id);
+
+  const submitForm = async (
+    values: any,
+    { setSubmitting, resetForm, setTouched }: any
+  ) => {
+    // Mark all fields as touched to trigger validation
+    setTouched({
+      serviceName: true,
+      serviceHSN: true,
+      serviceCode: true,
+      unit: true,
+      Category: true,
+    });
+
+    console.log("submitted values", values);
+
+    // Check if the form is valid
+    const isValid = await validationSchema.isValid(values);
+    if (isValid) {
+      console.log("Form Submitted:", values);
+    } else {
+      console.log("Form validation failed");
+    }
+
+    setSubmitting(false);
   };
 
+  const validationSchema = Yup.object().shape({
+    serviceName: Yup.string().required("Service name is required"),
+    serviceHSN: Yup.string().required("HSN is required"),
+    serviceCode: Yup.string().required("Service code is required"),
+  });
+
+  const content = [<Pricing setPricevalue={setPricevalue} />];
   const heading = [
     {
       icon: <RiDropboxFill size={25} />,
       title: "PRICING",
     },
-   
   ];
-  console.log("pricevalue", pricevalue)
-  console.log("stockvalue", stockvalue)
-  
-  const submitForm = async (
-    values: any,
-    { setFieldError, setSubmitting, resetForm }: any
-  ) => {
-    console.log("Form values:", values);
-    try {
-      setSubmitting(true);
 
-      // const fieldValuePlain = fieldValue.map((file) => ({
-      //   name: file.name,
-      //   type: file.type,
-      //   size: file.size,
-      //   lastModified: file.lastModified,
-      //   content: Array.from(new Uint8Array(file.content)), // Convert ArrayBuffer to Array
-      // }));
-
-      const formData = new FormData();
-      formData.append("serviceName", values.servicename);
-      formData.append("serviceHSN", values.Hsn);
-      formData.append("serviceCode", productcodevalue);
-      formData.append("categoryIds", selectedcategory);
-      formData.append("unit", selectedunit);
-      formData.append("salePrice", pricevalue.saleprice);
-      formData.append("salePriceTaxType", pricevalue.salepricewithgst);
-      formData.append("discountOnSalePrice", pricevalue.discountprice);
-      formData.append("discountOnSalePriceType", pricevalue.dicounttype);
-      formData.append("wholeSalePrice", pricevalue.wholesaleprice);
-      formData.append("wholeSalePriceTaxType", pricevalue.wholesalepricewithgst);
-      formData.append("wholeSaleQuantity", pricevalue.quantity);
-      formData.append("tax", pricevalue.tax);
-      // formData.append("firmId", firmid);
-      fieldValue.forEach((file: any, index: any) => {
-        formData.append(`imagePath`, file);
-      });
-     
-
-      console.log(">>>>>>>>>>", formData)
-      // const res = await AddService(formData, token)
-      // console.log("res_addservice", res)
-      setProductupdate(true)
-
-      resetForm();
-    } catch (err) {
-      console.log("Error:", err);
-    } finally {
-      setSubmitting(false);
-    }
-  };
-  console.log("selectedproduct",selectedproduct)
-  const content = [<Pricing setPricevalue={setPricevalue} />];
   return (
     <div>
-      <>
-        <Formik
-          initialValues={{
-            servicename: selectedproduct?.service?.serviceName || " ",
-            Hsn: selectedproduct?.service?.serviceHsn || " ",
-            servicecode: productcodevalue ||  selectedproduct?.service?.serviceCode,
-            category: "",
-          }}
-          onSubmit={submitForm}
-          validationSchema={""}
-        >
-          {({ handleChange, handleSubmit, values, errors, touched }: any) => {
+      <Formik
+        initialValues={formData}
+        validationSchema={validationSchema}
+        onSubmit={submitForm}
+        validateOnMount={true} // Ensure validation is performed on mount
+        validateOnChange={false} // Prevent validation on each change
+      >
+        {({ handleSubmit, isSubmitting, errors, touched, setFieldValue }) => (
+          <>
+            <form onSubmit={handleSubmit}>
+              <div className="flex justify-between items-center py-3 border-b">
+                <div>Add Product</div>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="bg-[#fda80c] rounded-lg px-5 py-2 text-white"
+                >
+                  {formData.id ? "Update" : "Add"}
+                </button>
+              </div>
 
-            return (
-              <>
-                <div className="py-3 border-b border-groove flex justify-between services-center">
-                  <div>Add Product</div>
-                  <div
-                    className="bg-[#FF8900] rounded-lg px-5 text-white py-2"
-                    onClick={() => handleSubmit()}
-                  >
-                    Save
-                  </div>
+              <div className="flex items-end gap-5 my-5 w-full">
+                <div className="w-[33%]">
+                  <Field name="serviceName">
+                    {({ field }: any) => (
+                      <TextInput
+                        {...field}
+                        type="text"
+                        label="Service Name"
+                        istouched={touched.serviceName}
+                        className="text-gray-800 text-base w-full"
+                      />
+                    )}
+                  </Field>
+                  <ErrorMessage
+                    name="serviceName"
+                    component="div"
+                    className="text-red-500 text-sm"
+                  />
                 </div>
-                <div className="flex services-end gap-5 my-5 w-full">
-                  <div className="w-[30%]">
-                    <TextInput
-                      name="servicename"
-                      type="text"
-                      placeholder=""
-                      label="service Name"
-                      value={values.servicename}
-                      onChange={handleChange("servicename")}
-                      onBlur={handleChange("servicename")}
-                      istouched={"Touch"}
-                      className="text-gray-800 text-base w-[30%]"
-                    />
-                  </div>
-                  <div className="w-[30%]">
-                    <TextInput
-                      name="Hsn"
-                      type="text"
-                      placeholder=""
-                      label="service HSN"
-                      value={values.Hsn}
-                      onChange={handleChange("Hsn")}
-                      onBlur={handleChange("Hsn")}
-                      istouched={"Touch"}
-                      className="text-gray-800 text-base w-[30%]"
-                    />
-                  </div>
-                  <div className="w-[25%] flex flex-col space-y-2 ">
-                    <div className="text-[#808080]">Unit</div>
-                    <Select
-                      name="unit"
-                      options={allunits}
-                      value={selectedunit?.value}
-                      onChange={handleChangedunit}
-                      styles={customStyles}
-                      className="w-full  bg-white  rounded-md outline-none font-medium font-optima  text-primary text-sm focus-within:outline-gray-200 focus-within:outline focus-within:outline-2"
-                    />
-                  </div>
-                </div>
-                <div className="flex items-end gap-5 my-5 w-full">
-                  <div className="w-[30%] flex flex-col space-y-2 ">
-                    <div className="text-[#808080]">Category</div>
-                    <Select
-                      name="Category"
-                      options={allcategory}
-                      value={selectedcategory?.value}
-                      onChange={handleChangedCategory}
-                      styles={customStyles}
-                      className="w-full  bg-white  rounded-md outline-none font-medium font-optima  text-primary text-sm focus-within:outline-gray-200 focus-within:outline focus-within:outline-2"
-                    />
-                  </div>
-                  <div className="w-[30%]">
-                    <TextInput
-                      name="servicecode"
-                      type="text"
-                      placeholder=""
-                      label="service Code"
-                      value={productcodevalue ?? values.servicecode}
-                      onChange={(e) => { setProductcodevalue(e.target.value) }}
-                      onBlur={handleChange("category")}
-                      istouched={"Touch"}
-                      className="text-gray-800 text-base w-[30%]"
-                    />
-                  </div>
-                  <div
-                    className="px-5 h-[40px] text-xs border border-gray-300 bg-[#E1F2FB] text-gray-500 rounded-lg flex justify-center items-center cursor-pointer"
-                    onClick={generateRandomNumber}
-                  >
-                    Assign code
-                  </div>
 
+                <div className="w-[33%]">
+                  <Field name="serviceHSN">
+                    {({ field }: any) => (
+                      <TextInput
+                        {...field}
+                        type="text"
+                        label="HSN"
+                        istouched={touched.serviceHSN}
+                        className="text-gray-800 text-base w-full"
+                      />
+                    )}
+                  </Field>
+                  <ErrorMessage
+                    name="serviceHSN"
+                    component="div"
+                    className="text-red-500 text-sm"
+                  />
                 </div>
-                <div className="flex services-end gap-5 my-5 w-full">
-                  <div className="w-[20%] flex-col space-y-2 ">
-                    <div>Image</div>
-                    <input
-                      title="d"
-                      type="file"
-                      id="fileInput"
-                      name="Signature"
-                      onChange={(e) => handleImageChange(e.target.files)}   
-                      className="border-dashed border-2 rounded-md px-3 py-2 text-center border-[#FF6E3F] bg-[#FEE8E1] text-[#FF6E3F]"
-                      aria-labelledby="fileInput"
-                    />
+
+                <div className="w-[25%] flex flex-col space-y-2">
+                  <div className="text-[#808080]">Unit</div>
+                  <Select
+                    name="unit"
+                    options={allunits}
+                    value={selectedunit}
+                    onChange={handleUnitChange}
+                    styles={customStyles}
+                    className="w-full bg-white rounded-md text-primary text-sm"
+                  />
+                </div>
+              </div>
+              <div className="flex items-end gap-5 my-5 w-full">
+                <div className="w-[30%] flex flex-col space-y-2">
+                  <div className="text-[#808080]">Category</div>
+                  <Select
+                    name="Category"
+                    options={allcategory}
+                    value={selectedcategory}
+                    onChange={handleCategoryChange}
+                    styles={customStyles}
+                    className="w-full bg-white rounded-md text-primary text-sm"
+                  />
+                </div>
+
+                <div className="w-[33%] flex items-center">
+                  {/* Service Code Input */}
+                  <Field name="serviceCode">
+                    {({ field, form }: any) => (
+                      <div className="w-full relative">
+                        <TextInput
+                          {...field}
+                          disabled={true}                               
+                          type="text"
+                          label="Service Code"
+                          istouched={touched.serviceCode}
+                          className="text-gray-800 text-base w-full"
+                        />
+                        <ErrorMessage
+                          name="serviceCode"
+                          component="div"
+                          className="text-red-500 text-sm"
+                        />
+                      </div>
+                    )}
+                  </Field>
+                  {/* Assign Code Button */}
+                  <div
+                    className="ml-3 px-5 h-[40px] text-xs border border-gray-300 bg-[#E1F2FB] text-gray-500 rounded-lg flex justify-center items-center cursor-pointer"
+                    onClick={() => {
+                      const randomCode = generateRandomNumber(); // Generate the random code
+                      setFieldValue("serviceCode", randomCode); // Set the random code in the serviceCode field
+                    }}
+                  >
+                    Assign Code
                   </div>
                 </div>
+              </div>
+
+              <div className="flex items-end gap-5 my-5 w-full">
+                <div className="w-[20%] flex-col space-y-2">
+                  <div>Image</div>
+                  <input
+                    type="file"
+                    onChange={(e) => handleImageChange(e.target.files)}
+                    accept="image/*"
+                    multiple
+                    className="text-gray-500 border-gray-400 border rounded"
+                  />
+                </div>
+              </div>
+
+              <div className="flex justify-center items-center mt-10">
                 <Tabs heading={heading} content={content} />
-
-
-              </>
-
-            );
-          }}
-        </Formik>
-      </>
+              </div>
+            </form>
+          </>
+        )}
+      </Formik>
     </div>
   );
 }
