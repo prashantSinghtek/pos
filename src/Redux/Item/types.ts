@@ -1,5 +1,5 @@
 export interface ServiceItem {
-  id : string;
+  id: string;
   serviceName: string; // Name of the service
   serviceHSN: string; // HSN code of the service
   serviceCode: string; // Service code
@@ -17,9 +17,8 @@ export interface ServiceItem {
   imagePath: File | string; // Image file or path
 }
 
-
 export interface ProductFormInterface {
-  id:string
+  id: string;
   itemName: string;
   itemHsn: string;
   itemCode: string;
@@ -36,10 +35,10 @@ export interface ProductFormInterface {
   minStockToMaintain: string;
   location: string;
   firmId: string;
-  discountOnSalePriceType: string;
-  wholeSalePriceTaxType: string;
-  salePriceType: string;
-  purchasePriceTaxType: string;
+  discountOnSalePriceType: null;
+  wholeSalePriceTaxType: null;
+  salePriceType: null;
+  purchasePriceTaxType: null;
   salePriceTaxType: string;
   categoryIds: string;
   path: File | null; // assuming it's a file type since an image is uploaded
@@ -53,7 +52,7 @@ export interface CombinedInitialState {
 }
 export const initialState: CombinedInitialState = {
   serviceForm: {
-    id :"",
+    id: "",
     serviceName: "",
     serviceHSN: "",
     serviceCode: "",
@@ -70,7 +69,7 @@ export const initialState: CombinedInitialState = {
     firmId: "",
     imagePath: "",
   },
-  itemProductForm:{
+  itemProductForm: {
     id: "",
     itemName: "",
     itemHsn: "",
@@ -88,14 +87,14 @@ export const initialState: CombinedInitialState = {
     minStockToMaintain: "",
     location: "",
     firmId: "",
-    discountOnSalePriceType: "",
-    wholeSalePriceTaxType: "",
-    salePriceType: "",
-    purchasePriceTaxType: "",
+    discountOnSalePriceType: null, // discount on sale price
+    wholeSalePriceTaxType: null, // whole sale
+    salePriceType: null,
+    purchasePriceTaxType: null, //below
     salePriceTaxType: "",
     categoryIds: "",
     path: null,
     itemAmount: "",
-    discountAmount: ""
-  }
+    discountAmount: "",
+  },
 };

@@ -14,11 +14,20 @@ const itemSlice = createSlice({
     ) => {
       set(state, `serviceForm.${action.payload.key}`, action.payload.value);
     },
-  
+    updateProductForm: (
+      state,
+      action: PayloadAction<{ key: string; value: any }>
+    ) => {
+      set(state, `itemProductForm.${action.payload.key}`, action.payload.value);
+    }
+
+
+
   },
 });
 
 export const {
-  updateServiceForm
+  updateServiceForm,
+  updateProductForm
 } = itemSlice.actions;
 export default itemSlice.reducer; // Ensure that you're exporting the reducer
