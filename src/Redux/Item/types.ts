@@ -91,10 +91,10 @@ export const initialState: CombinedInitialState = {
     wholeSalePriceTaxType: null, // whole sale
     salePriceType: null,
     purchasePriceTaxType: null, //below
-    salePriceTaxType: "",
+    salePriceTaxType: "WITHOUT_GST",
     categoryIds: "",
     path: null,
-    itemAmount: "",
-    discountAmount: "",
+    itemAmount: "500",
+    discountAmount: "200",
   },
 };

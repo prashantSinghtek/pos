@@ -12,7 +12,7 @@ export default function Stock() {
   // Create a Yup validation schema
   const validationSchema = Yup.object().shape({
     openingQuantity: Yup.number().required("Opening Quantity is required"),
-    opatPrice: Yup.number().required("At Price is required"),
+    atPrice: Yup.number().required("At Price is required"),
     asOfDate: Yup.date().required("As Of Date is required"),
     minStockToMaintain: Yup.number().required("Min Stock To Maintain is required"),
     location: Yup.string().required("Location is required"),
@@ -42,7 +42,7 @@ export default function Stock() {
     <Formik
       initialValues={{
         openingQuantity: formData.openingQuantity,
-        opatPrice: formData.atPrice,
+        atPrice: formData.atPrice,
         asOfDate: formData.asOfDate,
         minStockToMaintain: formData.minStockToMaintain,
         location: formData.location,
@@ -70,15 +70,15 @@ export default function Stock() {
               </div>
               <div className="w-[30%]">
                 <TextInput
-                  name="opatPrice"
+                  name="atPrice"
                   type="text"
                   placeholder=""
                   label="At Price"
-                  value={values.opatPrice}
-                  onChange={handleChange("opatPrice")}
-                  onBlur={handleChange("opatPrice")}
-                  istouched={touched.opatPrice}
-                  error={errors.opatPrice} 
+                  value={values.atPrice}
+                  onChange={handleChange("atPrice")}
+                  onBlur={handleChange("atPrice")}
+                  istouched={touched.atPrice}
+                  error={errors.atPrice} 
                   className="text-gray-800 text-base w-[30%]"
                 />
               </div>

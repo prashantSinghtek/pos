@@ -8,21 +8,18 @@ import Stock from "./Stock";
 import { customStyles } from "@/app/Components/Customstyle";
 import Select from "react-select";
 import { Formik } from "formik";
-import { useSelector } from "react-redux";
+import * as Yup from "yup"; // Import Yup for validation
+import { useDispatch, useSelector } from "react-redux";
 import { selectProductForm } from "@/Redux/Item/selectors";
 import { getCategoryByFirm, getUnit, myCompany } from "@/controller/posauth";
+import { addItem, updateProductForm } from "@/Redux/Item/reducer";
 
 export default function ProductForm() {
-  const [pricevalue, setPricevalue] = useState<any>();
-  const [stockvalue, setStockvalue] = useState<any>();
-  const [selectedunit, setSelectedUnit] = useState<any>([]);
-  const [selectedcategory, setSelectedcategory] = useState<any>([]);
+  const [selectedUnit, setSelectedUnit] = useState<any>(null);
+  const [selectedCategory, setSelectedCategory] = useState<any>(null);
   const [unit, setUnit] = useState<any>([]);
-  const [category, setCategory] = useState<any>([]);
+  const [categoryIds, setCategory] = useState<any>([]);
   const [fieldValue, setFieldValue] = useState<any>([]);
-
-  const firmid = localStorage.getItem("selectedStore");
-  console.log("firmisdv", firmid);
 
   const handleImageChange = (newFiles: FileList | null) => {
     if (newFiles) {
@@ -30,13 +27,13 @@ export default function ProductForm() {
     }
   };
 
-  const allcategory = category?.map((option: any) => ({
-    value: option.name.toUpperCase(),
+  const allCategory = categoryIds?.map((option: any) => ({
+    value: option.id,
     label: option.name.toUpperCase(),
     id: option.id,
   }));
 
-  const allunits = unit?.map((option: any) => ({
+  const allUnits = unit?.map((option: any) => ({
     value: option.id,
     label: option.unit.toUpperCase(),
     id: option.id,
@@ -45,18 +42,11 @@ export default function ProductForm() {
   // Generates random number and sets it in Formik form values
   const generateRandomNumber = (formikSetFieldValue: any) => {
     const randomNum = Math.floor(Math.random() * 9000000000) + 1000000000;
-    formikSetFieldValue("itemcode", randomNum.toString());
-    console.log("Generated item code:", randomNum);
+    formikSetFieldValue("itemCode", randomNum.toString());
   };
 
-  const handleChangedunit = (selectedOption: any) => {
-    setSelectedUnit(selectedOption.value);
-  };
-
-  const handleChangedCategory = (selectedOption: any) => {
-    setSelectedcategory(selectedOption.id);
-  };
   const [firmId, setFirmId] = useState("");
+
   useEffect(() => {
     myCompany()
       .then((res) => {
@@ -64,6 +54,7 @@ export default function ProductForm() {
       })
       .catch((err: any) => {});
   }, []);
+
   const heading = [
     {
       icon: <RiDropboxFill size={25} />,
@@ -75,97 +66,69 @@ export default function ProductForm() {
     },
   ];
 
+  const dispatch = useDispatch();
+
   const submitForm = async (
     values: any,
     { setFieldError, setSubmitting, resetForm }: any
   ) => {
-    console.log("Form values:", values);
     try {
       setSubmitting(true);
-      // const fieldValuePlain = fieldValue.map((file) => ({
-      //   name: file.name,
-      //   type: file.type,
-      //   size: file.size,
-      //   lastModified: file.lastModified,
-      //   content: Array.from(new Uint8Array(file.content)), // Convert ArrayBuffer to Array
-      // }));
-
-      const formData = new FormData();
-      formData.append("itemName", values.itemname);
-      formData.append("itemHsn", values.Hsn);
-      formData.append("categoryIds", selectedcategory);
-      formData.append("itemCode", values.itemcode);
-
-      fieldValue.forEach((file: any, index: any) => {
-        formData.append(`path`, file);
+      Object.entries(values).forEach(([key, value]) => {
+        dispatch(updateProductForm({ key: key, value: value }));
       });
-
-      formData.append("unit", selectedunit);
-      formData.append("salePrice", pricevalue.saleprice);
-      formData.append("discountOnSalePrice", pricevalue.discountprice);
-      formData.append("wholeSalePrice", pricevalue.wholesaleprice);
-      formData.append("Quantity", pricevalue.quantity);
-      formData.append("purchasePrice", pricevalue.purchaseprice);
-      formData.append("tax", pricevalue.tax);
-      formData.append("discountOnSalePriceType", pricevalue.dicounttype);
-      formData.append(
-        "wholeSalePriceTaxType",
-        pricevalue.wholesalepricewithgst
+      dispatch(
+        addItem({
+          callback() {},
+        })
       );
-      formData.append("salePriceTaxType", pricevalue.salepricewithgst);
-      formData.append("purchasePriceTaxType", pricevalue.purchasepricewithgst);
-      formData.append("openingQuantity", stockvalue.Openingqty);
-      formData.append("atPrice", stockvalue.Atprice);
-      formData.append("asOfDate", stockvalue.date);
-      formData.append("minStockToMaintain", stockvalue.minstock);
-      formData.append("location", stockvalue.Location);
-
-      console.log("FormData:", formData);
-      resetForm();
     } catch (err) {
-      console.log("Error:", err);
     } finally {
       setSubmitting(false);
     }
   };
 
-  const content = [
-    <Pricing />,
-    <Stock />,
-  ];
+  const content = [<Pricing />, <Stock />];
 
   const formData = useSelector(selectProductForm);
+
   useEffect(() => {
     getUnit(firmId)
       .then((res) => {
-        console.log(res.data, "resgetUnit");
         setUnit(res.data);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
 
-      getCategoryByFirm(firmId)
+    getCategoryByFirm(firmId)
       .then((res) => {
-        console.log(res, "getCategoryByFirmRes");
-        // setUnit(res.data);
+        setCategory(res.data);
       })
-      .catch((err) => {
-        console.log(err);
-      });
-      
+      .catch((err) => {});
+
+    dispatch(updateProductForm({ key: "firmId", value: firmId }));
   }, [firmId]);
+
+  // Validation Schema
+  const validationSchema = Yup.object().shape({
+    itemName: Yup.string().required("Item Name is required"),
+    itemHsn: Yup.string().required("Item HSN is required"),
+    itemCode: Yup.string().required("Item Code is required"),
+    categoryIds: Yup.number().required("Category is required"),
+    unit: Yup.string().required("Unit is required"),
+  });
+
   return (
     <div>
       <Formik
         initialValues={{
-          itemname: formData.itemName || "",
-          Hsn: formData.itemHsn || "",
-          itemcode: formData.itemCode || "",
-          category: formData.categoryIds || "",
+          itemName: formData.itemName || "",
+          itemHsn: formData.itemHsn || "",
+          itemCode: formData.itemCode || "",
+          categoryIds: formData.categoryIds, // Add initial value for categoryIds
+          unit: formData.unit, // Add initial value for unit
         }}
         onSubmit={submitForm}
-        validationSchema={""} // Add your validation schema here
+        validationSchema={validationSchema} // Use validation schema
       >
         {({
           handleChange,
@@ -189,24 +152,26 @@ export default function ProductForm() {
             <div className="flex items-end gap-5 my-5 w-full">
               <div className="w-[30%]">
                 <TextInput
-                  name="itemname"
+                  name="itemName"
                   type="text"
                   label="Item Name"
-                  value={values.itemname}
-                  onChange={handleChange("itemname")}
-                  istouched={"Touch"}
+                  value={values.itemName}
+                  error={errors.itemName}
+                  onChange={handleChange("itemName")}
+                  istouched={touched.itemName}
                   className="text-gray-800 text-base w-[30%]"
                 />
               </div>
 
               <div className="w-[30%]">
                 <TextInput
-                  name="Hsn"
+                  name="itemHsn"
                   type="text"
                   label="Item HSN"
-                  value={values.Hsn}
-                  onChange={handleChange("Hsn")}
-                  istouched={"Touch"}
+                  value={values.itemHsn}
+                  error={errors.itemHsn}
+                  onChange={handleChange("itemHsn")}
+                  istouched={touched.itemHsn}
                   className="text-gray-800 text-base w-[30%]"
                 />
               </div>
@@ -215,12 +180,18 @@ export default function ProductForm() {
                 <div className="text-[#808080]">Unit</div>
                 <Select
                   name="unit"
-                  options={allunits}
-                  value={selectedunit?.value}
-                  onChange={handleChangedunit}
+                  options={allUnits}
+                  value={selectedUnit}
+                  onChange={(selectedOption) => {
+                    setSelectedUnit(selectedOption);
+                    setFieldValue("unit", selectedOption?.value); // Set the Formik value
+                  }}
                   styles={customStyles}
                   className="w-full bg-white rounded-md outline-none font-medium text-primary text-sm"
                 />
+                {errors.unit && touched.unit && (
+                  <div className="text-red-500">{errors.unit}</div>
+                )}
               </div>
             </div>
 
@@ -228,23 +199,30 @@ export default function ProductForm() {
               <div className="w-[30%] flex flex-col space-y-2 ">
                 <div className="text-[#808080]">Category</div>
                 <Select
-                  name="Category"
-                  options={allcategory}
-                  value={selectedcategory?.value}
-                  onChange={handleChangedCategory}
+                  name="categoryIds"
+                  options={allCategory}
+                  value={selectedCategory}
+                  onChange={(selectedOption) => {
+                    setSelectedCategory(selectedOption);
+                    setFieldValue("categoryIds", selectedOption?.value); // Set the Formik value
+                  }}
                   styles={customStyles}
                   className="w-full bg-white rounded-md outline-none font-medium text-primary text-sm"
                 />
+                {errors.categoryIds && touched.categoryIds && (
+                  <div className="text-red-500">{errors.categoryIds}</div>
+                )}
               </div>
 
               <div className="w-[30%]">
                 <TextInput
-                  name="itemcode"
+                  name="itemCode"
                   type="text"
                   label="Item Code"
-                  value={values.itemcode}
-                  onChange={handleChange("itemcode")}
-                  istouched={"Touch"}
+                  value={values.itemCode}
+                  error={errors.itemCode}
+                  onChange={handleChange("itemCode")}
+                  istouched={touched.itemCode}
                   className="text-gray-800 text-base w-[30%]"
                 />
               </div>
@@ -263,14 +241,17 @@ export default function ProductForm() {
                 <input
                   type="file"
                   id="fileInput"
-                  name="Signature"
-                  onChange={(e) => handleImageChange(e.target.files)}
+                  onChange={(e) => {
+                    handleImageChange(e.target.files);
+                    setFieldValue("path", e.target.files);
+                  }}
                   className="border-dashed border-2 rounded-md px-3 py-2 text-center border-[#FF6E3F] bg-[#FEE8E1] text-[#FF6E3F]"
                 />
               </div>
             </div>
-
-            <Tabs heading={heading} content={content} />
+            <div className="py-3 border-t border-groove">
+              <Tabs heading={heading} content={content} />
+            </div>
           </>
         )}
       </Formik>

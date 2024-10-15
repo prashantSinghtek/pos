@@ -85,6 +85,11 @@ export const addFirmParty = (values: any, id: any) => {
   return apiRequest("post", url, values);
 };
 
+export const addItem = (values: any,) => {
+  const url = `${Constants.AddItem}`;
+  return apiRequest("post", url, values);
+};
+
 export const getState = () => {
   return apiRequest("get", Constants.state);
 };
