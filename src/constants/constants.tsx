@@ -5,6 +5,7 @@ export class Constants {
   static firm = `${BASE_MAIN}api/Firm/firm`;
   
   static Getunit = `${BASE_MAIN}api/Item/getSelectunit`;
+  static GetCategoryByFirm = `${BASE_MAIN}api/category/get/by`;
 
   static updatefirm = `${BASE_MAIN}api/Firm/firm`;
   static firmUser = `${BASE_MAIN}api/StaffData/staffRole`;

@@ -10,7 +10,7 @@ import Select from "react-select";
 import { Formik } from "formik";
 import { useSelector } from "react-redux";
 import { selectProductForm } from "@/Redux/Item/selectors";
-import { getUnit, myCompany } from "@/controller/posauth";
+import { getCategoryByFirm, getUnit, myCompany } from "@/controller/posauth";
 
 export default function ProductForm() {
   const [pricevalue, setPricevalue] = useState<any>();
@@ -41,26 +41,6 @@ export default function ProductForm() {
     label: option.unit.toUpperCase(),
     id: option.id,
   }));
-
-
-//   baseUnit
-// : 
-// "Bag"
-// conversionRate
-// : 
-// "20"
-// deleted
-// : 
-// false
-// id
-// : 
-// 18
-// secondaryUnit
-// : 
-// "Bottals"
-// unit
-// : 
-// "1 Bag = 20 Bottals"
 
   // Generates random number and sets it in Formik form values
   const generateRandomNumber = (formikSetFieldValue: any) => {
@@ -150,7 +130,7 @@ export default function ProductForm() {
   };
 
   const content = [
-    <Pricing setPricevalue={setPricevalue} />,
+    <Pricing />,
     <Stock setStockvalue={setStockvalue} />,
   ];
 
@@ -164,6 +144,16 @@ export default function ProductForm() {
       .catch((err) => {
         console.log(err);
       });
+
+      getCategoryByFirm(firmId)
+      .then((res) => {
+        console.log(res, "getCategoryByFirmRes");
+        // setUnit(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+      
   }, [firmId]);
   return (
     <div>

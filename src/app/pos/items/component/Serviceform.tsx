@@ -95,7 +95,7 @@ export default function ProductForm({
     serviceCode: Yup.string().required("Service code is required"),
   });
 
-  const content = [<Pricing setPricevalue={setPricevalue} />];
+  const content = [<Pricing />];
   const heading = [
     {
       icon: <RiDropboxFill size={25} />,

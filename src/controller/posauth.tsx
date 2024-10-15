@@ -75,6 +75,11 @@ export const getUnit = (id?: any) => {
 };
 
 
+export const getCategoryByFirm = (id?: any) => {
+  const url =  `${Constants.GetCategoryByFirm}/${id}`;
+  return apiRequest("get", url);
+};
+
 export const addFirmParty = (values: any, id: any) => {
   const url = `${Constants.AddfirmParty}?firmId=${id}`;
   return apiRequest("post", url, values);
