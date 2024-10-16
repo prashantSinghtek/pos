@@ -19,8 +19,8 @@ import { useSession } from "next-auth/react";
 import Stockadd from "./Stockadd";
 import StockReduce from "./StockReduce";
 import { useDispatch, useSelector } from "react-redux";
-import { selectAddItemModel, selectItemList } from "@/Redux/Item/selectors";
-import { chnageAddItemModelState, getItemById, getItemList } from "@/Redux/Item/reducer";
+import { selectAddItemModel, selectItemList, selectTransactionList } from "@/Redux/Item/selectors";
+import { chnageAddItemModelState, getItemById, getItemList, getTransactionByItemId } from "@/Redux/Item/reducer";
 import { selectFirmId } from "@/Redux/Parties/selectors";
 // import { PiMapPinAreaBold } from "react-icons/pi";
 
@@ -85,8 +85,14 @@ export default function Product() {
         callback() {},
       })
     );
-
+    dispatch(
+      getTransactionByItemId({
+        itemId: Id,
+        callback() {},
+      })
+    );
   }
+  const transactionList = useSelector(selectTransactionList)
   return (
     <>
       <div className="flex justify-between items-center px-1 mt-5"></div>
@@ -211,7 +217,9 @@ export default function Product() {
           </div>
 
           <div>
-            <Table headerData={header} />
+            <Table headerData={header} 
+            bodyData={transactionList}
+            />
           </div>
         </div>
       </div>

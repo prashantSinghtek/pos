@@ -407,3 +407,8 @@ export const DeleteItem = (id: any) => {
 export const GetItem = (id: any) => {
   return apiRequest("get", `${Constants.itemDelete}${id}`);
 };
+
+
+export const GetTrasactionItem = (id: any) => {
+  return apiRequest("get", `${Constants.ItemWiseTrasaction}${id}`);
+};

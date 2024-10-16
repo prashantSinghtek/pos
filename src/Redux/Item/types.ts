@@ -46,14 +46,28 @@ export interface ProductFormInterface {
   discountAmount: string;
 }
 
+export interface TransactionInterface {
+  id: number;
+  quantity: number;
+  unitPrice: number;
+  partyName: string;
+  operationType: string;
+  status: any;
+  invoiceNumber: string;
+  dateOfTransaction: any;
+}
+
 export interface CombinedInitialState {
   serviceForm: ServiceItem;
   itemProductForm: ProductFormInterface;
-  addItemModel :boolean;
-  itemList : Array<any>
+  addItemModel: boolean;
+  itemList: Array<any>;
+  transactionList : Array<TransactionInterface>;
 }
+
 export const initialState: CombinedInitialState = {
-  addItemModel:false,
+  addItemModel: false,
+  transactionList: [],
   serviceForm: {
     id: "",
     serviceName: "",
@@ -100,5 +114,5 @@ export const initialState: CombinedInitialState = {
     itemAmount: "500",
     discountAmount: "200",
   },
-  itemList:[]
+  itemList: [],
 };

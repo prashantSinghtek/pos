@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { usePathname } from "next/navigation";
+import { TransactionInterface } from "@/Redux/Item/types";
 
 const Table = ({
   headerData,
@@ -56,63 +57,38 @@ const Table = ({
           </thead>
           {/* Body */}
           <tbody>
-            {bodyData?.map((item: any, index: any) => (
+
+            
+            {bodyData?.map((item: TransactionInterface, index: any) => (
               <tr
                 key={index}
                 className={`font-light border-y border-gray-200 ${
                   index % 2 === 1 ? "bg-gray-100 rounded-full" : ""
                 }`}
               >
-                {item.value1 && (
                   <td className="text-sm text-gray-700 text-center px-2 py-1 ">
-                    {item.value1}
+                    {item.operationType ? item.operationType.replace("_", " ") : "NA"}
                   </td>
-                )}
-                {item.value2 && (
+              
                   <td className="text-sm text-gray-700 text-center px-2 py-1 ">
-                    {item.value2}
+                    {item.invoiceNumber ?item.invoiceNumber  :"NA"}
                   </td>
-                )}
-                {item.value3 && (
                   <td className="text-sm text-gray-700 text-center px-2 py-1 ">
-                    {item.value3}
+                    {item.partyName ? item.partyName : "NA"}
                   </td>
-                )}
-                {item.value4 && (
                   <td className="text-sm text-gray-700 text-center px-2 py-1 ">
-                    {item.value4}
+                    {item.dateOfTransaction ? item.dateOfTransaction : "NA"}
                   </td>
-                )}
-                {item.value5 && (
                   <td className="text-sm text-gray-700 text-center px-2 py-1 ">
-                    {item.value5}
+                    {item.quantity ? item.quantity : "NA"}
                   </td>
-                )}
-                {item.value6 && (
                   <td className="text-sm text-gray-700 text-center px-2 py-1 ">
-                    {item.value6}
+                    {item.unitPrice ? item.unitPrice : "NA"}
                   </td>
-                )}
-                {item.value7 && (
                   <td className="text-sm text-gray-700 text-center px-2 py-1 ">
-                    {item.value7}
+                    {item.status ? item.status : "NA"}
                   </td>
-                )}
-                {item.value8 && (
-                  <td className="text-sm text-gray-700 text-center px-2 py-1 ">
-                    {item.value8}
-                  </td>
-                )}
-                {item.value9 && (
-                  <td className="text-sm text-gray-700 text-center px-2 py-1 ">
-                    {item.value9}
-                  </td>
-                )}
-                {item.value10 && (
-                  <td className="text-sm text-gray-700 text-center px-2 py-1 ">
-                    {item.value10}
-                  </td>
-                )}
+     
               </tr>
             ))}
           </tbody>

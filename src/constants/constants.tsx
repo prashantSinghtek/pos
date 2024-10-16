@@ -3,11 +3,9 @@ import { BASE_MAIN } from "@/app/config/Constant";
 export class Constants {
   static X_API_KEY = "X API Key";
   static firm = `${BASE_MAIN}api/Firm/firm`;
-  
   static Getunit = `${BASE_MAIN}api/Item/getSelectunit`;
   static GetCategoryByFirm = `${BASE_MAIN}category/get/by`;
   static AddItem = `${BASE_MAIN}api/Item/save`;
-
   static updatefirm = `${BASE_MAIN}api/Firm/firm`;
   static firmUser = `${BASE_MAIN}api/StaffData/staffRole`;
   static AddfirmParty = `${BASE_MAIN}api/Party/add`;
@@ -17,7 +15,6 @@ export class Constants {
   static Getpartiesbyfirm = `${BASE_MAIN}api/Party/get/by/id?partyId=`;
   static state = `${BASE_MAIN}api/dropdown/State`;
   static unit = `${BASE_MAIN}api/dropdown/ProductUnit`;
-  // static item = `${BASE_MAIN}api/Item/`;
   static Service = `${BASE_MAIN}api/item/service/`;
   static category = `${BASE_MAIN}category/`;
   static getproduct = `${BASE_MAIN}api/Item/itemByFirm/`;
@@ -55,4 +52,5 @@ export class Constants {
   static UpdateParty = `${BASE_MAIN}api/Party/update/`;
   static DeleteTransaction = `${BASE_MAIN}api/party-transactions/`;
   static itemDelete = `${BASE_MAIN}api/Item/`;
+  static ItemWiseTrasaction = `${BASE_MAIN}api/item/transaction/summary/`;
 }
