@@ -409,6 +409,6 @@ export const GetItem = (id: any) => {
 };
 
 
-export const GetTrasactionItem = (id: any) => {
-  return apiRequest("get", `${Constants.ItemWiseTrasaction}${id}`);
+export const GetTrasactionItem = (id: any, search: any) => {
+  return apiRequest("get", `${Constants.ItemWiseTrasaction}${id}?searchTerm=${search}`);
 };

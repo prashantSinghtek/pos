@@ -39,7 +39,12 @@ const itemSlice = createSlice({
     ) => {
       state.transactionList = action.payload;
     },
-    
+    setSearch: (
+      state,
+      action: PayloadAction<string>
+    ) => {
+      state.searchItem = action.payload;
+    },
     getItemList: (
       state,
       action: PayloadAction<{
@@ -71,5 +76,5 @@ const itemSlice = createSlice({
   },
 });
 
-export const { updateServiceForm,setTransactionist, deleteItemById, updateProductForm ,addItem , getTransactionByItemId, chnageAddItemModelState , getItemList ,getItemById, setItemList} = itemSlice.actions;
+export const { updateServiceForm,setSearch,setTransactionist, deleteItemById, updateProductForm ,addItem , getTransactionByItemId, chnageAddItemModelState , getItemList ,getItemById, setItemList} = itemSlice.actions;
 export default itemSlice.reducer; // Ensure that you're exporting the reducer

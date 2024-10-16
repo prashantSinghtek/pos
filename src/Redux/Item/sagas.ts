@@ -1,7 +1,7 @@
 import { takeEvery, call, put, takeLatest, select, delay } from "redux-saga/effects";
 import axios, { AxiosResponse } from "axios";
-import { addItem, chnageAddItemModelState, deleteItemById, getItemById, getItemList, getTransactionByItemId, setItemList, setTransactionist } from "./reducer";
-import { selectProductForm } from "./selectors";
+import { addItem, chnageAddItemModelState, deleteItemById, getItemById, getItemList, getTransactionByItemId, setItemList, setSearch, setTransactionist } from "./reducer";
+import { selectProductForm, selectSearchItem } from "./selectors";
 import { ProductFormInterface } from "./types";
 import { addItem as addItemAPI, DeleteItem, GetItem, getProducts, GetTrasactionItem } from "@/controller/posauth";
 import toast from "react-hot-toast";
@@ -116,8 +116,9 @@ export function* getTransactionByItemIdRequest(action: {
   if (action.payload.itemId.length === 0) {
     return;
   }
+  const search: string = yield select(selectSearchItem);
   yield delay(1000);
-  const response: any = yield call(GetTrasactionItem, action.payload.itemId);
+  const response: any = yield call(GetTrasactionItem, action.payload.itemId, search);
   console.log(response , "response");
   yield put(setTransactionist(response));
   if (action.payload.callback) {

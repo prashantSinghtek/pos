@@ -19,17 +19,26 @@ import { useSession } from "next-auth/react";
 import Stockadd from "./Stockadd";
 import StockReduce from "./StockReduce";
 import { useDispatch, useSelector } from "react-redux";
-import { selectAddItemModel, selectItemList, selectTransactionList } from "@/Redux/Item/selectors";
-import { chnageAddItemModelState, getItemById, getItemList, getTransactionByItemId } from "@/Redux/Item/reducer";
+import {
+  selectAddItemModel,
+  selectItemList,
+  selectSearchItem,
+  selectTransactionList,
+} from "@/Redux/Item/selectors";
+import {
+  chnageAddItemModelState,
+  getItemById,
+  getItemList,
+  getTransactionByItemId,
+  setSearch,
+} from "@/Redux/Item/reducer";
 import { selectFirmId } from "@/Redux/Parties/selectors";
 // import { PiMapPinAreaBold } from "react-icons/pi";
 
 export default function Product() {
   const [selectedproduct, setSelectedProduct] = useState<any>();
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedlistitem, setSelectedlistitem] = useState();
   const [modalOpenFrom, setModalOpenFrom] = useState("");
-  const [, setModalopen] = useState(false);
   const [adjustitemmodalopen, setAdjustitemmodalopen] = useState(false);
   const Router = useRouter();
   const [tabs, setTabs] = useState([{ id: 1, isChecked: false }]);
@@ -63,7 +72,7 @@ export default function Product() {
 
   const firmId = useSelector(selectFirmId);
   useEffect(() => {
-    if(!firmId){
+    if (!firmId) {
       return;
     }
     dispatch(
@@ -76,9 +85,10 @@ export default function Product() {
     return () => {};
   }, [firmId]);
 
-
-  const list = useSelector(selectItemList)
-  const handleEdit = (Id:any) => {
+  const list = useSelector(selectItemList);
+  const [setselectedId, setSetselectedId] = useState("");
+  const handleEdit = (Id: any) => {
+    setSetselectedId(Id);
     dispatch(
       getItemById({
         itemId: Id,
@@ -91,8 +101,22 @@ export default function Product() {
         callback() {},
       })
     );
-  }
-  const transactionList = useSelector(selectTransactionList)
+  };
+  const search = useSelector(selectSearchItem);
+  useEffect(() => {
+    if (!setselectedId) {
+      return;
+    }
+    dispatch(
+      getTransactionByItemId({
+        itemId: setselectedId,
+        callback() {},
+      })
+    );
+    return () => {};
+  }, [search]);
+
+  const transactionList = useSelector(selectTransactionList);
   return (
     <>
       <div className="flex justify-between items-center px-1 mt-5"></div>
@@ -145,14 +169,13 @@ export default function Product() {
               <div>Item Name</div>
               <div>Quantity</div>
             </div>
-              <List
-                listdata={list}
-                onselected={(id: number) => {
-                  handleEdit(id)
-                }}
-                page={"product"}
-              />
-          
+            <List
+              listdata={list}
+              onselected={(id: number) => {
+                handleEdit(id);
+              }}
+              page={"product"}
+            />
           </div>
         </div>
         <div className="sm:w-screen lg:w-[75%] flex-col gap-5">
@@ -208,18 +231,20 @@ export default function Product() {
               <TextInput
                 name="search"
                 type="text"
+                value={search}
                 placeholder="Search By"
                 label=""
                 istouched={"Touch"}
                 className="text-gray-800 text-base w-full"
+                onChange={(e) => {
+                  dispatch(setSearch(e.target.value));
+                }}
               />
             </div>
           </div>
 
           <div>
-            <Table headerData={header} 
-            bodyData={transactionList}
-            />
+            <Table headerData={header} bodyData={transactionList} />
           </div>
         </div>
       </div>

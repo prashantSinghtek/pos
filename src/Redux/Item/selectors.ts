@@ -5,3 +5,5 @@ export const selectProductForm = (state: RootState) => state.item.itemProductFor
 export const selectAddItemModel = (state: RootState) => state.item.addItemModel
 export const selectItemList = (state: RootState) => state.item.itemList
 export const selectTransactionList = (state: RootState) => state.item.transactionList
+export const selectSearchItem = (state: RootState) => state.item.searchItem
+
