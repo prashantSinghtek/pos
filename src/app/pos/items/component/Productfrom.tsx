@@ -136,7 +136,7 @@ export default function ProductForm() {
           unit: formData.unit, // Add initial value for unit
         }}
         onSubmit={submitForm}
-        validationSchema={validationSchema} // Use validation schema
+        // validationSchema={validationSchema} // Use validation schema
       >
         {({
           handleChange,

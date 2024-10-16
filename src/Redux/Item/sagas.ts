@@ -7,7 +7,9 @@ import { addItem as addItemAPI } from "@/controller/posauth";
 import { log } from "console";
 import toast from "react-hot-toast";
 
-export function* addItemRequest(action: { payload: { callback: any } }): Generator<any, void, any> {
+export function* addItemRequest(action: {
+  payload: { callback: any };
+}): Generator<any, void, any> {
   const form: ProductFormInterface = yield select(selectProductForm);
   const formData = new FormData();
 
@@ -27,40 +29,41 @@ export function* addItemRequest(action: { payload: { callback: any } }): Generat
         // In case it's a single file
         formData.append("path", fileList);
       }
-    } 
+    }
     // Handle fields with "value" and "label"
-    else if (typeof fieldValue === "object" && fieldValue !== null && "value" in fieldValue && "label" in fieldValue) {
+    else if (
+      typeof fieldValue === "object" &&
+      fieldValue !== null &&
+      "value" in fieldValue &&
+      "label" in fieldValue
+    ) {
       formData.append(key, String(fieldValue.value)); // Append only the 'value'
-    } 
+    }
     // Handle other fields
     else {
       formData.append(key, String(fieldValue));
     }
   });
 
-  // Debugging: Log the FormData contents to verify
   formData.forEach((value, key) => {
     console.log(`${key}:`, value);
   });
 
   try {
     const response: any = yield call(addItemAPI, formData);
-    debugger
-    if (response && !response.status) {   
-       toast.success(response?.message);
+    debugger;
+    if (!response || response== undefined || response.status != 200) {
+      toast.error(response?.message || "Something went wrong");
       return;
-    }  
+    }
 
-     yield put(chnageAddItemModelState(false));  
-       toast.success(response?.message);   
-      action.payload.callback();
-
-  
+    yield put(chnageAddItemModelState(false));
+    toast.success(response?.message);
+    action.payload.callback();
   } catch (error) {
     console.error("Error updating item:", error);
   }
 }
-
 
 export default function* ItemSaga(): Generator {
   yield takeLatest(addItem, addItemRequest);
