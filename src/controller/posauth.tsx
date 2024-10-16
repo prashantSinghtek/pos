@@ -120,27 +120,6 @@ export const getProducts = (firmid: any) => {
   const url = `${Constants.getproduct}${firmid}`;
   return apiRequest("get", url);
 };
-
-export const addItems = (values: any) => {
-  const url = `${Constants.item}save`;
-  return apiRequest("post", url, values);
-};
-
-export const itemStockAdjustment = (
-  values: any,
-  itemid: any,
-  firmid: any,
-  stockAdjustmentType: any
-) => {
-  const url = `${Constants.item}${itemid}/stock/adjustment/${stockAdjustmentType}/firm/${firmid}?adjustmentQuantity=${values.qty}&stockAdjustmentDetails=${values.details}&atPrice=${values.price}`;
-  return apiRequest("post", url);
-};
-
-export const getParticularItems = (id: any) => {
-  const url = `${Constants.item}${id}`;
-  return apiRequest("get", url);
-};
-
 export const addCategory = (categoryName: any, firmId: any) => {
   const url = `${Constants.category}add?categoryName=${categoryName}&firmId=${firmId}`;
   return apiRequest("post", url);
@@ -380,13 +359,6 @@ export const getExpensesTransaction = (categoryid: any, firmid: any) => {
   );
 };
 
-export const getItemBySearch = (searchTerm: any, firmid: any) => {
-  return apiRequest(
-    "get",
-    `${Constants.item}search?searchTerm=${searchTerm}&firmId=${firmid}`
-  );
-};
-
 export const addService = (values: any) => {
   return apiRequest("post", `${Constants.Service}save`, values);
 };
@@ -427,4 +399,7 @@ export const deletePartyByIdAPI = (id: any) => {
 
 export const DeleteTransaction = (id: any) => {
   return apiRequest("delete", `${Constants.DeleteTransaction}${id}`);
+};
+export const DeleteItem = (id: any) => {
+  return apiRequest("delete", `${Constants.itemDelete}${id}`);
 };

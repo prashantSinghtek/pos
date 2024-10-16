@@ -5,6 +5,7 @@ import DeleteConfirmationModal from "./deleteConfirmationModel";
 import { useDispatch, useSelector } from "react-redux";
 import { deletePartyById, getParty } from "@/Redux/Parties/reducer";
 import { selectFirmId } from "@/Redux/Parties/selectors";
+import { deleteItemById, getItemList } from "@/Redux/Item/reducer";
 
 const List = ({
   listdata,
@@ -40,11 +41,11 @@ const List = ({
       );
     } else if (page == "product") {
       dispatch(
-        deletePartyById({
-          partieId: selected,
+        deleteItemById({
+          itemId: selected,
           callback() {
             dispatch(
-              getParty({
+              getItemList({
                 firmId: firmId,
                 callback() {
                   setOpenDeleteModel(false);
@@ -91,7 +92,7 @@ const List = ({
                     {page == "unit"
                       ? item?.shortName
                       : page == "product"
-                      ? item?.itemPricing.quantity
+                      ? item?.itemPricing?.quantity
                       : ""}
                   </div>
                   <div className="relative">

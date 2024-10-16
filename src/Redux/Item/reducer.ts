@@ -40,8 +40,15 @@ const itemSlice = createSlice({
         callback: () => void;
       }>
     ) => {},
+    deleteItemById: (
+      state,
+      action: PayloadAction<{
+        itemId: any;
+        callback: () => void;
+      }>
+    ) => {},
   },
 });
 
-export const { updateServiceForm, updateProductForm ,addItem , chnageAddItemModelState , getItemList , setItemList} = itemSlice.actions;
+export const { updateServiceForm, deleteItemById, updateProductForm ,addItem , chnageAddItemModelState , getItemList , setItemList} = itemSlice.actions;
 export default itemSlice.reducer; // Ensure that you're exporting the reducer

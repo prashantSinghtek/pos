@@ -17,7 +17,7 @@ export class Constants {
   static Getpartiesbyfirm = `${BASE_MAIN}api/Party/get/by/id?partyId=`;
   static state = `${BASE_MAIN}api/dropdown/State`;
   static unit = `${BASE_MAIN}api/dropdown/ProductUnit`;
-  static item = `${BASE_MAIN}api/Item/`;
+  // static item = `${BASE_MAIN}api/Item/`;
   static Service = `${BASE_MAIN}api/item/service/`;
   static category = `${BASE_MAIN}category/`;
   static getproduct = `${BASE_MAIN}api/Item/itemByFirm/`;
@@ -54,4 +54,5 @@ export class Constants {
   static DeleteParty = `${BASE_MAIN}api/Party/deleteParties?partyId=`;
   static UpdateParty = `${BASE_MAIN}api/Party/update/`;
   static DeleteTransaction = `${BASE_MAIN}api/party-transactions/`;
+  static itemDelete = `${BASE_MAIN}api/Item/`;
 }

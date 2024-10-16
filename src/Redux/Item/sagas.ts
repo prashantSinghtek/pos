@@ -1,9 +1,9 @@
 import { takeEvery, call, put, takeLatest, select, delay } from "redux-saga/effects";
 import axios, { AxiosResponse } from "axios";
-import { addItem, chnageAddItemModelState, getItemList, setItemList } from "./reducer";
+import { addItem, chnageAddItemModelState, deleteItemById, getItemList, setItemList } from "./reducer";
 import { selectProductForm } from "./selectors";
 import { ProductFormInterface } from "./types";
-import { addItem as addItemAPI, getProducts } from "@/controller/posauth";
+import { addItem as addItemAPI, DeleteItem, getProducts } from "@/controller/posauth";
 import { log } from "console";
 import toast from "react-hot-toast";
 
@@ -83,7 +83,21 @@ export function* getItemListRequest(action: {
     action.payload.callback();
   }
 }
+export function* deleteItemByIdRequest(action: {
+  payload: { itemId: string; callback: any };
+}): Generator<any, void, any> {
+  if (action.payload.itemId.length === 0) {
+    return;
+  }
+  yield delay(1000);
+  yield call(DeleteItem, action.payload.itemId);
+  if (action.payload.callback) {
+    action.payload.callback();
+  }
+}
 export default function* ItemSaga(): Generator {
   yield takeLatest(addItem, addItemRequest);
   yield takeLatest(getItemList, getItemListRequest);
+  yield takeLatest(deleteItemById, deleteItemByIdRequest);
+
 }

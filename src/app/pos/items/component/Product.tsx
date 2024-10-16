@@ -18,11 +18,6 @@ import { useSession } from "next-auth/react";
 
 import Stockadd from "./Stockadd";
 import StockReduce from "./StockReduce";
-import {
-  getItemBySearch,
-  getParticularItems,
-  getProducts,
-} from "@/controller/posauth";
 import { useDispatch, useSelector } from "react-redux";
 import { selectAddItemModel, selectItemList } from "@/Redux/Item/selectors";
 import { chnageAddItemModelState, getItemList } from "@/Redux/Item/reducer";
@@ -30,11 +25,8 @@ import { selectFirmId } from "@/Redux/Parties/selectors";
 // import { PiMapPinAreaBold } from "react-icons/pi";
 
 export default function Product() {
-  const [product, setProduct] = useState();
   const [selectedproduct, setSelectedProduct] = useState<any>();
   const [searchTerm, setSearchTerm] = useState("");
-  const [searchTermData, setSearchTermData] = useState<any>([]);
-  const token = localStorage.getItem("authToken");
   const [selectedtab, setSelectedtab] = useState<any>();
   const [selectedlistitem, setSelectedlistitem] = useState();
   const [modalOpenFrom, setModalOpenFrom] = useState("");
@@ -44,7 +36,6 @@ export default function Product() {
   console.log("selectedtab", selectedtab);
   const [tabs, setTabs] = useState([{ id: 1, isChecked: false }]);
   const [activeTab, setActiveTab] = useState<any>(1);
-  const [productupdate, setProductupdate] = useState(false);
   const handleCheckboxChanged = (tabId: any) => {
     setTabs(
       tabs.map((tab) =>
