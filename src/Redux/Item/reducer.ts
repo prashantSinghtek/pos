@@ -1,7 +1,7 @@
 // Redux/Parties/reducer.ts (or partiesSlice.ts)
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { initialState } from "./types";
-import { set } from "lodash";
+import { get, set } from "lodash";
 const itemSlice = createSlice({
   name: "item",
   initialState,
@@ -47,8 +47,15 @@ const itemSlice = createSlice({
         callback: () => void;
       }>
     ) => {},
+    getItemById: (
+      state,
+      action: PayloadAction<{
+        itemId: any;
+        callback: () => void;
+      }>
+    ) => {},
   },
 });
 
-export const { updateServiceForm, deleteItemById, updateProductForm ,addItem , chnageAddItemModelState , getItemList , setItemList} = itemSlice.actions;
+export const { updateServiceForm, deleteItemById, updateProductForm ,addItem , chnageAddItemModelState , getItemList ,getItemById, setItemList} = itemSlice.actions;
 export default itemSlice.reducer; // Ensure that you're exporting the reducer

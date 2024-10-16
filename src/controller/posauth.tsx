@@ -403,3 +403,7 @@ export const DeleteTransaction = (id: any) => {
 export const DeleteItem = (id: any) => {
   return apiRequest("delete", `${Constants.itemDelete}${id}`);
 };
+
+export const GetItem = (id: any) => {
+  return apiRequest("get", `${Constants.itemDelete}${id}`);
+};

@@ -7,14 +7,7 @@ import { deletePartyById, getParty } from "@/Redux/Parties/reducer";
 import { selectFirmId } from "@/Redux/Parties/selectors";
 import { deleteItemById, getItemList } from "@/Redux/Item/reducer";
 
-const List = ({
-  listdata,
-  onselected,
-  page,
-  setSelectedbank,
-  setModalopen,
-  setModalOpenFrom,
-}: any) => {
+const List = ({ listdata, onselected, page, handleEdit }: any) => {
   const path = usePathname();
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState();
@@ -59,6 +52,8 @@ const List = ({
   };
   console.log(listdata, page, "listdata");
 
+  
+
   return (
     <>
       <div className="flex flex-col space-y-4 px-4 mt-3">
@@ -68,7 +63,7 @@ const List = ({
               <li
                 key={itemIndex}
                 className="flex items-center justify-between py-2 space-x-4 mb-3 cursor-pointer border-b-2 border-gray-100"
-                onClick={() => onselected(item?.id)}
+                onClick={() =>  onselected(item?.id)}
               >
                 <div>
                   <div className="text-[18px] font-thin text-[#737373]">
@@ -106,13 +101,7 @@ const List = ({
                     </div>
                     {open && item?.id == selected && (
                       <div className="absolute p-1 px-3 text-sm z-50 flex flex-col gap-1 bg-white shadow-lg border border-gray-500 rounded-xl top-4 right-0">
-                        <div
-                          onClick={() => {
-                            setModalopen(true);
-                          }}
-                        >
-                          View/Edit
-                        </div>
+                        <div>View/Edit</div>
                         <div
                           onClick={() => {
                             setOpenDeleteModel(true);

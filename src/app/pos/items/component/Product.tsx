@@ -20,20 +20,18 @@ import Stockadd from "./Stockadd";
 import StockReduce from "./StockReduce";
 import { useDispatch, useSelector } from "react-redux";
 import { selectAddItemModel, selectItemList } from "@/Redux/Item/selectors";
-import { chnageAddItemModelState, getItemList } from "@/Redux/Item/reducer";
+import { chnageAddItemModelState, getItemById, getItemList } from "@/Redux/Item/reducer";
 import { selectFirmId } from "@/Redux/Parties/selectors";
 // import { PiMapPinAreaBold } from "react-icons/pi";
 
 export default function Product() {
   const [selectedproduct, setSelectedProduct] = useState<any>();
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedtab, setSelectedtab] = useState<any>();
   const [selectedlistitem, setSelectedlistitem] = useState();
   const [modalOpenFrom, setModalOpenFrom] = useState("");
   const [, setModalopen] = useState(false);
   const [adjustitemmodalopen, setAdjustitemmodalopen] = useState(false);
   const Router = useRouter();
-  console.log("selectedtab", selectedtab);
   const [tabs, setTabs] = useState([{ id: 1, isChecked: false }]);
   const [activeTab, setActiveTab] = useState<any>(1);
   const handleCheckboxChanged = (tabId: any) => {
@@ -80,6 +78,15 @@ export default function Product() {
 
 
   const list = useSelector(selectItemList)
+  const handleEdit = (Id:any) => {
+    dispatch(
+      getItemById({
+        itemId: Id,
+        callback() {},
+      })
+    );
+
+  }
   return (
     <>
       <div className="flex justify-between items-center px-1 mt-5"></div>
@@ -135,13 +142,9 @@ export default function Product() {
               <List
                 listdata={list}
                 onselected={(id: number) => {
-                  console.log(">>>>>>>>>>>", id);
-                  setSelectedtab(id);
+                  handleEdit(id)
                 }}
                 page={"product"}
-                setSelectedbank={setSelectedlistitem}
-                setModalopen={setModalopen}
-                setModalOpenFrom={setModalOpenFrom}
               />
           
           </div>
