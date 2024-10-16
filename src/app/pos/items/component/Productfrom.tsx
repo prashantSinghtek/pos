@@ -86,7 +86,7 @@ export default function ProductForm() {
           callback() {
             debugger;
             console.log("called");
-            
+
             dispatch(chnageAddItemModelState(false));
           },
         })
@@ -102,6 +102,9 @@ export default function ProductForm() {
   const formData = useSelector(selectProductForm);
 
   useEffect(() => {
+    if (!firmId) {
+      return;
+    }
     getUnit(firmId)
       .then((res) => {
         setUnit(res.data);

@@ -7,6 +7,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectUserInfo } from "@/Redux/Firm/selectors";
 import { useEffect } from "react";
 import { setUserDetailForm } from "@/Redux/Firm/reducer";
+import { myCompany } from "@/controller/posauth";
+import { setFirmId } from "@/Redux/Parties/reducer";
 
 export default function Header() {
   const path = usePathname();
@@ -30,10 +32,16 @@ export default function Header() {
           Role: session.user.type,
         })
       );
+
+      myCompany()
+        .then((res) => {
+          dispatch(setFirmId(res[0].id));
+        })
+        .catch((err) => {});
     }
 
     return () => {};
-  }, [session?.user , session?.uToken]);
+  }, [session?.user, session?.uToken]);
   return (
     <div>
       <header className="w-[100%] py-3 bg-opacity-20 flex shadow-sm shadow-gray-300 items-center z-50">

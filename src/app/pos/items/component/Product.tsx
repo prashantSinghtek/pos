@@ -24,16 +24,14 @@ import {
   getProducts,
 } from "@/controller/posauth";
 import { useDispatch, useSelector } from "react-redux";
-import { selectAddItemModel } from "@/Redux/Item/selectors";
-import { chnageAddItemModelState } from "@/Redux/Item/reducer";
+import { selectAddItemModel, selectItemList } from "@/Redux/Item/selectors";
+import { chnageAddItemModelState, getItemList } from "@/Redux/Item/reducer";
+import { selectFirmId } from "@/Redux/Parties/selectors";
 // import { PiMapPinAreaBold } from "react-icons/pi";
 
 export default function Product() {
-  const firmid = localStorage.getItem("selectedStore");
-  console.log(firmid, "firmid");
   const [product, setProduct] = useState();
   const [selectedproduct, setSelectedProduct] = useState<any>();
-  const session = useSession();
   const [searchTerm, setSearchTerm] = useState("");
   const [searchTermData, setSearchTermData] = useState<any>([]);
   const token = localStorage.getItem("authToken");
@@ -55,50 +53,6 @@ export default function Product() {
     );
   };
 
-  useEffect(() => {
-    getProducts(firmid)
-      .then((res) => {
-        setProduct(res.data);
-        setProductupdate(false);
-      })
-      .catch((err) => console.log(err));
-  }, [token, firmid, productupdate]);
-  console.log("selectedtab", selectedtab);
-
-  useEffect(() => {
-    getParticularItems(selectedtab)
-      .then((res: any) => {
-        setSelectedProduct(res.data), console.log(res);
-      })
-      .catch((err) => console.log(err));
-  }, [token, selectedtab]);
-
-  useEffect(() => {
-    getItemBySearch(searchTerm, firmid)
-      .then((res) => {
-        // setSearchTermData(res?.data);
-      })
-      .catch((err) => console.log(err));
-  }, [token, firmid, searchTerm]);
-
-  const data = [
-    {
-      id: 1,
-      name: "All",
-      amount: 1234,
-    },
-    {
-      id: 1,
-      name: "prashant",
-      amount: 1234,
-    },
-    {
-      id: 1,
-      name: "rahul",
-      amount: 1234,
-    },
-  ];
-
   const header = [
     "Type",
     "Invoice No.",
@@ -117,6 +71,24 @@ export default function Product() {
 
   const addItemModel = useSelector(selectAddItemModel);
   const dispatch = useDispatch();
+
+  const firmId = useSelector(selectFirmId);
+  useEffect(() => {
+    if(!firmId){
+      return;
+    }
+    dispatch(
+      getItemList({
+        firmId: firmId,
+        callback() {},
+      })
+    );
+
+    return () => {};
+  }, [firmId]);
+
+
+  const list = useSelector(selectItemList)
   return (
     <>
       <div className="flex justify-between items-center px-1 mt-5"></div>
@@ -169,9 +141,8 @@ export default function Product() {
               <div>Item Name</div>
               <div>Quantity</div>
             </div>
-            {searchTermData.length > 0 ? (
               <List
-                listdata={searchTermData}
+                listdata={list}
                 onselected={(id: number) => {
                   console.log(">>>>>>>>>>>", id);
                   setSelectedtab(id);
@@ -181,19 +152,7 @@ export default function Product() {
                 setModalopen={setModalopen}
                 setModalOpenFrom={setModalOpenFrom}
               />
-            ) : (
-              <List
-                listdata={product}
-                onselected={(id: number) => {
-                  console.log(">>>>>>>>>>>", id);
-                  setSelectedtab(id);
-                }}
-                page={"product"}
-                setSelectedbank={setSelectedlistitem}
-                setModalopen={setModalopen}
-                setModalOpenFrom={setModalOpenFrom}
-              />
-            )}
+          
           </div>
         </div>
         <div className="sm:w-screen lg:w-[75%] flex-col gap-5">
@@ -262,9 +221,12 @@ export default function Product() {
           </div>
         </div>
       </div>
-      <Modal isOpen={addItemModel} onClose={() => {
-             dispatch(chnageAddItemModelState(false));
-      }}>
+      <Modal
+        isOpen={addItemModel}
+        onClose={() => {
+          dispatch(chnageAddItemModelState(false));
+        }}
+      >
         {modalOpenFrom == "FromList" ? (
           <>
             <div className=" flex gap-2 items-center py-2">

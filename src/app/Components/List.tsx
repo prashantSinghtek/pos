@@ -22,22 +22,42 @@ const List = ({
   const dispatch = useDispatch();
   const firmId = useSelector(selectFirmId);
   const deleteParty = () => {
-    dispatch(
-      deletePartyById({
-        partieId: selected,
-        callback() {
-          dispatch(
-            getParty({
-              firmId: firmId,
-              callback() {
-                setOpenDeleteModel(false);
-              },
-            })
-          );
-        },
-      })
-    );
+    if (page == "parties") {
+      dispatch(
+        deletePartyById({
+          partieId: selected,
+          callback() {
+            dispatch(
+              getParty({
+                firmId: firmId,
+                callback() {
+                  setOpenDeleteModel(false);
+                },
+              })
+            );
+          },
+        })
+      );
+    } else if (page == "product") {
+      dispatch(
+        deletePartyById({
+          partieId: selected,
+          callback() {
+            dispatch(
+              getParty({
+                firmId: firmId,
+                callback() {
+                  setOpenDeleteModel(false);
+                },
+              })
+            );
+          },
+        })
+      );
+    }
   };
+  console.log(listdata, page, "listdata");
+
   return (
     <>
       <div className="flex flex-col space-y-4 px-4 mt-3">
@@ -68,11 +88,15 @@ const List = ({
                 </div>
                 <div className="flex gap-2 items-center">
                   <div className=" font-thin text-[18px] text-[#737373]">
-                    {page == "unit" ? item?.shortName : item?.openingBalance}
+                    {page == "unit"
+                      ? item?.shortName
+                      : page == "product"
+                      ? item?.itemPricing.quantity
+                      : ""}
                   </div>
                   <div className="relative">
                     <div
-                      onClick={() => { 
+                      onClick={() => {
                         setSelected(item?.id);
                         setOpen(!open);
                       }}

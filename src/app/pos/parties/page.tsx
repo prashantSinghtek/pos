@@ -231,6 +231,7 @@ export default function Page() {
               <div>Amount</div>
             </div>
             <List
+            name={"parties"}
               listdata={list}
               setModalopen={setModalopen}
               onselected={(id: number) => {

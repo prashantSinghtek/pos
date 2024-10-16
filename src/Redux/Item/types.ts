@@ -49,7 +49,8 @@ export interface ProductFormInterface {
 export interface CombinedInitialState {
   serviceForm: ServiceItem;
   itemProductForm: ProductFormInterface;
-  addItemModel :boolean
+  addItemModel :boolean;
+  itemList : Array<any>
 }
 export const initialState: CombinedInitialState = {
   addItemModel:false,
@@ -99,4 +100,5 @@ export const initialState: CombinedInitialState = {
     itemAmount: "500",
     discountAmount: "200",
   },
+  itemList:[]
 };

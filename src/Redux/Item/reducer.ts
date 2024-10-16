@@ -27,8 +27,21 @@ const itemSlice = createSlice({
     chnageAddItemModelState: (state ,  action: PayloadAction<boolean>) => {
       state.addItemModel = action.payload;
     },
+    setItemList: (
+      state,
+      action: PayloadAction<Array<any>>
+    ) => {
+      state.itemList = action.payload;
+    },
+    getItemList: (
+      state,
+      action: PayloadAction<{
+        firmId: any;
+        callback: () => void;
+      }>
+    ) => {},
   },
 });
 
-export const { updateServiceForm, updateProductForm ,addItem , chnageAddItemModelState} = itemSlice.actions;
+export const { updateServiceForm, updateProductForm ,addItem , chnageAddItemModelState , getItemList , setItemList} = itemSlice.actions;
 export default itemSlice.reducer; // Ensure that you're exporting the reducer
