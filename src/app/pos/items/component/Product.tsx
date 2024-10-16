@@ -18,7 +18,14 @@ import { useSession } from "next-auth/react";
 
 import Stockadd from "./Stockadd";
 import StockReduce from "./StockReduce";
-import { getItemBySearch, getParticularItems, getProducts } from "@/controller/posauth";
+import {
+  getItemBySearch,
+  getParticularItems,
+  getProducts,
+} from "@/controller/posauth";
+import { useDispatch, useSelector } from "react-redux";
+import { selectAddItemModel } from "@/Redux/Item/selectors";
+import { chnageAddItemModelState } from "@/Redux/Item/reducer";
 // import { PiMapPinAreaBold } from "react-icons/pi";
 
 export default function Product() {
@@ -33,7 +40,7 @@ export default function Product() {
   const [selectedtab, setSelectedtab] = useState<any>();
   const [selectedlistitem, setSelectedlistitem] = useState();
   const [modalOpenFrom, setModalOpenFrom] = useState("");
-  const [modalopen, setModalopen] = useState(false);
+  const [, setModalopen] = useState(false);
   const [adjustitemmodalopen, setAdjustitemmodalopen] = useState(false);
   const Router = useRouter();
   console.log("selectedtab", selectedtab);
@@ -108,6 +115,8 @@ export default function Product() {
     setIsChecked(!isChecked);
   };
 
+  const addItemModel = useSelector(selectAddItemModel);
+  const dispatch = useDispatch();
   return (
     <>
       <div className="flex justify-between items-center px-1 mt-5"></div>
@@ -139,7 +148,9 @@ export default function Product() {
               >
                 <div
                   className="flex  items-center"
-                  onClick={() => setModalopen(!modalopen)}
+                  onClick={() => {
+                    dispatch(chnageAddItemModelState(true));
+                  }}
                 >
                   <IoMdAdd size={25} />
                   Add Item
@@ -251,7 +262,9 @@ export default function Product() {
           </div>
         </div>
       </div>
-      <Modal isOpen={modalopen} onClose={() => setModalopen(false)}>
+      <Modal isOpen={addItemModel} onClose={() => {
+             dispatch(chnageAddItemModelState(false));
+      }}>
         {modalOpenFrom == "FromList" ? (
           <>
             <div className=" flex gap-2 items-center py-2">
@@ -288,13 +301,7 @@ export default function Product() {
                 Service
               </span>
             </div>
-            {isChecked == true ? (
-              <Serviceform />
-            ) : (
-              <Productfrom
- 
-              />
-            )}
+            {isChecked == true ? <Serviceform /> : <Productfrom />}
           </>
         ) : (
           <>
@@ -332,11 +339,7 @@ export default function Product() {
                 Service
               </span>
             </div>
-            {isChecked == true ? (
-              <Serviceform />
-            ) : (
-              <Productfrom />
-            )}
+            {isChecked == true ? <Serviceform /> : <Productfrom />}
           </>
         )}
       </Modal>

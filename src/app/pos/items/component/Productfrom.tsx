@@ -12,7 +12,11 @@ import * as Yup from "yup"; // Import Yup for validation
 import { useDispatch, useSelector } from "react-redux";
 import { selectProductForm } from "@/Redux/Item/selectors";
 import { getCategoryByFirm, getUnit, myCompany } from "@/controller/posauth";
-import { addItem, updateProductForm } from "@/Redux/Item/reducer";
+import {
+  addItem,
+  chnageAddItemModelState,
+  updateProductForm,
+} from "@/Redux/Item/reducer";
 
 export default function ProductForm() {
   const [selectedUnit, setSelectedUnit] = useState<any>(null);
@@ -79,7 +83,12 @@ export default function ProductForm() {
       });
       dispatch(
         addItem({
-          callback() {},
+          callback() {
+            debugger;
+            console.log("called");
+            
+            dispatch(chnageAddItemModelState(false));
+          },
         })
       );
     } catch (err) {
@@ -104,7 +113,6 @@ export default function ProductForm() {
         setCategory(res.data);
       })
       .catch((err) => {});
-
     dispatch(updateProductForm({ key: "firmId", value: firmId }));
   }, [firmId]);
 
@@ -218,6 +226,7 @@ export default function ProductForm() {
                 <TextInput
                   name="itemCode"
                   type="text"
+                  disabled
                   label="Item Code"
                   value={values.itemCode}
                   error={errors.itemCode}

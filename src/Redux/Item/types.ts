@@ -49,8 +49,10 @@ export interface ProductFormInterface {
 export interface CombinedInitialState {
   serviceForm: ServiceItem;
   itemProductForm: ProductFormInterface;
+  addItemModel :boolean
 }
 export const initialState: CombinedInitialState = {
+  addItemModel:false,
   serviceForm: {
     id: "",
     serviceName: "",

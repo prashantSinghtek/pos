@@ -126,10 +126,6 @@ export default function Pricing() {
 
       const updatedValues = {
         ...values,
-        salePriceType: selectedgstOption?.value || null,
-        wholeSalePriceTaxType: selecteddiscountgstOption?.value || null,
-        purchasePriceTaxType: selectedpurchasegstOption?.value || null,
-        discountOnSalePriceType: selecteddiscountOption?.value || null,
       };
 
       Object.entries(updatedValues).forEach(([key, value]) => {
@@ -147,16 +143,16 @@ export default function Pricing() {
     <div>
       <Formik
         initialValues={{
-          salePrice: productForm.salePrice || "",
-          discountOnSalePrice: productForm.discountOnSalePrice || "",
-          wholeSalePrice: productForm.wholeSalePrice || "",
-          quantity: productForm.quantity || "",
-          tax: productForm.tax || "",
-          purchasePrice: productForm.purchasePrice || "",
-          salePriceType: productForm.salePriceType || null,
-          discountOnSalePriceType: productForm.discountOnSalePriceType || null,
-          wholeSalePriceTaxType: productForm.wholeSalePriceTaxType || null,
-          purchasePriceTaxType: productForm.purchasePriceTaxType || null,
+          salePrice: productForm.salePrice,
+          discountOnSalePrice: productForm.discountOnSalePrice,
+          wholeSalePrice: productForm.wholeSalePrice,
+          quantity: productForm.quantity,
+          tax: productForm.tax,
+          purchasePrice: productForm.purchasePrice,
+          salePriceType: productForm.salePriceType,
+          discountOnSalePriceType: productForm.discountOnSalePriceType,
+          wholeSalePriceTaxType: productForm.wholeSalePriceTaxType,
+          purchasePriceTaxType: productForm.purchasePriceTaxType,
         }}
         onSubmit={submitForm}
         validationSchema={validationSchema}
@@ -181,9 +177,8 @@ export default function Pricing() {
                       <Select
                         options={gst}
                         placeholder={"Select"}
-                        value={selectedgstOption}
+                        value={values.salePriceType}
                         onChange={(selectedOption) => {
-                          setSelectedgstOptions(selectedOption);
                           form.setFieldValue(field.name, selectedOption); // Update Formik value
                         }}
                         styles={customStyles}
@@ -218,9 +213,8 @@ export default function Pricing() {
                       <Select
                         options={discount}
                         placeholder={"Select"}
-                        value={selecteddiscountOption}
+                        value={values.discountOnSalePriceType}
                         onChange={(selectedOption) => {
-                          setSelecteddiscountOptions(selectedOption);
                           form.setFieldValue(field.name, selectedOption); // Update Formik value
                         }}
                         styles={customStyles}
@@ -272,9 +266,8 @@ export default function Pricing() {
                         <Select
                           options={gst}
                           placeholder={"Select"}
-                          value={selecteddiscountgstOption}
+                          value={values.wholeSalePriceTaxType}
                           onChange={(selectedOption) => {
-                            setSelectedDiscountgstOptions(selectedOption);
                             form.setFieldValue(field.name, selectedOption); // Update Formik value
                           }}
                           styles={customStyles}
@@ -345,9 +338,8 @@ export default function Pricing() {
                     <Select
                       options={gst}
                       placeholder={"Select"}
-                      value={selectedpurchasegstOption}
+                      value={values.purchasePriceTaxType}
                       onChange={(selectedOption) => {
-                        setSelectedPurchasegstOptions(selectedOption);
                         form.setFieldValue(field.name, selectedOption); // Update Formik value
                       }}
                       styles={customStyles}
@@ -369,7 +361,7 @@ export default function Pricing() {
             {/* Submit Button */}
             <div className="w-full mt-4">
               <button
-                 className="bg-[#FF8900] my-5 w-fit rounded-lg px-5 text-white py-2"
+                className="bg-[#FF8900] my-5 w-fit rounded-lg px-5 text-white py-2"
                 onClick={() => handleSubmit()}
               >
                 Submit
