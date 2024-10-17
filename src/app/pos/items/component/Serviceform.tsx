@@ -237,9 +237,7 @@ export default function ProductForm({
                 </div>
               </div>
 
-              <div className="flex justify-center items-center mt-10">
                 <Tabs heading={heading} content={content} />
-              </div>
             </form>
           </>
         )}

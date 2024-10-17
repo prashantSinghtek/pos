@@ -67,7 +67,7 @@ export default function Service() {
     setIsChecked(!isChecked);
   };
   useEffect(() => {
-   getService(firmid)
+    getService(firmid)
       .then((res) => {
         setService(res.data);
         console.log(res);
@@ -77,7 +77,7 @@ export default function Service() {
       });
   }, [firmid, token]);
   useEffect(() => {
-   getParticularService(selectedtab)
+    getParticularService(selectedtab)
       .then((res) => {
         // setService(res.data)
         setParticularService(res?.data?.itemService);
@@ -169,43 +169,7 @@ export default function Service() {
         </div>
       </div>
       <Modal isOpen={modalopen} onClose={() => setModalopen(false)}>
-        <>
-          <div className=" flex gap-2 items-center py-2">
-            <span
-              className={`${
-                isChecked == true ? "text-[#808080]" : "text-[#2D9CDB]"
-              }`}
-            >
-              Product
-            </span>
-            <label className="flex cursor-pointer select-none items-center">
-              <div className="relative">
-                <input
-                  title="check"
-                  type="checkbox"
-                  checked={isChecked}
-                  onChange={handleCheckboxChange}
-                  className="sr-only"
-                  id="creditlimit"
-                />
-                <div className="block h-8 w-16 rounded-full border border-[#2D9CDB] bg-white"></div>
-                <div
-                  className={`dot bg-[#2D9CDB] absolute duration-100 top-1 h-6 w-6 rounded-full transition ${
-                    isChecked == true ? "right-1" : "left-1"
-                  }`}
-                ></div>
-              </div>
-            </label>
-            <span
-              className={`${
-                isChecked == true ? "text-[#2D9CDB]" : "text-[#808080]"
-              }`}
-            >
-              Service
-            </span>
-          </div>
-          {isChecked == true ? <Serviceform /> : <Productfrom />}
-        </>
+          <Serviceform />
       </Modal>
       <Modal
         isOpen={adjustitemmodalopen}

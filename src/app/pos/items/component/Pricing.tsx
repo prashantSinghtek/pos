@@ -159,76 +159,74 @@ export default function Pricing() {
       >
         {({ handleChange, handleSubmit, values, errors, touched }) => (
           <>
-            <div className="flex space-x-2 w-full mt-4">
-              {/* First Row */}
+            <div className="flex space-x-2 w-full mt-4 items-end">
               <div className="w-full">
-                <div className="w-full flex items-end">
-                  <TextInput
-                    name="salePrice"
-                    type="text"
-                    label="Sale Price"
-                    value={values.salePrice}
-                    onChange={handleChange("salePrice")}
-                    className="text-gray-800 text-base w-[85%]"
-                    istouched={touched.salePrice}
-                  />
-                  <Field name="salePriceType">
-                    {({ field, form }: any) => (
-                      <Select
-                        options={gst}
-                        placeholder={"Select"}
-                        value={values.salePriceType}
-                        onChange={(selectedOption) => {
-                          form.setFieldValue(field.name, selectedOption); // Update Formik value
-                        }}
-                        styles={customStyles}
-                        className="w-[50%] ml-4 bg-[#E1F2FB]"
-                      />
-                    )}
-                  </Field>
-                </div>
+                <TextInput
+                  name="salePrice"
+                  type="text"
+                  label="Sale Price"
+                  value={values.salePrice}
+                  onChange={handleChange("salePrice")}
+                  className="text-gray-800 text-base w-full"
+                  istouched={touched.salePrice}
+                />
+
                 {touched.salePrice && errors.salePrice && (
                   <div className="text-red-500">{errors.salePrice}</div>
                 )}
+              </div>
+
+              <div className="w-full">
+                <Field name="salePriceType">
+                  {({ field, form }: any) => (
+                    <Select
+                      options={gst}
+                      placeholder={"Select"}
+                      value={values.salePriceType}
+                      onChange={(selectedOption) => {
+                        form.setFieldValue(field.name, selectedOption); // Update Formik value
+                      }}
+                      styles={customStyles}
+                      className="w-[100%] bg-[#E1F2FB]"
+                    />
+                  )}
+                </Field>
                 {errors.salePriceType && touched.salePriceType && (
                   <div className="text-red-500">{errors.salePriceType}</div>
                 )}
               </div>
-
               {/* Second Row */}
               <div className="w-full">
-                <div className="w-full flex items-end">
-                  <TextInput
-                    name="discountOnSalePrice"
-                    type="text"
-                    label="Discount On Sale Price"
-                    value={values.discountOnSalePrice}
-                    onChange={handleChange("discountOnSalePrice")}
-                    className="text-gray-800 text-base w-[85%]"
-                    istouched={touched.discountOnSalePrice}
-                  />
-
-                  <Field name="discountOnSalePriceType">
-                    {({ field, form }: any) => (
-                      <Select
-                        options={discount}
-                        placeholder={"Select"}
-                        value={values.discountOnSalePriceType}
-                        onChange={(selectedOption) => {
-                          form.setFieldValue(field.name, selectedOption); // Update Formik value
-                        }}
-                        styles={customStyles}
-                        className="w-[50%] ml-4 bg-[#E1F2FB]"
-                      />
-                    )}
-                  </Field>
-                </div>
-
+                <TextInput
+                  name="discountOnSalePrice"
+                  type="text"
+                  label="Discount On Sale Price"
+                  value={values.discountOnSalePrice}
+                  onChange={handleChange("discountOnSalePrice")}
+                  className="text-gray-800 text-base w-full"
+                  istouched={touched.discountOnSalePrice}
+                />
                 {touched.discountOnSalePrice && errors.discountOnSalePrice && (
                   <div className="text-red-500">
                     {errors.discountOnSalePrice}
                   </div>
                 )}
+              </div>
+              <div className="w-full">
+                <Field name="discountOnSalePriceType">
+                  {({ field, form }: any) => (
+                    <Select
+                      options={discount}
+                      placeholder={"Select"}
+                      value={values.discountOnSalePriceType}
+                      onChange={(selectedOption) => {
+                        form.setFieldValue(field.name, selectedOption); // Update Formik value
+                      }}
+                      styles={customStyles}
+                      className="w-[100%] bg-[#E1F2FB]"
+                    />
+                  )}
+                </Field>
                 {errors.discountOnSalePriceType &&
                   touched.discountOnSalePriceType && (
                     <div className="text-red-500">
@@ -237,102 +235,92 @@ export default function Pricing() {
                   )}
               </div>
             </div>
+            <div className="flex space-x-2 w-full mt-6 items-end">
+              <div className="w-full">
+                <TextInput
+                  name="wholeSalePrice"
+                  type="text"
+                  label="Whole Sale Price"
+                  value={values.wholeSalePrice}
+                  onChange={handleChange("wholeSalePrice")}
+                  className="text-gray-800 text-base w-[100%]"
+                  istouched={touched.wholeSalePrice}
+                />
 
-            {/* Toggle Wholesale Price */}
-            {/* <div
-              className="py-3 flex gap-[2px] items-center text-[#2D9CDB] cursor-pointer"
-              onClick={() => setShowfield(!showfield)}
-            >
-              {showfield ? <FiMinus /> : <IoMdAdd />}
-              {showfield ? "Hide Wholesale Price" : "Add Wholesale Price"}
-            </div> */}
-
-            {/* Show Wholesale Price Fields */}
-
-              <div className="flex space-x-4 w-full">
-                <div>
-                  <div className="w-full flex items-end">
-                    <TextInput
-                      name="wholeSalePrice"
-                      type="text"
-                      label="Whole Sale Price"
-                      value={values.wholeSalePrice}
-                      onChange={handleChange("wholeSalePrice")}
-                      className="text-gray-800 text-base w-[70%]"
-                      istouched={touched.wholeSalePrice}
-                    />
-                    <Field name="wholeSalePriceTaxType">
-                      {({ field, form }: any) => (
-                        <Select
-                          options={gst}
-                          placeholder={"Select"}
-                          value={values.wholeSalePriceTaxType}
-                          onChange={(selectedOption) => {
-                            form.setFieldValue(field.name, selectedOption); // Update Formik value
-                          }}
-                          styles={customStyles}
-                          className="w-[50%] ml-4 bg-[#E1F2FB]"
-                        />
-                      )}
-                    </Field>
-                  </div>
-                  {touched.wholeSalePrice && errors.wholeSalePrice && (
-                    <div className="text-red-500">{errors.wholeSalePrice}</div>
-                  )}
-
-                  {errors.wholeSalePriceTaxType &&
-                    touched.wholeSalePriceTaxType && (
-                      <div className="text-red-500">
-                        {errors.wholeSalePriceTaxType}
-                      </div>
-                    )}
-                </div>
-
-                <div>
-                  <TextInput
-                    name="quantity"
-                    type="text"
-                    label="quantity"
-                    value={values.quantity}
-                    onChange={handleChange("quantity")}
-                    className="text-gray-800 text-base w-[70%]"
-                    istouched={touched.quantity}
-                  />
-                  {touched.quantity && errors.quantity && (
-                    <div className="text-red-500">{errors.quantity}</div>
-                  )}
-                </div>
+                {touched.wholeSalePrice && errors.wholeSalePrice && (
+                  <div className="text-red-500">{errors.wholeSalePrice}</div>
+                )}
               </div>
-  
+              <div className="w-full ml-2 mr-2">
+                <Field name="wholeSalePriceTaxType">
+                  {({ field, form }: any) => (
+                    <Select
+                      options={gst}
+                      placeholder={"Select"}
+                      value={values.wholeSalePriceTaxType}
+                      onChange={(selectedOption) => {
+                        form.setFieldValue(field.name, selectedOption); // Update Formik value
+                      }}
+                      styles={customStyles}
+                      className="w-[100%] bg-[#E1F2FB]"
+                    />
+                  )}
+                </Field>
+                {errors.wholeSalePriceTaxType &&
+                  touched.wholeSalePriceTaxType && (
+                    <div className="text-red-500">
+                      {errors.wholeSalePriceTaxType}
+                    </div>
+                  )}
+              </div>
 
-            {/* Other Fields */}
-            <div className="w-[45%] mt-4">
-              <TextInput
-                name="tax"
-                type="text"
-                label="tax"
-                value={values.tax}
-                onChange={handleChange("tax")}
-                className="text-gray-800 text-base"
-                istouched={touched.tax}
-              />
-              {touched.tax && errors.tax && (
-                <div className="text-red-500">{errors.tax}</div>
-              )}
+              <div className="w-full">
+                <TextInput
+                  name="quantity"
+                  type="text"
+                  label="quantity"
+                  value={values.quantity}
+                  onChange={handleChange("quantity")}
+                  className="text-gray-800 text-base w-[100%]"
+                  istouched={touched.quantity}
+                />
+                {touched.quantity && errors.quantity && (
+                  <div className="text-red-500">{errors.quantity}</div>
+                )}
+              </div>
             </div>
 
-            <div className="w-full mt-4">
-              <div className="w-full flex items-end">
+            <div className="flex space-x-2 w-full mt-6 items-end">
+              <div className="w-full">
+                <TextInput
+                  name="tax"
+                  type="text"
+                  label="tax"
+                  value={values.tax}
+                  onChange={handleChange("tax")}
+                  className="text-gray-800 text-base"
+                  istouched={touched.tax}
+                />
+                {touched.tax && errors.tax && (
+                  <div className="text-red-500">{errors.tax}</div>
+                )}
+              </div>
+              <div className="w-full">
                 <TextInput
                   name="purchasePrice"
                   type="text"
                   label="Purchase Price"
                   value={values.purchasePrice}
                   onChange={handleChange("purchasePrice")}
-                  className="text-gray-800 text-base w-[80%]"
+                  className="text-gray-800 text-base w-full"
                   istouched={touched.purchasePrice}
                 />
+                {touched.purchasePrice && errors.purchasePrice && (
+                  <div className="text-red-500">{errors.purchasePrice}</div>
+                )}
+              </div>
 
+              <div className="w-full">
                 <Field name="purchasePriceTaxType">
                   {({ field, form }: any) => (
                     <Select
@@ -343,19 +331,18 @@ export default function Pricing() {
                         form.setFieldValue(field.name, selectedOption); // Update Formik value
                       }}
                       styles={customStyles}
-                      className="w-[25%] ml-4 bg-[#E1F2FB]"
+                      className="w-[100%] bg-[#E1F2FB]"
                     />
                   )}
                 </Field>
+
+                {errors.purchasePriceTaxType &&
+                  touched.purchasePriceTaxType && (
+                    <div className="text-red-500">
+                      {errors.purchasePriceTaxType}
+                    </div>
+                  )}
               </div>
-              {touched.purchasePrice && errors.purchasePrice && (
-                <div className="text-red-500">{errors.purchasePrice}</div>
-              )}
-              {errors.purchasePriceTaxType && touched.purchasePriceTaxType && (
-                <div className="text-red-500">
-                  {errors.purchasePriceTaxType}
-                </div>
-              )}
             </div>
 
             {/* Submit Button */}
