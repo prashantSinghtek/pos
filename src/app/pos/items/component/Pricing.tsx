@@ -239,16 +239,16 @@ export default function Pricing() {
             </div>
 
             {/* Toggle Wholesale Price */}
-            <div
+            {/* <div
               className="py-3 flex gap-[2px] items-center text-[#2D9CDB] cursor-pointer"
               onClick={() => setShowfield(!showfield)}
             >
               {showfield ? <FiMinus /> : <IoMdAdd />}
               {showfield ? "Hide Wholesale Price" : "Add Wholesale Price"}
-            </div>
+            </div> */}
 
             {/* Show Wholesale Price Fields */}
-            {showfield && (
+
               <div className="flex space-x-4 w-full">
                 <div>
                   <div className="w-full flex items-end">
@@ -303,7 +303,7 @@ export default function Pricing() {
                   )}
                 </div>
               </div>
-            )}
+  
 
             {/* Other Fields */}
             <div className="w-[45%] mt-4">
