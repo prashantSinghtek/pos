@@ -8,14 +8,13 @@ import { IoMdAdd } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
 import * as Yup from "yup";
+import { FiLoader } from "react-icons/fi"; // Import a loader icon
 
 // Define a type for select options
 interface SelectOption {
   value: string;
   label: string;
 }
-
-// Assuming you have an action to save form data in Redux
 
 export default function Pricing() {
   const dispatch = useDispatch();
@@ -56,10 +55,6 @@ export default function Pricing() {
       backgroundColor: "#E1F2FB",
       outline: "none",
     }),
-  };
-  type SelectOption = {
-    label: string;
-    value: string;
   };
 
   // Validation Schema using Yup
@@ -117,11 +112,10 @@ export default function Pricing() {
       ),
   });
 
-  // Submit function
-  // Submit function
+const [isSubmitting, setIsSubmitting] = useState(false)
   const submitForm = async (values: any, { setSubmitting, resetForm }: any) => {
     try {
-      setSubmitting(true);
+      setIsSubmitting(true);
       await validationSchema.validate(values, { abortEarly: false });
 
       const updatedValues = {
@@ -131,13 +125,14 @@ export default function Pricing() {
       Object.entries(updatedValues).forEach(([key, value]) => {
         dispatch(updateProductForm({ key: key, value: value }));
       });
-      // resetForm();
+      setIsSubmitting(false);
     } catch (err) {
       console.log("Error:", err);
     } finally {
-      setSubmitting(false);
+      setIsSubmitting(false);
     }
   };
+console.log(isSubmitting , "isSubmitting");
 
   return (
     <div>
@@ -170,7 +165,6 @@ export default function Pricing() {
                   className="text-gray-800 text-base w-full"
                   istouched={touched.salePrice}
                 />
-
                 {touched.salePrice && errors.salePrice && (
                   <div className="text-red-500">{errors.salePrice}</div>
                 )}
@@ -195,7 +189,6 @@ export default function Pricing() {
                   <div className="text-red-500">{errors.salePriceType}</div>
                 )}
               </div>
-              {/* Second Row */}
               <div className="w-full">
                 <TextInput
                   name="discountOnSalePrice"
@@ -235,6 +228,7 @@ export default function Pricing() {
                   )}
               </div>
             </div>
+          
             <div className="flex space-x-2 w-full mt-6 items-end">
               <div className="w-full">
                 <TextInput
@@ -345,13 +339,17 @@ export default function Pricing() {
               </div>
             </div>
 
-            {/* Submit Button */}
             <div className="w-full mt-4">
               <button
-                className="bg-[#FF8900] my-5 w-fit rounded-lg px-5 text-white py-2"
+                className="bg-[#FF8900] my-5 w-fit rounded-lg px-5 text-white py-2 flex items-center justify-center"
                 onClick={() => handleSubmit()}
+                disabled={isSubmitting} // Disable button while submitting
               >
-                Submit
+                {isSubmitting ? (
+                  <FiLoader className="animate-spin mr-2" /> // Loader icon
+                ) : (
+                  "Submit"
+                )}
               </button>
             </div>
           </>
