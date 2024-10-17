@@ -17,6 +17,7 @@ import {
   chnageAddItemModelState,
   updateProductForm,
 } from "@/Redux/Item/reducer";
+import { FiLoader } from "react-icons/fi";
 
 export default function ProductForm() {
   const [selectedUnit, setSelectedUnit] = useState<any>(null);
@@ -71,29 +72,24 @@ export default function ProductForm() {
   ];
 
   const dispatch = useDispatch();
-
-  const submitForm = async (
-    values: any,
-    { setFieldError, setSubmitting, resetForm }: any
-  ) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const submitForm = async (values: any) => {
     try {
-      setSubmitting(true);
+      setIsSubmitting(true);
       Object.entries(values).forEach(([key, value]) => {
         dispatch(updateProductForm({ key: key, value: value }));
       });
       dispatch(
         addItem({
           callback() {
-            debugger;
-            console.log("called");
-
+            setIsSubmitting(false);
             dispatch(chnageAddItemModelState(false));
           },
         })
       );
     } catch (err) {
     } finally {
-      setSubmitting(false);
+      setIsSubmitting(false);
     }
   };
 
@@ -152,12 +148,17 @@ export default function ProductForm() {
           <>
             <div className="py-3 border-b border-groove flex justify-between items-center">
               <div>Add Product</div>
-              <div
-                className="bg-[#FF8900] rounded-lg px-5 text-white py-2"
+              <button
+                className="bg-[#FF8900] my-5 w-fit rounded-lg px-5 text-white py-2 flex items-center justify-center"
                 onClick={() => handleSubmit()}
+                disabled={isSubmitting} // Disable button while submitting
               >
-                Save
-              </div>
+                {isSubmitting ? (
+                  <FiLoader className="animate-spin mr-2" /> // Loader icon
+                ) : (
+                  "Submit"
+                )}
+              </button>
             </div>
 
             <div className="flex items-end gap-5 my-5 w-full">

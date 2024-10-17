@@ -2,7 +2,8 @@ import TextInput from "@/app/Components/Textinput";
 import { updateProductForm } from "@/Redux/Item/reducer";
 import { selectProductForm } from "@/Redux/Item/selectors";
 import { Formik } from "formik";
-import React from "react";
+import React, { useState } from "react";
+import { FiLoader } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup"; // Import Yup for validation
 
@@ -17,22 +18,21 @@ export default function Stock() {
     minStockToMaintain: Yup.number().required("Min Stock To Maintain is required"),
     location: Yup.string().required("Location is required"),
   });
-
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const submitForm = async (
     values: any,
-    { setFieldError, setSubmitting, resetForm }: any
   ) => {
     console.log("Form values:", values);
     try {
+      setIsSubmitting(true);
       Object.entries(values).forEach(([key, value]) => {
         dispatch(updateProductForm({ key: key, value: value }));
       });
-      setSubmitting(true);
       // resetForm();
     } catch (err) {
       console.log("Error:", err);
     } finally {
-      setSubmitting(false);
+      setIsSubmitting(false);
     }
   };
 
@@ -125,12 +125,18 @@ export default function Stock() {
                 />
               </div>
             </div>
-            <div
-              className="bg-[#FF8900] my-5 w-fit rounded-lg px-5 text-white py-2"
-              onClick={() => handleSubmit()}
-            >
-              Save
-            </div>
+
+            <button
+                className="bg-[#FF8900] my-5 w-fit rounded-lg px-5 text-white py-2 flex items-center justify-center"
+                onClick={() => handleSubmit()}
+                disabled={isSubmitting} // Disable button while submitting
+              >
+                {isSubmitting ? (
+                  <FiLoader className="animate-spin mr-2" /> // Loader icon
+                ) : (
+                  "Submit"
+                )}
+              </button>
           </div>
         );
       }}
