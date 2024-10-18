@@ -1,6 +1,6 @@
 // Redux/Parties/reducer.ts (or partiesSlice.ts)
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { initialState, TransactionInterface } from "./types";
+import { initialState, ProductFormInterface, TransactionInterface } from "./types";
 import { get, set } from "lodash";
 const itemSlice = createSlice({
   name: "item",
@@ -26,6 +26,9 @@ const itemSlice = createSlice({
     ) => {},
     chnageAddItemModelState: (state ,  action: PayloadAction<boolean>) => {
       state.addItemModel = action.payload;
+    },
+    setProductFormData: (state ,  action: PayloadAction<ProductFormInterface>) => {
+      state.itemProductForm = action.payload;
     },
     setItemList: (
       state,
@@ -76,5 +79,5 @@ const itemSlice = createSlice({
   },
 });
 
-export const { updateServiceForm,setSearch,setTransactionist, deleteItemById, updateProductForm ,addItem , getTransactionByItemId, chnageAddItemModelState , getItemList ,getItemById, setItemList} = itemSlice.actions;
+export const { updateServiceForm,setProductFormData, setSearch,setTransactionist, deleteItemById, updateProductForm ,addItem , getTransactionByItemId, chnageAddItemModelState , getItemList ,getItemById, setItemList} = itemSlice.actions;
 export default itemSlice.reducer; // Ensure that you're exporting the reducer

@@ -22,6 +22,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   selectAddItemModel,
   selectItemList,
+  selectProductForm,
   selectSearchItem,
   selectTransactionList,
 } from "@/Redux/Item/selectors";
@@ -117,6 +118,7 @@ export default function Product() {
   }, [search]);
 
   const transactionList = useSelector(selectTransactionList);
+  const data = useSelector(selectProductForm);
   return (
     <>
       <div className="flex justify-between items-center px-1 mt-5"></div>
@@ -201,25 +203,22 @@ export default function Product() {
                 <Partiescard
                   icon={<IoPersonOutline />}
                   title={"Sale Price"}
-                  value={selectedproduct?.item?.itemPricing?.salePrice}
+                  value={data.salePrice || "NA"}
                 />
                 <Partiescard
                   icon={<RiPagesLine />}
                   title={"Stock Quntity"}
-                  value={selectedproduct?.item?.itemPricing?.quantity}
+                  value={data.quantity || "NA"}
                 />
                 <Partiescard
                   icon={<IoMdCard />}
                   title={"Stock Value"}
-                  value={
-                    selectedproduct?.item?.itemPricing?.salePrice *
-                    selectedproduct?.item?.itemPricing?.quantity
-                  }
+                  value={Number(data.salePrice) * Number(data.quantity) || "NA"}
                 />
                 <Partiescard
                   icon={<MdOutlineEmail />}
                   title={"Purchase Price"}
-                  value={selectedproduct?.item?.itemPricing?.purchasePrice}
+                  value={data.purchasePrice || "NA"}
                 />
               </div>
             </CardPrototype>
@@ -256,12 +255,11 @@ export default function Product() {
       >
         {modalOpenFrom == "FromList" ? (
           <>
-          
             <Productfrom />
           </>
         ) : (
           <>
-          <Productfrom />
+            <Productfrom />
           </>
         )}
       </Modal>

@@ -1,6 +1,6 @@
 import { takeEvery, call, put, takeLatest, select, delay } from "redux-saga/effects";
 import axios, { AxiosResponse } from "axios";
-import { addItem, chnageAddItemModelState, deleteItemById, getItemById, getItemList, getTransactionByItemId, setItemList, setSearch, setTransactionist } from "./reducer";
+import { addItem, chnageAddItemModelState, deleteItemById, getItemById, getItemList, getTransactionByItemId, setItemList, setProductFormData, setSearch, setTransactionist } from "./reducer";
 import { selectProductForm, selectSearchItem } from "./selectors";
 import { ProductFormInterface } from "./types";
 import { addItem as addItemAPI, DeleteItem, GetItem, getProducts, GetTrasactionItem } from "@/controller/posauth";
@@ -104,7 +104,7 @@ export function* getItemByIdRequest(action: {
   yield delay(1000);
   const response: any = yield call(GetItem, action.payload.itemId);
   console.log(response , "response");
-  
+  yield put(setProductFormData(response.data.itemData));
   if (action.payload.callback) {
     action.payload.callback();
   }
