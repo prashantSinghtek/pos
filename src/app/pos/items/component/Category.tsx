@@ -4,83 +4,55 @@ import List from "@/app/Components/List";
 import Table from "@/app/Components/Table";
 import TextInput from "@/app/Components/Textinput";
 import React, { useEffect, useState } from "react";
-import { MdGroupAdd, MdOutlineEmail } from "react-icons/md";
-import { IoPersonOutline, IoPersonSharp } from "react-icons/io5";
-import { RiFileExcel2Line, RiPagesLine } from "react-icons/ri";
-import { IoMdAdd, IoMdCard } from "react-icons/io";
-import { PiMapPinBold } from "react-icons/pi";
+import { IoMdAdd } from "react-icons/io";
 import Modal from "@/app/Components/Modal";
-import Button from "@/app/Components/Button";
-import Partiescard from "../../parties/component/partiescard";
 import { HiAdjustmentsHorizontal } from "react-icons/hi2";
-import Productfrom from "./Productfrom";
-import Serviceform from "./Serviceform";
 import { useRouter } from "next/navigation";
 import { Formik } from "formik";
 import { useSession } from "next-auth/react";
-
-// import { PiMapPinAreaBold } from "react-icons/pi";
-
+import * as Yup from "yup"; // Import Yup for validation
+import {
+  selectCategoryForm,
+  selectCategoryModel,
+} from "@/Redux/Item/selectors";
+import { useDispatch, useSelector } from "react-redux";
+import { FiLoader } from "react-icons/fi";
+import {
+  addCategory,
+  changeAddCategoryModelState,
+  updateCategoryForm,
+} from "@/Redux/Item/reducer";
 export default function Product() {
-  const firmid = localStorage.getItem("selectedStore");
-  const session = useSession();
-  const [modalOpenFrom, setModalOpenFrom] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState();
-  console.log(session)
-  const token = localStorage.getItem("authToken");
-  console.log("dfvgbdefg", token)
-  // const auth = new pos_controller()
   const [selectedtab, setSelectedtab] = useState<any>();
-  const [modalopen, setModalopen] = useState(false);
-  const [category, setCategory] = useState()
+  const [category, setCategory] = useState();
   const [adjustitemmodalopen, setAdjustitemmodalopen] = useState(false);
-  const [particularcategory,setParticularcategory] = useState<any>();
+  const [particularcategory, setParticularcategory] = useState<any>();
 
-  const Router = useRouter();
-
-  const submitForm = async (
-    values: any,
-    { setFieldError, setSubmitting, resetForm }: any
-  ) => {
-    console.log("Form values:", values);
+  const dispatch = useDispatch();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const submitForm = async (values: any, { resetForm }: any) => {
     try {
-      setSubmitting(true);
-      // const res = await Addcategory(values.Categoryname, token, firmid)
-      // console.log("defv", res)
+      setIsSubmitting(true);
+      dispatch(
+        updateCategoryForm({ key: "categoryName", value: values.categoryName })
+      );
+      dispatch(
+        addCategory({
+          callback() {
+            setIsSubmitting(false);
+            dispatch(changeAddCategoryModelState(false));
+          },
+        })
+      );
       resetForm();
-      setModalopen(false)
+      dispatch(changeAddCategoryModelState(false));
     } catch (err) {
-      console.log("Error:", err);
+      setIsSubmitting(false);
     } finally {
-      setSubmitting(false);
+      setIsSubmitting(false);
+      dispatch(changeAddCategoryModelState(false));
     }
   };
-
-  const Updateform = async (
-    values: any,
-    { setFieldError, setSubmitting, resetForm }: any
-  ) => {
-    console.log("Form values:", values);
-    try {
-      setSubmitting(true);
-      // const res = await PutCategoryName(token, selectedtab,values.Categoryname)
-      // console.log("defv", res)
-      resetForm();
-      setModalopen(false)
-    } catch (err) {
-      console.log("Error:", err);
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  useEffect(() => {
-    // Getcategory(token).then((res: any) => { setCategory(res.data) }).catch((err) => console.log("ctegory", err))
-  }, [token])
-
-  useEffect(() => {
-    // GetParticularCategory(token,selectedtab).then((res: any) => { setParticularcategory(res.data)}).catch((err) => console.log("ctegory", err))
-  }, [token,selectedtab])
 
   const header = [
     "Type",
@@ -91,12 +63,8 @@ export default function Product() {
     "Price/Unit",
     "Status",
   ];
-
-  const [isChecked, setIsChecked] = useState(false);
-
-  const handleCheckboxChange = () => {
-    setIsChecked(!isChecked);
-  };
+  const form = useSelector(selectCategoryForm);
+  const modelCategory = useSelector(selectCategoryModel);
 
   return (
     <>
@@ -119,7 +87,12 @@ export default function Product() {
                 className=" bg-[#fda80c] text-sm text-white rounded-lg px-3 overflow-hidden gap-2 items-center mt-2 flex h-[45px]"
                 title="Add Parties"
               >
-                <div className="flex items-center" onClick={() => setModalopen(!modalopen)}>
+                <div
+                  className="flex items-center"
+                  onClick={() => {
+                    dispatch(changeAddCategoryModelState(true));
+                  }}
+                >
                   <IoMdAdd size={25} />
                   Add Category
                 </div>
@@ -135,9 +108,6 @@ export default function Product() {
                 setSelectedtab(id);
               }}
               page={"categories"}
-              setSelectedbank={setSelectedCategory}
-              setModalopen={setModalopen}
-              setModalOpenFrom={setModalOpenFrom}
             />
           </div>
         </div>
@@ -154,7 +124,6 @@ export default function Product() {
                   Move To This Category
                 </div>
               </div>
-
             </CardPrototype>
           </div>
 
@@ -178,70 +147,69 @@ export default function Product() {
         </div>
       </div>
 
-      <Modal isOpen={modalopen} onClose={() => setModalopen(false)}>
-{/* {console.log(particularcategory)} */}
-      {modalOpenFrom =="FromList" ?  <Formik initialValues={{ Categoryname: particularcategory?.name }} onSubmit={Updateform} validationSchema={""}>
-          {({ handleChange, handleSubmit, values, errors, touched }: any) => {
+      <Modal
+        isOpen={modelCategory}
+        onClose={() => {
+          dispatch(changeAddCategoryModelState(false));
+        }}
+      >
+        <Formik
+          initialValues={{ categoryName: form?.categoryName || "" }} // Ensure fallback
+          validationSchema={Yup.object({
+            categoryName: Yup.string().required("Category Name is required"),
+          })}
+          onSubmit={submitForm}
+        >
+          {({
+            handleChange,
+            handleSubmit,
+            handleBlur,
+            values,
+            errors,
+            touched,
+          }: any) => {
             return (
               <>
-                <div className="pb-3 border-b border-groove flex">Add Category</div>
+                <div className="pb-3 border-b border-groove flex">
+                  Add Category
+                </div>
                 <div className="flex gap-5 my-5 w-full">
-                  <div className="w-[25%]">
+                  <div className="w-[100%]">
                     <TextInput
-                      name="Categoryname"
+                      name="categoryName"
                       type="text"
-                      placeholder=""
+                      placeholder="Category Name"
                       label="Category Name"
-                      value={values.Categoryname}
-                      onChange={handleChange("Categoryname")}
-                      onBlur={handleChange("Categoryname")}
-                      istouched={true}
-                      className="text-gray-800 text-base w-[30%]"
+                      value={values.categoryName}
+                      onChange={handleChange("categoryName")}
+                      onBlur={handleBlur("categoryName")}
+                      istouched={touched.categoryName?.toString()} // Convert boolean to string
+                      className="text-gray-800 text-base w-full"
+                      error={
+                        errors.categoryName && touched.categoryName
+                          ? errors.categoryName
+                          : ""
+                      }
                     />
                   </div>
                 </div>
-                <div
-                  className="bg-[#FF8900] w-fit rounded-lg px-5 text-white py-2"
-                  onClick={() => handleSubmit()}
-                >
-                  Save
-                </div>
-              </>
-            );
-          }}
-        </Formik> :   <Formik initialValues={{ Categoryname: "" }} onSubmit={submitForm} validationSchema={""}>
-          {({ handleChange, handleSubmit, values, errors, touched }: any) => {
-            return (
-              <>
-                <div className="pb-3 border-b border-groove flex">Add Category</div>
-                <div className="flex gap-5 my-5 w-full">
-                  <div className="w-[25%]">
-                    <TextInput
-                      name="Categoryname"
-                      type="text"
-                      placeholder=""
-                      label="Category Name"
-                      value={values.Categoryname}
-                      onChange={handleChange("Categoryname")}
-                      onBlur={handleChange("Categoryname")}
-                      istouched={true}
-                      className="text-gray-800 text-base w-[30%]"
-                    />
-                  </div>
-                </div>
-                <div
-                  className="bg-[#FF8900] w-fit rounded-lg px-5 text-white py-2"
-                  onClick={() => handleSubmit()}
-                >
-                  Save
-                </div>
-              </>
-            );
-          }}
-        </Formik>}
-      
-      </Modal>
 
+                <button
+                  className="bg-[#FF8900] my-5 w-fit rounded-lg px-5 text-white py-2 flex items-center justify-center"
+                  onClick={() => handleSubmit()}
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? (
+                    <FiLoader className="animate-spin mr-2" />
+                  ) : (
+                    "Submit"
+                  )}
+                </button>
+              </>
+            );
+          }}
+        </Formik>
+      </Modal>
       <Modal
         isOpen={adjustitemmodalopen}
         onClose={() => setAdjustitemmodalopen(false)}
