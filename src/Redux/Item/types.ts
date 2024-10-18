@@ -64,10 +64,12 @@ export interface CombinedInitialState {
   itemList: Array<any>;
   searchItem: string;
   transactionList : Array<TransactionInterface>;
+  search : string
 }
 
 export const initialState: CombinedInitialState = {
   addItemModel: false,
+  search :"",
   transactionList: [],
   searchItem :"",
   serviceForm: {

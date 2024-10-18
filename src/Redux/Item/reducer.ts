@@ -76,8 +76,14 @@ const itemSlice = createSlice({
         callback: () => void;
       }>
     ) => {},
+    setSearchItemName: (
+      state,
+      action: PayloadAction<string>
+    ) => {
+      state.search = action.payload;
+    },
   },
 });
 
-export const { updateServiceForm,setProductFormData, setSearch,setTransactionist, deleteItemById, updateProductForm ,addItem , getTransactionByItemId, chnageAddItemModelState , getItemList ,getItemById, setItemList} = itemSlice.actions;
+export const { updateServiceForm,setSearchItemName, setProductFormData, setSearch,setTransactionist, deleteItemById, updateProductForm ,addItem , getTransactionByItemId, chnageAddItemModelState , getItemList ,getItemById, setItemList} = itemSlice.actions;
 export default itemSlice.reducer; // Ensure that you're exporting the reducer

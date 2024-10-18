@@ -6,4 +6,6 @@ export const selectAddItemModel = (state: RootState) => state.item.addItemModel
 export const selectItemList = (state: RootState) => state.item.itemList
 export const selectTransactionList = (state: RootState) => state.item.transactionList
 export const selectSearchItem = (state: RootState) => state.item.searchItem
+export const selectSearch = (state: RootState) => state.item.search
+
 

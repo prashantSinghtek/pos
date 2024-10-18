@@ -116,8 +116,8 @@ export const getUnits = () => {
   return apiRequest("get", Constants.unit);
 };
 
-export const getProducts = (firmid: any) => {
-  const url = `${Constants.getproduct}${firmid}`;
+export const getProducts = (firmid: any , search: string) => {
+  const url = `${Constants.getproduct}${firmid}?searchTerm=${search}`;
   return apiRequest("get", url);
 };
 export const addCategory = (categoryName: any, firmId: any) => {

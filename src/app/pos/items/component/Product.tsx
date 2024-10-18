@@ -23,6 +23,7 @@ import {
   selectAddItemModel,
   selectItemList,
   selectProductForm,
+  selectSearch,
   selectSearchItem,
   selectTransactionList,
 } from "@/Redux/Item/selectors";
@@ -32,6 +33,7 @@ import {
   getItemList,
   getTransactionByItemId,
   setSearch,
+  setSearchItemName,
 } from "@/Redux/Item/reducer";
 import { selectFirmId } from "@/Redux/Parties/selectors";
 // import { PiMapPinAreaBold } from "react-icons/pi";
@@ -70,7 +72,7 @@ export default function Product() {
 
   const addItemModel = useSelector(selectAddItemModel);
   const dispatch = useDispatch();
-
+  const searchName = useSelector(selectSearch);
   const firmId = useSelector(selectFirmId);
   useEffect(() => {
     if (!firmId) {
@@ -85,6 +87,17 @@ export default function Product() {
 
     return () => {};
   }, [firmId]);
+
+  useEffect(() => {
+    dispatch(
+      getItemList({
+        firmId: firmId,
+        callback() {},
+      })
+    );
+
+    return () => {};
+  }, [searchName]);
 
   const list = useSelector(selectItemList);
   const [setselectedId, setSetselectedId] = useState("");
@@ -138,8 +151,11 @@ export default function Product() {
                   name="search"
                   type="text"
                   placeholder="Search By"
+                  value={searchName}
                   label=""
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={(e) => {
+                    dispatch(setSearchItemName(e.target.value));
+                  }}
                   istouched={"Touch"}
                   className="text-gray-800 text-base w-full"
                 />
