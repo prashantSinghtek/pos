@@ -74,12 +74,6 @@ export const getUnit = (id?: any) => {
   return apiRequest("get", url);
 };
 
-
-export const getCategoryByFirm = (id?: any) => {
-  const url =  `${Constants.GetCategoryByFirm}/${id}`;
-  return apiRequest("get", url);
-};
-
 export const addFirmParty = (values: any, id: any) => {
   const url = `${Constants.AddfirmParty}?firmId=${id}`;
   return apiRequest("post", url, values);
@@ -120,14 +114,8 @@ export const getProducts = (firmid: any , search: string) => {
   const url = `${Constants.getproduct}${firmid}?searchTerm=${search}`;
   return apiRequest("get", url);
 };
-export const addCategory = (categoryName: any, firmId: any) => {
-  const url = `${Constants.category}add?categoryName=${categoryName}&firmId=${firmId}`;
-  return apiRequest("post", url);
-};
 
-export const getCategory = () => {
-  return apiRequest("get", `${Constants.category}get/all`);
-};
+
 
 export const getParticularCategory = (id: any) => {
   return apiRequest("get", `${Constants.category}get/${id}`);
@@ -412,3 +400,25 @@ export const GetItem = (id: any) => {
 export const GetTrasactionItem = (id: any, search: any) => {
   return apiRequest("get", `${Constants.ItemWiseTrasaction}${id}?searchTerm=${search}`);
 };
+
+// Category
+
+export const addCategoryAPI = (formData: any, firmId: any) => {
+  const url = `${Constants.category}add?firmId=${firmId}`;
+  return apiRequest("post", url , formData);
+};
+
+  export const getCategory = (id: any) => {
+    return apiRequest("get", `${Constants.category}all/firm/${id}`);
+  };
+  export const getCategoryById = (id: any) => {
+    return apiRequest("get", `${Constants.category}${id}`);
+  };
+
+  export const getCategoryByFirm = (id: any) => {
+    return apiRequest("get", `${Constants.GetCategoryByFirm}/${id}`);
+  };
+  export const getCategoryByFirmId = (id: any) => {
+    return apiRequest("get", `${Constants.GetCategoryByFirm}/${id}`);
+  };
+  

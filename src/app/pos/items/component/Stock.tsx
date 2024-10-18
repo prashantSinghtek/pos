@@ -9,19 +9,19 @@ import * as Yup from "yup"; // Import Yup for validation
 
 export default function Stock() {
   const dispatch = useDispatch();
-  
+
   // Create a Yup validation schema
   const validationSchema = Yup.object().shape({
     openingQuantity: Yup.number().required("Opening Quantity is required"),
     atPrice: Yup.number().required("At Price is required"),
     asOfDate: Yup.date().required("As Of Date is required"),
-    minStockToMaintain: Yup.number().required("Min Stock To Maintain is required"),
+    minStockToMaintain: Yup.number().required(
+      "Min Stock To Maintain is required"
+    ),
     location: Yup.string().required("Location is required"),
   });
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const submitForm = async (
-    values: any,
-  ) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const submitForm = async (values: any) => {
     console.log("Form values:", values);
     try {
       setIsSubmitting(true);
@@ -37,7 +37,7 @@ export default function Stock() {
   };
 
   const formData = useSelector(selectProductForm);
-  
+
   return (
     <Formik
       initialValues={{
@@ -64,7 +64,7 @@ export default function Stock() {
                   onChange={handleChange("openingQuantity")}
                   onBlur={handleChange("openingQuantity")}
                   istouched={touched.openingQuantity}
-                  error={errors.openingQuantity} 
+                  error={errors.openingQuantity}
                   className="text-gray-800 text-base w-[30%]"
                 />
               </div>
@@ -78,7 +78,7 @@ export default function Stock() {
                   onChange={handleChange("atPrice")}
                   onBlur={handleChange("atPrice")}
                   istouched={touched.atPrice}
-                  error={errors.atPrice} 
+                  error={errors.atPrice}
                   className="text-gray-800 text-base w-[30%]"
                 />
               </div>
@@ -92,7 +92,7 @@ export default function Stock() {
                   value={values.asOfDate}
                   onChange={handleChange("asOfDate")}
                   onBlur={handleChange("asOfDate")}
-                  error={errors.asOfDate} 
+                  error={errors.asOfDate}
                   className="text-gray-800 text-base w-[30%]"
                 />
               </div>
@@ -106,7 +106,7 @@ export default function Stock() {
                   value={values.minStockToMaintain}
                   onChange={handleChange("minStockToMaintain")}
                   onBlur={handleChange("minStockToMaintain")}
-                  error={errors.minStockToMaintain} 
+                  error={errors.minStockToMaintain}
                   className="text-gray-800 text-base w-[30%]"
                 />
               </div>
@@ -120,23 +120,23 @@ export default function Stock() {
                   value={values.location}
                   onChange={handleChange("location")}
                   onBlur={handleChange("location")}
-                  error={errors.location} 
+                  error={errors.location}
                   className="text-gray-800 text-base w-[30%]"
                 />
               </div>
             </div>
 
             <button
-                className="bg-[#FF8900] my-5 w-fit rounded-lg px-5 text-white py-2 flex items-center justify-center"
-                onClick={() => handleSubmit()}
-                disabled={isSubmitting} // Disable button while submitting
-              >
-                {isSubmitting ? (
-                  <FiLoader className="animate-spin mr-2" /> // Loader icon
-                ) : (
-                  "Submit"
-                )}
-              </button>
+              className="bg-[#FF8900] my-5 w-fit rounded-lg px-5 text-white py-2 flex items-center justify-center"
+              onClick={() => handleSubmit()}
+              disabled={isSubmitting} // Disable button while submitting
+            >
+              {isSubmitting ? (
+                <FiLoader className="animate-spin mr-2" /> // Loader icon
+              ) : (
+                "Submit"
+              )}
+            </button>
           </div>
         );
       }}
