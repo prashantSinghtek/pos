@@ -57,6 +57,12 @@ export interface TransactionInterface {
   dateOfTransaction: any;
 }
 
+
+export interface categoryFormInterface {
+  id: number;
+  categoryName : string;
+}
+
 export interface CombinedInitialState {
   serviceForm: ServiceItem;
   itemProductForm: ProductFormInterface;
@@ -64,14 +70,22 @@ export interface CombinedInitialState {
   itemList: Array<any>;
   searchItem: string;
   transactionList : Array<TransactionInterface>;
-  search : string
+  search : string;
+
+
+  categoryForm: categoryFormInterface;
+  categoryModel: boolean;
+  categoryList: Array<any>;
+  searchCategory: string;
+  categoryTransactionList : Array<TransactionInterface>;
+  searchCategoryTrasaction : string
 }
 
 export const initialState: CombinedInitialState = {
   addItemModel: false,
-  search :"",
+  search: "",
   transactionList: [],
-  searchItem :"",
+  searchItem: "",
   serviceForm: {
     id: "",
     serviceName: "",
@@ -119,4 +133,13 @@ export const initialState: CombinedInitialState = {
     discountAmount: "200",
   },
   itemList: [],
+  categoryForm: {
+    id: 0,
+    categoryName: ""
+  },
+  categoryModel: false,
+  categoryList: [],
+  searchCategory: "",
+  categoryTransactionList: [],
+  searchCategoryTrasaction: ""
 };
