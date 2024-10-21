@@ -14,6 +14,7 @@ import {
   addFirmParty,
   deletePartyByIdAPI,
   DeleteTransaction,
+  getPartiesByID,
   getPartyDetailAPI,
   getPartyList,
   getPartyTransactionApi,
@@ -90,11 +91,13 @@ export function* getPartyTransactionRequest(action: {
 export function* getPartyDetailRequest(action: {
   payload: { partieId: string; callback: any };
 }): Generator<any, void, any> {
+  debugger
   if (action.payload.partieId.length === 0) {
     return;
   }
   yield delay(1000);
-  const response: any = yield call(getPartyDetailAPI, action.payload.partieId);
+  const response: any = yield call(getPartiesByID, action.payload.partieId);
+  debugger
   yield put(setPartiesDashboardData(response.data));
   yield put(setPartieDetailForm(response.data));
   if (action.payload.callback) {
