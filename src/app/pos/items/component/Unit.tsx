@@ -142,7 +142,7 @@ export default function Unit() {
           <div>
             <CardPrototype>
               <div className="flex justify-between px-7 pb-5">
-                <div>Name56456456</div>
+                <div>Name</div>
                 <div
                   className={`bg-orange-500 rounded-full px-5 py-2 flex gap-3 text-white items-center`}
                   onClick={() => setAdjustitemmodalopen(!adjustitemmodalopen)}
