@@ -42,6 +42,10 @@ import {
 } from "@/Redux/Parties/selectors";
 import { partiesFormInterface } from "@/Redux/Parties/types";
 import { getPartyTransaction } from "../../../Redux/Parties/reducer";
+import { GiCloudDownload } from "react-icons/gi";
+import { FiDownload } from "react-icons/fi";
+import { FaAngleRight } from "react-icons/fa";
+import { CiFilter, CiMenuKebab } from "react-icons/ci";
 const validationSchema = Yup.object({
   partyName: Yup.string()
     .matches(/^[a-zA-Z\s]+$/, "Party Name can only contain letters and spaces")
@@ -91,7 +95,7 @@ export default function Page() {
     },
   ];
 
-  const onPageChange = (page: any) => {};
+  const onPageChange = (page: any) => { };
   const count = bodyData?.length;
   const isFullScreen = true;
 
@@ -109,7 +113,7 @@ export default function Page() {
     if ((gstValidate && creditvalidate && additionalvalidate) || formData.id) {
       setShowButton(true);
     }
-    return () => {};
+    return () => { };
   }, [gstValidate, creditvalidate, additionalvalidate, formData.id]);
 
   const dispatch = useDispatch();
@@ -124,7 +128,7 @@ export default function Page() {
       .then((res) => {
         dispatch(setFirmId(res[0].id));
       })
-      .catch((err) => {});
+      .catch((err) => { });
   }, []);
 
   const handleSubmit = () => {
@@ -138,7 +142,7 @@ export default function Page() {
             dispatch(
               getParty({
                 firmId: firmId,
-                callback() {},
+                callback() { },
               })
             );
           },
@@ -148,7 +152,7 @@ export default function Page() {
       dispatch(
         addParty({
           firmId: firmId,
-          callback() {},
+          callback() { },
         })
       );
     }
@@ -157,10 +161,10 @@ export default function Page() {
     dispatch(
       getParty({
         firmId: firmId,
-        callback() {},
+        callback() { },
       })
     );
-    return () => {};
+    return () => { };
   }, [firmId]);
 
   const list = useSelector(selectPartiesList);
@@ -168,30 +172,30 @@ export default function Page() {
   const dashboardData = useSelector(selectPartyDashboardData);
   const search = useSelector(selectSearch);
 
-  
+
   useEffect(() => {
-    if (selectParty) {   
+    if (selectParty) {
       dispatch(
         getPartyTransaction({
           partieId: selectParty,
           search: search,
-          callback() {},
+          callback() { },
         })
       );
       dispatch(
         getPartyDetail({
           partieId: selectParty,
-          callback() {},
+          callback() { },
         })
       );
     }
 
-    return () => {};
-  }, [selectParty , search]);
+    return () => { };
+  }, [selectParty, search]);
   return (
     <>
       <div className="flex justify-between items-center px-1 mt-5 h-full">
-        <div className="flex gap-3 w-[50%] items-center">
+        {/* <div className="flex gap-3 w-[50%] items-center">
           <div className="w-[35%]">
             <TextInput
               name="search"
@@ -212,8 +216,8 @@ export default function Page() {
               onClick={() => setModalopen(!modalopen)}
             />
           </div>
-        </div>
-        <div className="flex gap-3 pr-7">
+        </div> */}
+        {/* <div className="flex gap-3 pr-7">
           <Button color={"bg-blue-500"} title={"Add Sale"} link={"/addsale"} />
           <Button
             color={"bg-orange-500"}
@@ -221,17 +225,148 @@ export default function Page() {
             link={"/addpurchase"}
           />
           <Button color={"bg-gray-400"} title={"Add More"} link={"/"} />
-        </div>
+        </div> */}
       </div>
-      <div className="flex  mt-5 gap-5 mr-5">
-        <div className="w-[26%] rounded-lg overflow-hidden ">
-          <div className="bg-white  border border-gray-200 rounded-2xl shadow-sm w-full h-full overflow-x-hidden">
-            <div className="bg-gray-100 px-4 py-4 text-[16px] flex justify-between">
-              <div>Party</div>
-              <div>Amount</div>
+      <div className="flex mt-5 gap-5 mr-5">
+        <div className="w-[26%] rounded-lg overflow-hidden">
+          <div className="bg-white border border-gray-200 rounded-2xl shadow-sm w-full h-full overflow-x-hidden ">
+            <div className="flex gap-[15px] px-[8px] py-[12px]">
+              <div className="bg-[#CDDBE3] h-[32px] w-[32px] rounded-[100%] flex items-center justify-center">
+                <FiDownload className="text-[#2D9CDB]" />
+              </div>
+              <div>
+                <p className="text-[#363636] text-[15px] font-semibold capitalize">Import parties</p>
+                <div className="flex align-center justify-center">
+                  <p className="text-[#737373] font-normal text-[14px] capitalize mt-2">
+                    use contacts from your phone or gmail to create parties.
+                  </p>
+                  <FaAngleRight className="text-[#2D9CDB]" />
+                </div>
+              </div>
+
             </div>
+            <div className="border-1 border-b border-[#CDDBE3] h-2"></div>
+            <div className="flex items-center justify-between">
+              <div>
+                <Button
+                  className="border-1 border-[#D0D2D6] [box-shadow:2px_3px_18px_0px_#AAB4B914] flex items-center justify-center"
+                  title={"Add Purchase"}
+                  link={"/addpurchase"}
+                />
+              </div>
+            </div>
+           <div className="h-[400px] overflow-auto">
+           <table className="w-full px-[8px] py-[12px] ">
+              <thead>
+                <tr className="bg-[#F3F3F2] sticky top-0">
+                  <th className="text-start rounded-tl-[5px] rounded-br-[0] rounded-tr-[0px] rounded-bl-[0] px-[12px] py-[9px]">
+                    <p className="flex items-center	 gap-3 font-normal">
+                      Party
+                      <span>
+                        <CiFilter className="text-[#2D9CDB] text-[20px]"/>
+                      </span>
+                    </p>
+                  </th>
+                  <th className="text-end rounded-tl-[0] rounded-br-[0] rounded-tr-[5px] rounded-bl-[0] px-[12px] py-[9px ] font-normal">Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="border-1 border-b border-[#E8E8E8] hover:bg-[#FEF1E1]">
+                  <td className="px-[12px] py-[10px] text-[#737373] capitalize">Rakesh kumar</td>
+                  <td className="px-[12px] py-[10px] text-end"><p className="flex items-center justify-end text-[#737373]">
+                    ₹ 11245 <CiMenuKebab className="ms-2 text-[18px] text-[#737373]" /></p></td>
+                </tr>
+                <tr className="border-1 border-b border-[#E8E8E8] hover:bg-[#FEF1E1]">
+                  <td className="px-[12px] py-[10px] text-[#737373] capitalize">Rakesh kumar</td>
+                  <td className="px-[12px] py-[10px] text-end"><p className="flex items-center justify-end text-[#737373]">
+                    ₹ 11245 <CiMenuKebab className=" ms-2 text-[18px] text-[#737373]" /></p></td>
+                </tr>
+                <tr className="border-1 border-b border-[#E8E8E8] hover:bg-[#FEF1E1]">
+                  <td className="px-[12px] py-[10px] text-[#737373] capitalize">Rakesh kumar</td>
+                  <td className="px-[12px] py-[10px] text-end"><p className="flex items-center justify-end text-[#737373]">
+                    ₹ 11245 <CiMenuKebab className=" ms-2 text-[18px] text-[#737373]" /></p></td>
+                </tr>
+                <tr className="border-1 border-b border-[#E8E8E8] hover:bg-[#FEF1E1]">
+                  <td className="px-[12px] py-[10px] text-[#737373] capitalize">Rakesh kumar</td>
+                  <td className="px-[12px] py-[10px] text-end"><p className="flex items-center justify-end text-[#737373]">
+                    ₹ 11245 <CiMenuKebab className=" ms-2 text-[18px] text-[#737373]" /></p></td>
+                </tr>
+                <tr className="border-1 border-b border-[#E8E8E8] hover:bg-[#FEF1E1]">
+                  <td className="px-[12px] py-[10px] text-[#737373] capitalize">Rakesh kumar</td>
+                  <td className="px-[12px] py-[10px] text-end"><p className="flex items-center justify-end text-[#737373]">
+                    ₹ 11245 <CiMenuKebab className=" ms-2 text-[18px] text-[#737373]" /></p></td>
+                </tr>
+                <tr className="border-1 border-b border-[#E8E8E8] hover:bg-[#FEF1E1]">
+                  <td className="px-[12px] py-[10px] text-[#737373] capitalize">Rakesh kumar</td>
+                  <td className="px-[12px] py-[10px] text-end"><p className="flex items-center justify-end text-[#737373]">
+                    ₹ 11245 <CiMenuKebab className=" ms-2 text-[18px] text-[#737373]" /></p></td>
+                </tr><tr className="border-1 border-b border-[#E8E8E8] hover:bg-[#FEF1E1]">
+                  <td className="px-[12px] py-[10px] text-[#737373] capitalize">Rakesh kumar</td>
+                  <td className="px-[12px] py-[10px] text-end"><p className="flex items-center justify-end text-[#737373]">
+                    ₹ 11245 <CiMenuKebab className=" ms-2 text-[18px] text-[#737373]" /></p></td>
+                </tr>
+                <tr className="border-1 border-b border-[#E8E8E8] hover:bg-[#FEF1E1]">
+                  <td className="px-[12px] py-[10px] text-[#737373] capitalize">Rakesh kumar</td>
+                  <td className="px-[12px] py-[10px] text-end"><p className="flex items-center justify-end text-[#737373]">
+                    ₹ 11245 <CiMenuKebab className=" ms-2 text-[18px] text-[#737373]" /></p></td>
+                </tr>
+                <tr className="border-1 border-b border-[#E8E8E8] hover:bg-[#FEF1E1]">
+                  <td className="px-[12px] py-[10px] text-[#737373] capitalize">Rakesh kumar</td>
+                  <td className="px-[12px] py-[10px] text-end"><p className="flex items-center justify-end text-[#737373]">
+                    ₹ 11245 <CiMenuKebab className=" ms-2 text-[18px] text-[#737373]" /></p></td>
+                </tr>
+                <tr className="border-1 border-b border-[#E8E8E8] hover:bg-[#FEF1E1]">
+                  <td className="px-[12px] py-[10px] text-[#737373] capitalize">Rakesh kumar</td>
+                  <td className="px-[12px] py-[10px] text-end"><p className="flex items-center justify-end text-[#737373]">
+                    ₹ 11245 <CiMenuKebab className=" ms-2 text-[18px] text-[#737373]" /></p></td>
+                </tr>
+                <tr className="border-1 border-b border-[#E8E8E8] hover:bg-[#FEF1E1]">
+                  <td className="px-[12px] py-[10px] text-[#737373] capitalize">Rakesh kumar</td>
+                  <td className="px-[12px] py-[10px] text-end"><p className="flex items-center justify-end text-[#737373]">
+                    ₹ 11245 <CiMenuKebab className=" ms-2 text-[18px] text-[#737373]" /></p></td>
+                </tr>
+                <tr className="border-1 border-b border-[#E8E8E8] hover:bg-[#FEF1E1]">
+                  <td className="px-[12px] py-[10px] text-[#737373] capitalize">Rakesh kumar</td>
+                  <td className="px-[12px] py-[10px] text-end"><p className="flex items-center justify-end text-[#737373]">
+                    ₹ 11245 <CiMenuKebab className=" ms-2 text-[18px] text-[#737373]" /></p></td>
+                </tr>
+                <tr className="border-1 border-b border-[#E8E8E8] hover:bg-[#FEF1E1]">
+                  <td className="px-[12px] py-[10px] text-[#737373] capitalize">Rakesh kumar</td>
+                  <td className="px-[12px] py-[10px] text-end"><p className="flex items-center justify-end text-[#737373]">
+                    ₹ 11245 <CiMenuKebab className=" ms-2 text-[18px] text-[#737373]" /></p></td>
+                </tr>
+                <tr className="border-1 border-b border-[#E8E8E8] hover:bg-[#FEF1E1]">
+                  <td className="px-[12px] py-[10px] text-[#737373] capitalize">Rakesh kumar</td>
+                  <td className="px-[12px] py-[10px] text-end"><p className="flex items-center justify-end text-[#737373]">
+                    ₹ 11245 <CiMenuKebab className=" ms-2 text-[18px] text-[#737373]" /></p></td>
+                </tr>
+                <tr className="border-1 border-b border-[#E8E8E8] hover:bg-[#FEF1E1]">
+                  <td className="px-[12px] py-[10px] text-[#737373] capitalize">Rakesh kumar</td>
+                  <td className="px-[12px] py-[10px] text-end"><p className="flex items-center justify-end text-[#737373]">
+                    ₹ 11245 <CiMenuKebab className=" ms-2 text-[18px] text-[#737373]" /></p></td>
+                </tr>
+                <tr className="border-1 border-b border-[#E8E8E8] hover:bg-[#FEF1E1]">
+                  <td className="px-[12px] py-[10px] text-[#737373] capitalize">Rakesh kumar</td>
+                  <td className="px-[12px] py-[10px] text-end"><p className="flex items-center justify-end text-[#737373]">
+                    ₹ 11245 <CiMenuKebab className=" ms-2 text-[18px] text-[#737373]" /></p></td>
+                </tr>
+                <tr className="border-1 border-b border-[#E8E8E8] hover:bg-[#FEF1E1]">
+                  <td className="px-[12px] py-[10px] text-[#737373] capitalize">Rakesh kumar</td>
+                  <td className="px-[12px] py-[10px] text-end"><p className="flex items-center justify-end text-[#737373]">
+                    ₹ 11245 <CiMenuKebab className=" ms-2 text-[18px] text-[#737373]" /></p></td>
+                </tr>
+
+                <tr className="border-1 border-b border-[#E8E8E8] hover:bg-[#FEF1E1]">
+                  <td className="px-[12px] py-[10px] text-[#737373] capitalize">Rakesh kumar</td>
+                  <td className="px-[12px] py-[10px] text-end"><p className="flex items-center justify-end text-[#737373]">
+                    ₹ 11245 <CiMenuKebab className=" ms-2 text-[18px] text-[#737373]" /></p></td>
+                </tr>
+              </tbody>
+            </table>
+           </div>
+           
             <List
-            name={"parties"}
+              name={"parties"}
               listdata={list}
               setModalopen={setModalopen}
               onselected={(id: number) => {
@@ -243,7 +378,10 @@ export default function Page() {
         <div className="w-[74%] flex-col gap-5">
           <div>
             <CardPrototype>
-              <div className="flex flex-wrap  ">
+              <p className="text-[#1F1F1F] font-semibold text-[20px] mb-[22px]">
+                Rahul kumar
+              </p>
+              <div className="flex flex-wrap">
                 <Partiescard
                   icon={<IoPersonOutline />}
                   title={"Name"}
@@ -285,7 +423,7 @@ export default function Page() {
             </CardPrototype>
           </div>
 
-          <div className="flex justify-between w-full items-center px-3 my-3">
+          <div className="flex justify-between w-full items-center px-3 mt-[30px] mb-[20px]">
             <div className="text-[25px]">Transaction</div>
             <div className="w-[300px]">
               <TextInput
@@ -298,14 +436,14 @@ export default function Page() {
                 placeholder="Search By"
                 label=""
                 istouched={"Touch"}
-                className="text-gray-800 text-base w-full"
+                className="text-gray-800 text-base w-full border-1 border-[#D0D2D6]"
               />
             </div>
           </div>
 
           <div>
             <Table2
-            selectParty={selectParty}
+              selectParty={selectParty}
               headerData={headerData}
               bodyData={transactionList}
               onPageChange={onPageChange}
