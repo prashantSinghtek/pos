@@ -41,6 +41,7 @@ import {
   addCategoryAPI,
   addItem as addItemAPI,
   DeleteItem,
+  getCategoryByFirmId,
   GetItem,
   getProducts,
   GetTrasactionItem,
@@ -198,7 +199,7 @@ export function* getCategoryistRequest(action: {
   const search: string = yield select(selectSearchCategory);
 
   yield delay(1000);
-  const response: any = yield call(getProducts, action.payload.firmId, search);
+  const response: any = yield call(getCategoryByFirmId, action.payload.firmId, search);
   yield put(setCategoryist(response.data));
   if (action.payload.callback) {
     action.payload.callback();

@@ -4,31 +4,47 @@ import List from "@/app/Components/List";
 import Table from "@/app/Components/Table";
 import TextInput from "@/app/Components/Textinput";
 import React, { useEffect, useState } from "react";
-import { IoMdAdd } from "react-icons/io";
+import { RiFileExcel2Line, RiPagesLine } from "react-icons/ri";
+import { IoMdAdd,  } from "react-icons/io";
 import Modal from "@/app/Components/Modal";
 import { HiAdjustmentsHorizontal } from "react-icons/hi2";
-import { useRouter } from "next/navigation";
 import { Formik } from "formik";
-import { useSession } from "next-auth/react";
 import * as Yup from "yup"; // Import Yup for validation
 import {
   selectCategoryForm,
+  selectCategoryList,
   selectCategoryModel,
+  selectCategoryTransactionList,
+  selectSearchCategory,
+  selectSearchCategoryTrasaction,
 } from "@/Redux/Item/selectors";
-import { useDispatch, useSelector } from "react-redux";
 import { FiLoader } from "react-icons/fi";
 import {
   addCategory,
   changeAddCategoryModelState,
+  getCategoryById,
+  getCategoryist,
+  getCategoryTransactionById,
+  setCategoryTransactionSearch,
+  setSearchCategoryName,
   updateCategoryForm,
 } from "@/Redux/Item/reducer";
-export default function Product() {
-  const [selectedtab, setSelectedtab] = useState<any>();
-  const [category, setCategory] = useState();
-  const [adjustitemmodalopen, setAdjustitemmodalopen] = useState(false);
-  const [particularcategory, setParticularcategory] = useState<any>();
+import { useDispatch, useSelector } from "react-redux";
+import { selectFirmId } from "@/Redux/Parties/selectors";
 
-  const dispatch = useDispatch();
+export default function Product() {
+  const [adjustitemmodalopen, setAdjustitemmodalopen] = useState(false);
+  const header = [
+    "Type",
+    "Invoice No.",
+    "Item ",
+    "Date",
+    "Qty",
+    "Price/Unit",
+    "Status",
+  ];
+
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const submitForm = async (values: any, { resetForm }: any) => {
     try {
@@ -54,23 +70,82 @@ export default function Product() {
     }
   };
 
-  const header = [
-    "Type",
-    "Invoice No.",
-    "Item ",
-    "Date",
-    "Qty",
-    "Price/Unit",
-    "Status",
-  ];
+  const dispatch = useDispatch();
+  const searchName = useSelector(selectSearchCategory);
+  const firmId = useSelector(selectFirmId);
+  useEffect(() => {
+    if (!firmId) {
+      return;
+    }
+    dispatch(
+      getCategoryist({
+        firmId: firmId,
+        callback() {},
+      })
+    );
+
+    return () => {};
+  }, [firmId]);
+
+  useEffect(() => {
+    dispatch(
+      getCategoryist({
+        firmId: firmId,
+        callback() {},
+      })
+    );
+
+    return () => {};
+  }, [searchName]);
+
+  const list = useSelector(selectCategoryList);
+  const [setselectedId, setSetselectedId] = useState("");
+  const handleEdit = (Id: any) => {
+    setSetselectedId(Id);
+    dispatch(
+      getCategoryById({
+        itemId: Id,
+        callback() {},
+      })
+    );
+    dispatch(
+      getCategoryTransactionById({
+        itemId: Id,
+        callback() {},
+      })
+    );
+  };
+  const search = useSelector(selectSearchCategoryTrasaction);
+  useEffect(() => {
+    if (!setselectedId) {
+      return;
+    }
+    dispatch(
+      getCategoryTransactionById({
+        itemId: setselectedId,
+        callback() {},
+      })
+    );
+    return () => {};
+  }, [search]);
+
+  const transactionList = useSelector(selectCategoryTransactionList);
+
+
   const form = useSelector(selectCategoryForm);
   const modelCategory = useSelector(selectCategoryModel);
-
   return (
     <>
       <div className="flex justify-between items-center px-1 mt-5"></div>
-      <div className="flex mt-5 gap-5">
-        <div className="w-[26%] rounded-lg overflow-hidden ">
+      <div className="flex flex-wrap lg:flex-nowrap mt-5 gap-5">
+        <div
+          className="sm:w-screen lg:w-[25%] rounded-lg h-[80vh] overflow-auto "
+          style={{
+            overflowX: "auto",
+            scrollbarWidth: "none",
+            scrollbarColor: "transparent transparent",
+          }}
+        >
           <div className="bg-white  border border-gray-200 rounded-2xl shadow-sm w-full h-full overflow-x-hidden">
             <div className="flex justify-between px-3 pb-3 pt-1 gap-3 w-[100%] items-center">
               <div className="w-[31%]">
@@ -78,17 +153,21 @@ export default function Product() {
                   name="search"
                   type="text"
                   placeholder="Search By"
+                  value={searchName}
                   label=""
+                  onChange={(e) => {
+                    dispatch(setSearchCategoryName(e.target.value));
+                  }}
                   istouched={"Touch"}
                   className="text-gray-800 text-base w-full"
                 />
               </div>
               <div
-                className=" bg-[#fda80c] text-sm text-white rounded-lg px-3 overflow-hidden gap-2 items-center mt-2 flex h-[45px]"
+                className=" bg-[#fda80c] text-sm text-white rounded-lg pl-1 pr-[1px] overflow-hidden gap-1 items-center mt-2 flex h-[45px]"
                 title="Add Parties"
               >
                 <div
-                  className="flex items-center"
+                  className="flex  items-center"
                   onClick={() => {
                     dispatch(changeAddCategoryModelState(true));
                   }}
@@ -96,32 +175,46 @@ export default function Product() {
                   <IoMdAdd size={25} />
                   Add Category
                 </div>
+                <div
+                  className="border-l bg-[#E9A315] py-[14px] px-[10px] cursor-pointer"
+                  // onClick={() => {
+                  //   Router.push("items/importitems");
+                  // }}
+                >
+                  <RiFileExcel2Line />
+                </div>
               </div>
             </div>
-            <div className="bg-gray-100 rounded-t-2xl px-4 py-4 text-[20px] flex justify-between">
-              <div>Category</div>
+            <div className="bg-gray-100 rounded-t-2xl px-4 py-4 text-[16px] flex justify-between">
+              <div>Category Name</div>
               <div>Item</div>
             </div>
             <List
-              listdata={category}
+              listdata={list}
               onselected={(id: number) => {
-                setSelectedtab(id);
+                handleEdit(id);
               }}
               page={"categories"}
             />
           </div>
         </div>
-        <div className="w-[74%] flex-col gap-5">
+        <div className="sm:w-screen lg:w-[75%] flex-col gap-5">
           <div>
             <CardPrototype>
               <div className="flex justify-between px-7 pb-5">
-                <div>{particularcategory?.name}</div>
-                <div
-                  className={`bg-orange-500 rounded-full px-5 py-2 flex gap-3 text-white items-center`}
-                  onClick={() => setAdjustitemmodalopen(!adjustitemmodalopen)}
-                >
-                  <HiAdjustmentsHorizontal size={25} />
-                  Move To This Category
+                <div>{form.categoryName}</div>
+                <div>
+                  <div className="flex gap-3 pr-7">
+                    <div
+                      className={`bg-orange-500 rounded-full px-5 py-2 flex gap-3 text-white items-center`}
+                      onClick={() =>
+                        setAdjustitemmodalopen(!adjustitemmodalopen)
+                      }
+                    >
+                      <HiAdjustmentsHorizontal size={25} />
+                      Move To This Category
+                    </div>
+                  </div>
                 </div>
               </div>
             </CardPrototype>
@@ -133,27 +226,30 @@ export default function Product() {
               <TextInput
                 name="search"
                 type="text"
+                value={search}
                 placeholder="Search By"
                 label=""
                 istouched={"Touch"}
                 className="text-gray-800 text-base w-full"
+                onChange={(e) => {
+                  dispatch(setCategoryTransactionSearch(e.target.value));
+                }}
               />
             </div>
           </div>
 
           <div>
-            <Table headerData={header} />
+            <Table headerData={header} bodyData={transactionList} />
           </div>
         </div>
       </div>
-
       <Modal
         isOpen={modelCategory}
         onClose={() => {
           dispatch(changeAddCategoryModelState(false));
         }}
       >
-        <Formik
+       <Formik
           initialValues={{ categoryName: form?.categoryName || "" }} // Ensure fallback
           validationSchema={Yup.object({
             categoryName: Yup.string().required("Category Name is required"),

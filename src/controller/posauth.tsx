@@ -420,7 +420,7 @@ export const addCategoryAPI = (formData: any, firmId: any) => {
   export const getCategoryByFirm = (id: any) => {
     return apiRequest("get", `${Constants.GetCategoryByFirm}/${id}`);
   };
-  export const getCategoryByFirmId = (id: any) => {
-    return apiRequest("get", `${Constants.GetCategoryByFirm}/${id}`);
+  export const getCategoryByFirmId = (id: any , search :string) => {
+    return apiRequest("get", `${Constants.GetCategoryByFirm}/${id}?searchTerm=${search}`);
   };
   
