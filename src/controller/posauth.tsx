@@ -21,6 +21,7 @@ const apiRequest = async (
       data: values,
       headers: {
         Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
       },
       responseType: responseType || "json",
     });

@@ -197,7 +197,7 @@ export default function LoginForm() {
                       <AiFillGooglePlusCircle size={30} />
                     </div>
                     <div className="flex items-center justify-center gap-1 text-sm text-gray-500">
-                      If You Don't Have an Account?
+                      If You Dont Have an Account?
                       <span className="text-sm text-blue-500 underline font-semibold hover:text-[#FF8900]">
                         <Link href={"/auth/pos/signup"}>
                           <>Sign Up</></Link>

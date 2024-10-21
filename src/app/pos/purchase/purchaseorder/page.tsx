@@ -12,7 +12,7 @@ import { IoMdPrint } from 'react-icons/io'
 import { IoPrintOutline } from 'react-icons/io5'
 import { RiFileExcel2Line } from 'react-icons/ri'
 
-export default function page() {
+function Page() {
   const header = [
     "Party Name ",
     "No.",
@@ -206,3 +206,6 @@ export default function page() {
     </div>
   )
 }
+
+
+export default Page;

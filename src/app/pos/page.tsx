@@ -5,8 +5,6 @@ import Dashboardcard2 from "./Component/Dashboardcard2";
 import Chart from "../Components/Chart";
 import CardPrototype from "../Components/CardPrototype";
 import Table from "../Components/Table";
-import { useDispatch, useSelector } from "react-redux";
-import { selectPartiesList } from "@/Redux/Parties/selectors";
 
 function page() {
   const header = [
@@ -18,11 +16,9 @@ function page() {
     "Amount",
     "Balance Due",
   ];
-  const dispatch = useDispatch();
 
-  
 
-  const listData = useSelector(selectPartiesList)
+  // const listData = useSelector(selectPartiesList)
   return (
     <div className="mr-5">
       <div className="flex mt-5 gap-5">

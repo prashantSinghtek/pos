@@ -1,16 +1,14 @@
 "use client"
 import CardPrototype from '@/app/Components/CardPrototype';
-import pos_controller from '@/controller/posauth';
 import { useSession } from 'next-auth/react';
 import React, { useEffect, useState } from 'react'
 import { BsThreeDotsVertical } from 'react-icons/bs';
 
 
-export default function page() {
+function Page() {
     const firmid = localStorage.getItem("selectedStore");
     const session = useSession();
     const token = localStorage.getItem("authToken");
-    const auth = new pos_controller()
     const [body, setBody] = useState<any>([]);
     const [selecteduser, setSelecteduser] = useState<any>();
     console.log("selecteduser",selecteduser)
@@ -36,17 +34,17 @@ export default function page() {
       onPageChanged(page);
     };
 
-    useEffect(()=>{
-        getcash(token,firmid).then((res)=>{setBody(res.data),console.log(res.data)}).catch((err)=>console.log(err))
-    },[token,firmid])
+    // useEffect(()=>{
+    //     getcash(token,firmid).then((res)=>{setBody(res.data),console.log(res.data)}).catch((err)=>console.log(err))
+    // },[token,firmid])
 
     useEffect(()=>{
         // handleGetCashtrasaction(storeid).then((res)=>{setBody(res);console.log(res)}).catch((err)=>console.log(err))
     },[token,firmid])
 
-    useEffect(()=>{
-      GetCashAmount(token,firmid).then((res)=>{SetCashAmount(res?.data),console.log(res)}).catch((err)=>console.log(err))
-  },[token,firmid])
+  //   useEffect(()=>{
+  //     GetCashAmount(token,firmid).then((res)=>{SetCashAmount(res?.data),console.log(res)}).catch((err)=>console.log(err))
+  // },[token,firmid])
 
   return (
     <div className='mr-5'>
@@ -172,3 +170,4 @@ export default function page() {
     </div>
   )
 }
+export default Page;

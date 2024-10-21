@@ -19,7 +19,7 @@ interface schema {
   otp: string;
 }
 
-export default function page() {
+function Page() {
   const searchParams = useSearchParams();
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -129,3 +129,6 @@ export default function page() {
     </div>
   );
 }
+
+
+export default Page;

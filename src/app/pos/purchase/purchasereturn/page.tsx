@@ -16,7 +16,7 @@ import { MdCurrencyRupee } from "react-icons/md";
 import { RiBillLine, RiFileExcel2Line } from "react-icons/ri";
 import { VscGraph } from "react-icons/vsc";
 
-export default function page() {
+function Page() {
   const header = [
     "Date",
     "Reference No.",
@@ -272,3 +272,6 @@ export default function page() {
     </div>
   );
 }
+
+
+export default Page;
