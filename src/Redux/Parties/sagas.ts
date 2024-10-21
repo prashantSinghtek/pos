@@ -83,7 +83,6 @@ export function* getPartyTransactionRequest(action: {
     action.payload.search
   );
   yield put(setTrasactionList(response.data));
-  console.log(response, "response");
   if (action.payload.callback) {
     action.payload.callback();
   }
@@ -95,9 +94,13 @@ export function* getPartyDetailRequest(action: {
     return;
   }
   yield delay(1000);
-  const response: any = yield call(getPartiesByID, action.payload.partieId);
-   yield put(setPartiesDashboardData(response.data));
-  yield put(setPartieDetailForm(response.data));
+  
+  const response : AxiosResponse =  yield call(
+    getPartyDetailAPI,
+    action.payload.partieId,
+  );
+  yield put(setPartiesDashboardData(response?.data));
+  yield put(setPartieDetailForm(response?.data));
   if (action.payload.callback) {
     action.payload.callback();
   }

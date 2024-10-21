@@ -21,7 +21,6 @@ const apiRequest = async (
       data: values,
       headers: {
         Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
       },
       responseType: responseType || "json",
     });
@@ -34,6 +33,8 @@ const apiRequest = async (
       document.body.removeChild(aTag);
       return URL.createObjectURL(data);
     }
+    console.log(url , data , "data");
+    
     if (!data && !data.data.status) {
       return;
     }
