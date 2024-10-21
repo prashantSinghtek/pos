@@ -42,11 +42,10 @@ const Table2 = ({
   const path = usePathname();
   const shouldShowBorder = !(path === "/pos");
 
-  const containerClasses = `w-full my-5 ${
-    shouldShowBorder
+  const containerClasses = `w-full my-5 ${shouldShowBorder
       ? "border border-gray-300 rounded-xl shadow-md"
       : "rounded-md"
-  } pb-[10px] bg-white border border-gray-300`;
+    } pb-[10px] bg-white border border-gray-300`;
 
   const onPageChanged = (page: number) => {
     setCurrentPage(page);
@@ -162,18 +161,17 @@ const Table2 = ({
     <div className={containerClasses}>
       <table className="w-full table-fixed border-collapse">
         <thead
-          className={`rounded-t-lg w-full ${
-            shouldShowBorder ? "bg-[#FFF1EC]" : "bg-[#FFF1EC]"
-          }`}
+          className={`rounded-t-lg w-full ${shouldShowBorder ? "bg-[#FFF1EC]" : "bg-[#FFF1EC]"
+            }`}
         >
           <tr>
-            <th className="py-3 text-[13px] text-gray-800 text-center uppercase w-10">
+            <th className="py-3 px-[11px] text-[13px] text-gray-800 text-center uppercase w-10 rounded-tl-[10px] rounded-br-[0] rounded-tr-[0] rounded-bl-[0] whitespace-nowrap	">
               S. No.
             </th>
             {headerData.map((header: string, index: number) => (
               <th
                 key={index}
-                className="py-3 text-[13px] text-gray-800  whitespace-nowrap text-center  uppercase relative"
+                className="py-3 text-[13px] text-gray-800 whitespace-nowrap text-center uppercase relative"
               >
                 {header}
                 {header.toLowerCase() !== "serial no" && (
@@ -222,23 +220,23 @@ const Table2 = ({
                           <option value="">Select...</option>
                           {filtersOptions[header.replace(" ", "_")]
                             ? filtersOptions[header.replace(" ", "_")].map(
-                                (option: string, idx: number) => (
-                                  <option key={idx} value={option}>
-                                    {option}
-                                  </option>
+                              (option: string, idx: number) => (
+                                <option key={idx} value={option}>
+                                  {option}
+                                </option>
+                              )
+                            )
+                            : Array.from(
+                              new Set(
+                                bodyData.map(
+                                  (item: any) => item[header.toLowerCase()]
                                 )
                               )
-                            : Array.from(
-                                new Set(
-                                  bodyData.map(
-                                    (item: any) => item[header.toLowerCase()]
-                                  )
-                                )
-                              ).map((value: any, idx: any) => (
-                                <option key={idx} value={value}>
-                                  {value}
-                                </option>
-                              ))}
+                            ).map((value: any, idx: any) => (
+                              <option key={idx} value={value}>
+                                {value}
+                              </option>
+                            ))}
                         </select>
                       </div>
                     )}
@@ -246,7 +244,7 @@ const Table2 = ({
                 )}
               </th>
             ))}
-            <th className="py-3 text-[13px] text-gray-800 text-center uppercase relative"></th>
+            {/* <th className="py-3 text-[13px] text-gray-800 text-center uppercase relative"></th> */}
           </tr>
         </thead>
         {bodyData.length ? (
@@ -255,9 +253,8 @@ const Table2 = ({
               (item: transactionInterface, index: number) => (
                 <tr
                   key={index}
-                  className={`font-light border-y border-gray-200 ${
-                    index % 2 === 1 ? "bg-gray-100" : ""
-                  }`}
+                  className={`font-light border-y border-gray-200 ${index % 2 === 1 ? "bg-gray-100" : ""
+                    }`}
                 >
                   <td className="text-sm text-gray-700 text-center py-1">
                     {index + 1}
@@ -278,7 +275,7 @@ const Table2 = ({
                     {item.balanceDue}
                   </td>
 
-                  <td className="text-center">
+                  <td className="text-center ">
                     <div className="relative inline-block text-left">
                       <button
                         onClick={() => {
@@ -335,10 +332,10 @@ const Table2 = ({
         )}
       </table>
       <nav
-        className="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4 px-3"
+        className="flex items-center flex-column flex-wrap md:flex-row justify-center pt-4 px-3 text-center"
         aria-label="Table navigation"
       >
-        <span className="text-sm font-normal text-gray-500">
+        <span className="text-sm font-normal text-gray-500 ">
           Showing <span className="font-semibold">{itemStartIndex}</span> to{" "}
           <span className="font-semibold">{itemEndIndex}</span> of{" "}
           <span className="font-semibold">{count}</span> entries
@@ -347,11 +344,10 @@ const Table2 = ({
           {Array.from({ length: totalPages }, (_, index) => (
             <li key={index}>
               <button
-                className={` ${
-                  currentPage === index + 1
+                className={` ${currentPage === index + 1
                     ? "active-page-class"
                     : "inactive-page-class"
-                }`}
+                  }`}
                 onClick={() => onPageChanged(index + 1)}
               >
                 {index + 1}

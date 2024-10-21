@@ -212,7 +212,7 @@ export default function Product() {
           </div>
 
           <div className="flex justify-between w-full items-center px-3 my-3">
-            <div className="text-[25px]">Transaction</div>
+            <div className="text-[20px]">Transaction</div>
             <div className="w-[300px]">
               <TextInput
                 name="search"
