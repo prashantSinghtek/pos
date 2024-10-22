@@ -55,12 +55,21 @@ export default function Header() {
               : Pagehead.toUpperCase()}
           </div>
           <div className="px-3 flex space-x-1">
-            <div className="flex items-center gap-[6px]">
+            <div className="flex items-center gap-[12px]">
               <div className="border-2 border-[#CDC8C6] text-[#867E7C] p-2 rounded-full">
+                <div className="relative">
                 <IoChatboxEllipsesOutline size={25} />
+                <div className="absolute h-[10px] w-[10px] bg-[#FF6E3F] rounded-[100%] absolute right-0 top-0">
+                </div>
+                </div>
               </div>
               <div className="border-2 border-[#CDC8C6] text-[#867E7C] p-2 rounded-full">
-                <HiOutlineBell size={25} />
+               <div className="relative">
+               <HiOutlineBell size={25} />
+               <div className="absolute h-[10px] w-[10px] bg-[#FF6E3F] rounded-[100%] absolute right-0 top-0">
+             
+              </div>
+               </div>
               </div>
               <div className="flex items-center gap-1 cursor-pointer">
                 <img src="/Ellipse9.png" alt="User profile picture" />
