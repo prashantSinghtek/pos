@@ -94,7 +94,7 @@ const handleDelete =async (id:any)=>{
                     name="datefrom"
                     type="datefrom"
                     placeholder="05/04/2024"
-                    label="Date From:"
+                    label="Date From"
                     istouched={"Touch"}
                     className="text-gray-800 text-base w-full"
                   />
@@ -106,7 +106,7 @@ const handleDelete =async (id:any)=>{
                     name="datefrom"
                     type="datefrom"
                     placeholder="05/04/2024"
-                    label="Date To:"
+                    label="Date To"
                     istouched={"Touch"}
                     className="text-gray-800 text-base w-full"
                   />

@@ -215,45 +215,10 @@ export default function Product() {
         onClose={() => setAdjustitemmodalopen(false)}
       >
         <>
-          <div className="pb-2 flex">Stock Adjustment</div>
-          <div className="flex justify-between my-5 border-b border-groove pb-3 ">
-            <div className="flex flex-col">
-              <div className="text-gray-600 text-sm">Item Name</div>
-              <div className="text-gray-800 text-sm font-semibold">XYZ</div>
-            </div>
-          </div>
-          <div className="flex gap-5 my-5 w-full">
-            <div className="w-[25%]">
-              <TextInput
-                name="Qty"
-                type="text"
-                placeholder=""
-                label="Total Qty"
-                istouched={"Touch"}
-                className="text-gray-800 text-base w-[30%]"
-              />
-            </div>
-            <div className="w-[25%]">
-              <TextInput
-                name="Price"
-                type="text"
-                placeholder=""
-                label="At Price"
-                istouched={"Touch"}
-                className="text-gray-800 text-base w-[30%]"
-              />
-            </div>
-            <div className="w-[25%]">
-              <TextInput
-                name="Details"
-                type="text"
-                placeholder=""
-                label="Details"
-                istouched={"Touch"}
-                className="text-gray-800 text-base w-[30%]"
-              />
-            </div>
-          </div>
+      {/* // Move to this Category form design  */}
+
+
+      
         </>
       </Modal>
     </>

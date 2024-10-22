@@ -97,7 +97,7 @@ export default function Page() {
           <>
             <div className="flex gap-5 items-end">
               <div className="w-[10%]  text-[22px] mb-1">This Month</div>
-              <div className="rounded-md text-gray-800 bg-gray-200 px-5 py-2 h-fit">
+              <div className="rounded-md text-gray-800 bg-gray-200 px-5 py-3 h-fit">
                 Between
               </div>
               <div className="w-[30%] flex flex-col justify-center items-start">
@@ -106,7 +106,7 @@ export default function Page() {
                     name="datefrom"
                     type="datefrom"
                     placeholder="05/04/2024"
-                    label="Date From:"
+                    label="Date From :"
                     istouched={"Touch"}
                     className="text-gray-800 text-base w-full"
                   />
@@ -118,7 +118,7 @@ export default function Page() {
                     name="datefrom"
                     type="datefrom"
                     placeholder="05/04/2024"
-                    label="Date To:"
+                    label="Date To :"
                     istouched={"Touch"}
                     className="text-gray-800 text-base w-full"
                   />
@@ -152,7 +152,7 @@ export default function Page() {
                       setTouchedpayment({ ...touchedpayment, state: true })
                     }
                     styles={customStyles}
-                    className="w-[100%]  bg-white  outline-none font-medium font-optima  text-primary text-sm focus-within:outline-gray-200 focus-within:outline focus-within:outline-2"
+                    className="w-[100%] bg-white outline-none font-medium font-optima text-primary text-sm focus-within:outline-gray-200 focus-within:outline focus-within:outline-2"
                   />
                 </div>
               </div>
@@ -248,7 +248,7 @@ export default function Page() {
                         <FaShare className="text-gray-800 text-xl" />
                       </div>
                     </td>
-                    
+
                   </tr>
                 ))}
               </tbody>
