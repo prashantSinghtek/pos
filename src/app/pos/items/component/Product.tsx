@@ -44,15 +44,7 @@ export default function Product() {
   const [modalOpenFrom, setModalOpenFrom] = useState("");
   const [adjustitemmodalopen, setAdjustitemmodalopen] = useState(false);
   const Router = useRouter();
-  const [tabs, setTabs] = useState([{ id: 1, isChecked: false }]);
   const [activeTab, setActiveTab] = useState<any>(1);
-  const handleCheckboxChanged = (tabId: any) => {
-    setTabs(
-      tabs.map((tab) =>
-        tab.id === tabId ? { ...tab, isChecked: !tab.isChecked } : tab
-      )
-    );
-  };
 
   const header = [
     "Type",
@@ -81,22 +73,22 @@ export default function Product() {
     dispatch(
       getItemList({
         firmId: firmId,
-        callback() {},
+        callback() { },
       })
     );
 
-    return () => {};
+    return () => { };
   }, [firmId]);
 
   useEffect(() => {
     dispatch(
       getItemList({
         firmId: firmId,
-        callback() {},
+        callback() { },
       })
     );
 
-    return () => {};
+    return () => { };
   }, [searchName]);
 
   const list = useSelector(selectItemList);
@@ -106,13 +98,13 @@ export default function Product() {
     dispatch(
       getItemById({
         itemId: Id,
-        callback() {},
+        callback() { },
       })
     );
     dispatch(
       getTransactionByItemId({
         itemId: Id,
-        callback() {},
+        callback() { },
       })
     );
   };
@@ -124,10 +116,10 @@ export default function Product() {
     dispatch(
       getTransactionByItemId({
         itemId: setselectedId,
-        callback() {},
+        callback() { },
       })
     );
-    return () => {};
+    return () => { };
   }, [search]);
 
   const transactionList = useSelector(selectTransactionList);
@@ -287,64 +279,39 @@ export default function Product() {
           <div className="flex items-center gap-4">
             <div className=" flex text-[16px]">Stock Adjustment</div>
             <div className="rounded-b-md">
-              {tabs.map((tab) =>
-                activeTab === tab.id ? (
-                  <div
-                    key={tab.id}
-                    className=" text-[13px] text-gray-800  flex items-end gap-5"
+              <div
+                className=" text-[13px] text-gray-800  flex items-end gap-5"
+              >
+                <div className="flex gap-2 items-center">
+                  <span
                   >
-                    <div className="flex gap-2 items-center">
-                      <span
-                        className={`${
-                          tab.isChecked ? "text-[#808080]" : "text-[#2D9CDB]"
-                        }`}
-                      >
-                        Add Stock
-                      </span>
-                      <label className="flex cursor-pointer select-none items-center">
-                        <div className="relative">
-                          <input
-                            title="check"
-                            type="checkbox"
-                            checked={tab.isChecked}
-                            onChange={() => handleCheckboxChanged(tab.id)}
-                            className="sr-only"
-                            id={`creditlimit-${tab.id}`}
-                          />
-                          <div className="block h-8 w-16 rounded-full border border-[#2D9CDB] bg-white"></div>
-                          <div
-                            className={`dot bg-[#2D9CDB] absolute duration-100 top-1 h-6 w-6 rounded-full transition ${
-                              tab.isChecked ? "right-1" : "left-1"
-                            }`}
-                          ></div>
-                        </div>
-                      </label>
-                      <span
-                        className={`${
-                          tab.isChecked ? "text-[#2D9CDB]" : "text-[#808080]"
-                        }`}
-                      >
-                        Reduce Stock
-                      </span>
+                    Add Stock
+                  </span>
+                  <label className="flex cursor-pointer select-none items-center">
+                    <div className="relative">
+                      <input
+                        title="check"
+                        type="checkbox"
+                        className="sr-only"
+                      />
+                      <div className="block h-8 w-16 rounded-full border border-[#2D9CDB] bg-white"></div>
+                      <div
+                        className={`dot bg-[#2D9CDB] absolute duration-100 top-1 h-6 w-6 rounded-full transition`}
+                      ></div>
                     </div>
-                  </div>
-                ) : null
-              )}
+                  </label>
+                  <span
+
+                  >
+                    Reduce Stock
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
 
           <div className="mt-5">
-            {tabs.map((tab) =>
-              activeTab === tab.id ? (
-                <div key={tab.id}>
-                  {tab.isChecked ? (
-                    <StockReduce selectedproduct={selectedproduct} />
-                  ) : (
-                    <Stockadd selectedproduct={selectedproduct} />
-                  )}
-                </div>
-              ) : null
-            )}
+            <Stockadd  />
           </div>
         </>
       </Modal>
