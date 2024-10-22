@@ -430,4 +430,6 @@ export const updateCategoryAPI = (formData: any, id: any) => {
     return apiRequest("delete", `${Constants.CategoryDelete}${id}`);
   };
   
-
+  export const GetCategoryByItem = (id: any, search: any, firmid : any) => {
+    return apiRequest("get", `${Constants.CategoryItemList}${id}/firm/${firmid}`);
+  };

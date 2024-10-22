@@ -259,7 +259,7 @@ export default function Product() {
           </div>
 
           <div>
-            <Table headerData={header} bodyData={transactionList} />
+            <Table headerData={header} bodyData={transactionList} page={"product"} />
           </div>
         </div>
       </div>

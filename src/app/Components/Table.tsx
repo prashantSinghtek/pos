@@ -9,12 +9,13 @@ const Table = ({
   onPageChange,
   count,
   isFullScreen,
+  page,
 }: any) => {
   const PAGE_SIZE = 4;
   const [currentPage, setCurrentPage] = useState(1);
   const startIndex = (currentPage - 1) * PAGE_SIZE;
-  const endIndex = startIndex + PAGE_SIZE;
-  const currentDisplayedData = bodyData?.slice(startIndex, endIndex);
+  // const endIndex = startIndex + PAGE_SIZE;
+  // const currentDisplayedData = bodyData?.slice(startIndex, endIndex);
   const totalPages = Math.ceil(count / PAGE_SIZE);
   const itemStartIndex = startIndex + 1;
   const itemEndIndex = Math.min(startIndex + PAGE_SIZE, bodyData?.length);
@@ -57,40 +58,72 @@ const Table = ({
           </thead>
           {/* Body */}
           <tbody>
-
-            
-            {bodyData?.map((item: TransactionInterface, index: any) => (
+            {page == "product" && bodyData?.map((item: TransactionInterface, index: any) => (
               <tr
                 key={index}
                 className={`font-light border-y border-gray-200 ${
                   index % 2 === 1 ? "bg-gray-100 rounded-full" : ""
                 }`}
               >
+                <td className="text-sm text-gray-700 text-center px-2 py-1 ">
+                  {item.operationType
+                    ? item.operationType.replace("_", " ")
+                    : "NA"}
+                </td>
+
+                <td className="text-sm text-gray-700 text-center px-2 py-1 ">
+                  {item.invoiceNumber ? item.invoiceNumber : "NA"}
+                </td>
+                <td className="text-sm text-gray-700 text-center px-2 py-1 ">
+                  {item.partyName ? item.partyName : "NA"}
+                </td>
+                <td className="text-sm text-gray-700 text-center px-2 py-1 ">
+                  {item.dateOfTransaction ? item.dateOfTransaction : "NA"}
+                </td>
+                <td className="text-sm text-gray-700 text-center px-2 py-1 ">
+                  {item.quantity ? item.quantity : "NA"}
+                </td>
+                <td className="text-sm text-gray-700 text-center px-2 py-1 ">
+                  {item.unitPrice ? item.unitPrice : "NA"}
+                </td>
+                <td className="text-sm text-gray-700 text-center px-2 py-1 ">
+                  {item.status ? item.status : "NA"}
+                </td>
+              </tr>
+            ))}
+
+            {page == "categories" &&
+              bodyData?.map((item: any, index: any) => (
+                <tr
+                  key={index}
+                  className={`font-light border-y border-gray-200 ${
+                    index % 2 === 1 ? "bg-gray-100 rounded-full" : ""
+                  }`}
+                >
                   <td className="text-sm text-gray-700 text-center px-2 py-1 ">
-                    {item.operationType ? item.operationType.replace("_", " ") : "NA"}
+                    {item.itemName ? item.itemName : "NA"}
                   </td>
-              
+
                   <td className="text-sm text-gray-700 text-center px-2 py-1 ">
-                    {item.invoiceNumber ?item.invoiceNumber  :"NA"}
+                    {item.itemHsn ? item.itemHsn : "NA"}
                   </td>
                   <td className="text-sm text-gray-700 text-center px-2 py-1 ">
-                    {item.partyName ? item.partyName : "NA"}
+                    {item.purchasePrice ? item.purchasePrice : "NA"}
                   </td>
                   <td className="text-sm text-gray-700 text-center px-2 py-1 ">
-                    {item.dateOfTransaction ? item.dateOfTransaction : "NA"}
+                    {item.salePrice ? item.salePrice : "NA"}
+                  </td>
+                  <td className="text-sm text-gray-700 text-center px-2 py-1 ">
+                    {item.wholeSalePrice ? item.wholeSalePrice : "NA"}
                   </td>
                   <td className="text-sm text-gray-700 text-center px-2 py-1 ">
                     {item.quantity ? item.quantity : "NA"}
                   </td>
                   <td className="text-sm text-gray-700 text-center px-2 py-1 ">
-                    {item.unitPrice ? item.unitPrice : "NA"}
+                    {item.openingQuantity ? item.openingQuantity : "NA"}
                   </td>
-                  <td className="text-sm text-gray-700 text-center px-2 py-1 ">
-                    {item.status ? item.status : "NA"}
-                  </td>
-     
-              </tr>
-            ))}
+                </tr>
+              ))}
           </tbody>
         </table>
 

@@ -35,16 +35,14 @@ import { selectFirmId } from "@/Redux/Parties/selectors";
 export default function Product() {
   const [adjustitemmodalopen, setAdjustitemmodalopen] = useState(false);
   const header = [
-    "Type",
-    "Invoice No.",
-    "Item ",
-    "Date",
-    "Qty",
-    "Price/Unit",
-    "Status",
+    "Item Name",
+    "Item HSN",
+    "Purchase Price ",
+    "Sale Price",
+    "Whole Sale Price",
+    "Quantity",
+    "Opening Quantity",
   ];
-
-
   const [isSubmitting, setIsSubmitting] = useState(false);
   const submitForm = async (values: any, { resetForm }: any) => {
     try {
@@ -221,7 +219,7 @@ export default function Product() {
           </div>
 
           <div className="flex justify-between w-full items-center px-3 my-3">
-            <div className="text-[25px]">Transaction</div>
+            <div className="text-[25px]">ITEM</div>
             <div className="w-[300px]">
               <TextInput
                 name="search"
@@ -239,7 +237,7 @@ export default function Product() {
           </div>
 
           <div>
-            <Table headerData={header} bodyData={transactionList} />
+            <Table headerData={header} bodyData={transactionList}  page={"categories"}/>
           </div>
         </div>
       </div>

@@ -44,6 +44,7 @@ import {
   DeleteItem,
   getCategoryByFirmId,
   getCategoryByIdAPI,
+  GetCategoryByItem,
   GetItem,
   getProducts,
   GetTrasactionItem,
@@ -248,14 +249,16 @@ export function* getCategoryTransactionByIdRequest(action: {
   if (action.payload.itemId.length === 0) {
     return;
   }
+  const firmId: string = yield select(selectFirmId);
   const search: string = yield select(selectSearchCategoryTrasaction);
   yield delay(1000);
   const response: any = yield call(
-    GetTrasactionItem,
+    GetCategoryByItem,
     action.payload.itemId,
-    search
-  );
-  yield put(setCategoryTransactionist(response));
+    search,
+    firmId
+  ); 
+  yield put(setCategoryTransactionist(response.data.items));
   if (action.payload.callback) {
     action.payload.callback();
   }
