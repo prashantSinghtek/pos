@@ -32,9 +32,7 @@ const apiRequest = async (
       aTag.click();
       document.body.removeChild(aTag);
       return URL.createObjectURL(data);
-    }
-    console.log(url , data , "data");
-    
+    }   
     if (!data && !data.data.status) {
       return;
     }
@@ -409,6 +407,10 @@ export const addCategoryAPI = (formData: any, firmId: any) => {
   const url = `${Constants.category}add?firmId=${firmId}`;
   return apiRequest("post", url , formData);
 };
+export const updateCategoryAPI = (formData: any, id: any) => {
+  const url = `${Constants.category}update/${id}`;
+  return apiRequest("put", url , formData);
+};
 
   export const getCategory = (id: any) => {
     return apiRequest("get", `${Constants.category}all/firm/${id}`);
@@ -417,8 +419,8 @@ export const addCategoryAPI = (formData: any, firmId: any) => {
     return apiRequest("get", `${Constants.GetCategoryByID}${id}`);
   };
 
-  export const getCategoryByFirm = (id: any) => {
-    return apiRequest("get", `${Constants.GetCategoryByFirm}/${id}`);
+  export const getCategoryByFirm = (id: any) => {    
+  return apiRequest("get", `${Constants.GetCategoryByFirm}/${id}?searchTerm=`);
   };
   export const getCategoryByFirmId = (id: any , search :string) => {
     return apiRequest("get", `${Constants.GetCategoryByFirm}/${id}?searchTerm=${search}`);
@@ -428,3 +430,4 @@ export const addCategoryAPI = (formData: any, firmId: any) => {
     return apiRequest("delete", `${Constants.CategoryDelete}${id}`);
   };
   
+

@@ -47,6 +47,7 @@ import {
   GetItem,
   getProducts,
   GetTrasactionItem,
+  updateCategoryAPI,
 } from "@/controller/posauth";
 import toast from "react-hot-toast";
 import { selectFirmId } from "../Parties/selectors";
@@ -175,10 +176,12 @@ export function* addCategoryRequest(action: {
   const form: categoryFormInterface = yield select(selectCategoryForm);
   const firmId: string = yield select(selectFirmId);
   try {
-    const response: any = yield call(addCategoryAPI, form, firmId);
-    console.log(response, "response");
-    
-    debugger;
+    let response;
+    if (form.id) {
+      response = yield call(updateCategoryAPI, form, form.id);
+    } else {
+      response = yield call(addCategoryAPI, form, firmId);
+    }
     if (!response || response == undefined || response.status != 200) {
       toast.error(response?.categoryName || "Something went wrong");
       return;
@@ -201,7 +204,11 @@ export function* getCategoryistRequest(action: {
   const search: string = yield select(selectSearchCategory);
 
   yield delay(1000);
-  const response: any = yield call(getCategoryByFirmId, action.payload.firmId, search);
+  const response: any = yield call(
+    getCategoryByFirmId,
+    action.payload.firmId,
+    search
+  );
   yield put(setCategoryist(response.data));
   if (action.payload.callback) {
     action.payload.callback();
@@ -229,6 +236,7 @@ export function* getCategoryByIdRequest(action: {
   yield delay(1000);
   const response: any = yield call(getCategoryByIdAPI, action.payload.itemId);
   yield put(setCategoryFormData(response.data));
+  yield put(changeAddCategoryModelState(true));
   if (action.payload.callback) {
     action.payload.callback();
   }
@@ -252,6 +260,7 @@ export function* getCategoryTransactionByIdRequest(action: {
     action.payload.callback();
   }
 }
+
 export default function* ItemSaga(): Generator {
   yield takeLatest(addItem, addItemRequest);
   yield takeLatest(getItemList, getItemListRequest);

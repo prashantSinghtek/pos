@@ -71,8 +71,6 @@ const List = ({ listdata, onselected, page, handleEdit }: any) => {
       );
     }
   };
-  console.log(listdata, page, "listdata");
-
   return (
     <>
       <div className="flex flex-col space-y-4 px-4 mt-3">

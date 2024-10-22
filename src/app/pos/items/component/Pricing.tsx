@@ -132,8 +132,6 @@ const [isSubmitting, setIsSubmitting] = useState(false)
       setIsSubmitting(false);
     }
   };
-console.log(isSubmitting , "isSubmitting");
-
   return (
     <div>
       <Formik
