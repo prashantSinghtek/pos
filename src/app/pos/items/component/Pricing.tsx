@@ -3,8 +3,6 @@ import { updateProductForm } from "@/Redux/Item/reducer";
 import { selectProductForm } from "@/Redux/Item/selectors";
 import { Field, Formik } from "formik";
 import React, { useState } from "react";
-import { FiMinus } from "react-icons/fi";
-import { IoMdAdd } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
 import * as Yup from "yup";
@@ -26,24 +24,11 @@ export default function Pricing() {
     { value: "WITH_GST", label: "With GST" },
   ]);
 
-  const [selectedgstOption, setSelectedgstOptions] =
-    useState<SelectOption | null>(null);
-  const [selecteddiscountgstOption, setSelectedDiscountgstOptions] =
-    useState<SelectOption | null>(null);
-  const [selectedpurchasegstOption, setSelectedPurchasegstOptions] =
-    useState<SelectOption | null>(null);
   const [discount] = useState<SelectOption[]>([
     { value: "SELECT", label: "Select" },
     { value: "PERCENTAGE", label: "Percentage" },
     { value: "AMOUNT", label: "Amount" },
   ]);
-  const [selecteddiscountOption, setSelecteddiscountOptions] =
-    useState<SelectOption | null>(null);
-  const [toucheddiscount, setToucheddiscount] = useState({ state: false });
-  const [showfield, setShowfield] = useState(false);
-
-  const handleChangedPurchasegst = (selectedOption: SelectOption | null) =>
-    setSelectedPurchasegstOptions(selectedOption);
 
   const customStyles = {
     control: (provided: any) => ({
@@ -112,7 +97,7 @@ export default function Pricing() {
       ),
   });
 
-const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const submitForm = async (values: any, { setSubmitting, resetForm }: any) => {
     try {
       setIsSubmitting(true);
@@ -226,7 +211,7 @@ const [isSubmitting, setIsSubmitting] = useState(false)
                   )}
               </div>
             </div>
-          
+
             <div className="flex space-x-2 w-full mt-6 items-end">
               <div className="w-full">
                 <TextInput

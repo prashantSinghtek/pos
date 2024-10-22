@@ -9,44 +9,31 @@ import { ErrorMessage, Field, Formik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import { selectServiceForm } from "@/Redux/Item/selectors";
 import * as Yup from "yup";
-import { updateServiceForm } from "@/Redux/Item/reducer";
 
 export default function ProductForm({
-  setProductupdate,
-  selectedproduct,
+    selectedproduct,
 }: any) {
-  const [pricevalue, setPricevalue] = useState<any>({});
-  const [productcodevalue, setProductcodevalue] = useState("");
   const [selectedunit, setSelectedUnit] = useState<any>(
     selectedproduct?.service?.unit || null
   );
   const [selectedcategory, setSelectedCategory] = useState<any>(null);
   const [unit, setUnit] = useState<any[]>([]);
   const [category, setCategory] = useState<any[]>([]);
-  const [fieldValue, setFieldValue] = useState<File[]>([]);
-
-  // Correct usage
   const handleImageChange = (newFiles: FileList | null) => {
     if (newFiles) {
-      setFieldValue(Array.from(newFiles));
+      // setFieldValue(Array.from(newFiles));
     }
   };
-  const dispatch = useDispatch();
   const formData = useSelector(selectServiceForm);
-
-  // Function to generate random service code and return it
   const generateRandomNumber = () => {
     const randomNum = Math.floor(Math.random() * 9000000000) + 1000000000;
-    setProductcodevalue(randomNum.toString());
     return randomNum.toString(); // Return the random code as a string
   };
 
-  // Handle unit selection change
-  const handleUnitChange = (selectedOption: any) => {
+ const handleUnitChange = (selectedOption: any) => {
     setSelectedUnit(selectedOption);
   };
 
-  // Handle category selection change
   const handleCategoryChange = (selectedOption: any) => {
     setSelectedCategory(selectedOption);
   };

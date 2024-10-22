@@ -5,7 +5,7 @@ import Table from "@/app/Components/Table";
 import TextInput from "@/app/Components/Textinput";
 import React, { useEffect, useState } from "react";
 import { RiFileExcel2Line, RiPagesLine } from "react-icons/ri";
-import { IoMdAdd, } from "react-icons/io";
+import { IoMdAdd } from "react-icons/io";
 import Modal from "@/app/Components/Modal";
 import { HiAdjustmentsHorizontal } from "react-icons/hi2";
 import { Formik } from "formik";
@@ -31,9 +31,7 @@ import {
 } from "@/Redux/Item/reducer";
 import { useDispatch, useSelector } from "react-redux";
 import { selectFirmId } from "@/Redux/Parties/selectors";
-import { TextField } from "@mui/material";
 import { IoSearchOutline } from "react-icons/io5";
-import { Input } from "postcss";
 
 export default function Product() {
   const [adjustitemmodalopen, setAdjustitemmodalopen] = useState(false);
@@ -81,22 +79,22 @@ export default function Product() {
     dispatch(
       getCategoryist({
         firmId: firmId,
-        callback() { },
+        callback() {},
       })
     );
 
-    return () => { };
+    return () => {};
   }, [firmId]);
 
   useEffect(() => {
     dispatch(
       getCategoryist({
         firmId: firmId,
-        callback() { },
+        callback() {},
       })
     );
 
-    return () => { };
+    return () => {};
   }, [searchName]);
 
   const list = useSelector(selectCategoryList);
@@ -106,13 +104,13 @@ export default function Product() {
     dispatch(
       getCategoryById({
         itemId: Id,
-        callback() { },
+        callback() {},
       })
     );
     dispatch(
       getCategoryTransactionById({
         itemId: Id,
-        callback() { },
+        callback() {},
       })
     );
   };
@@ -124,14 +122,13 @@ export default function Product() {
     dispatch(
       getCategoryTransactionById({
         itemId: setselectedId,
-        callback() { },
+        callback() {},
       })
     );
-    return () => { };
+    return () => {};
   }, [search]);
 
   const transactionList = useSelector(selectCategoryTransactionList);
-
 
   const form = useSelector(selectCategoryForm);
   const modelCategory = useSelector(selectCategoryModel);
@@ -178,9 +175,9 @@ export default function Product() {
                 </div>
                 <div
                   className="border-l bg-[#E9A315] py-[14px] px-[10px] cursor-pointer"
-                // onClick={() => {
-                //   Router.push("items/importitems");
-                // }}
+                  // onClick={() => {
+                  //   Router.push("items/importitems");
+                  // }}
                 >
                   <RiFileExcel2Line />
                 </div>
@@ -240,7 +237,11 @@ export default function Product() {
           </div>
 
           <div>
-            <Table headerData={header} bodyData={transactionList}  page={"categories"}/>
+            <Table
+              headerData={header}
+              bodyData={transactionList}
+              page={"categories"}
+            />
           </div>
         </div>
       </div>
@@ -319,60 +320,94 @@ export default function Product() {
               Select Items
             </p>
             <div className="mt-[18px] relative">
-              <input className="border border-[#D0D2D6] rounded-[6px] min-h-[46px] ps-[40px] w-[100%]">
-              </input>
+              <input className="border border-[#D0D2D6] rounded-[6px] min-h-[46px] ps-[40px] w-[100%]"></input>
               <IoSearchOutline className="absolute top-[30%] left-[10px] text-[24px]" />
             </div>
             <div className="mt-[20px] min-h-[350px] h-[350px] overflow-auto">
               <table className="w-[100%]">
                 <tr className="bg-[#E7E7E7] sticky top-0">
                   <th className="text-[16px] p-[10px] text-[#1F1F1F] font-semibold text-start capitalize">
-                    <input className="h-[16px] w-[16px] rounded mr-[10px] border-[#93B4C7] border-1"
+                    <input
+                      className="h-[16px] w-[16px] rounded mr-[10px] border-[#93B4C7] border-1"
                       type="checkbox"
-                    />item name</th>
-                  <th className="text-[16px] p-[10px] text-[#1F1F1F] font-semibold text-end capitalize">Quantity</th>
+                    />
+                    item name
+                  </th>
+                  <th className="text-[16px] p-[10px] text-[#1F1F1F] font-semibold text-end capitalize">
+                    Quantity
+                  </th>
                 </tr>
                 <tr className="">
                   <th className="text-[16px] p-[10px] text-[#737373] font-medium text-start capitalize">
-                    <input className="h-[16px] w-[16px] rounded mr-[10px] border-[#93B4C7] border-1"
+                    <input
+                      className="h-[16px] w-[16px] rounded mr-[10px] border-[#93B4C7] border-1"
                       type="checkbox"
-                    />item name</th>
-                  <th className="text-[16px] p-[10px] text-[#737373] font-medium text-end capitalize">Quantity</th>
+                    />
+                    item name
+                  </th>
+                  <th className="text-[16px] p-[10px] text-[#737373] font-medium text-end capitalize">
+                    Quantity
+                  </th>
                 </tr>
                 <tr className="">
                   <th className="text-[16px] p-[10px] text-[#737373] font-medium text-start capitalize">
-                    <input className="h-[16px] w-[16px] rounded mr-[10px] border-[#93B4C7] border-1"
+                    <input
+                      className="h-[16px] w-[16px] rounded mr-[10px] border-[#93B4C7] border-1"
                       type="checkbox"
-                    />item name</th>
-                  <th className="text-[16px] p-[10px] text-[#737373] font-medium text-end capitalize">Quantity</th>
+                    />
+                    item name
+                  </th>
+                  <th className="text-[16px] p-[10px] text-[#737373] font-medium text-end capitalize">
+                    Quantity
+                  </th>
                 </tr>
                 <tr className="">
                   <th className="text-[16px] p-[10px] text-[#737373] font-medium text-start capitalize">
-                    <input className="h-[16px] w-[16px] rounded mr-[10px] border-[#93B4C7] border-1 capitalize"
+                    <input
+                      className="h-[16px] w-[16px] rounded mr-[10px] border-[#93B4C7] border-1 capitalize"
                       type="checkbox"
-                    />item name</th>
-                  <th className="text-[16px] p-[10px] text-[#737373] font-medium text-end capitalize">Quantity</th>
+                    />
+                    item name
+                  </th>
+                  <th className="text-[16px] p-[10px] text-[#737373] font-medium text-end capitalize">
+                    Quantity
+                  </th>
                 </tr>
                 <tr className="">
                   <th className="text-[16px] p-[10px] text-[#737373] font-medium text-start">
-                    <input className="h-[16px] w-[16px] rounded mr-[10px] border-[#93B4C7] border-1 capitalize"
+                    <input
+                      className="h-[16px] w-[16px] rounded mr-[10px] border-[#93B4C7] border-1 capitalize"
                       type="checkbox"
-                    />item name</th>
-                  <th className="text-[16px] p-[10px] text-[#737373] font-medium text-end capitalize">Quantity</th>
+                    />
+                    item name
+                  </th>
+                  <th className="text-[16px] p-[10px] text-[#737373] font-medium text-end capitalize">
+                    Quantity
+                  </th>
                 </tr>
                 <tr className="">
                   <th className="text-[16px] p-[10px] text-[#737373] font-medium text-start capitalize">
-                    <input className="h-[16px] w-[16px] rounded mr-[10px] border-[#93B4C7] border-1 "
+                    <input
+                      className="h-[16px] w-[16px] rounded mr-[10px] border-[#93B4C7] border-1 "
                       type="checkbox"
-                    />item name</th>
-                  <th className="text-[16px] p-[10px] text-[#737373] font-medium text-end capitalize">Quantity</th>
+                    />
+                    item name
+                  </th>
+                  <th className="text-[16px] p-[10px] text-[#737373] font-medium text-end capitalize">
+                    Quantity
+                  </th>
                 </tr>
                 <tr className="">
                   <th className="text-[16px] p-[10px] text-[#737373] font-medium text-start capitalize">
-                    <input className="h-[16px] w-[16px] rounded mr-[10px] border-[#93B4C7] border-1"
+                    <input
+                      className="h-[16px] w-[16px] rounded mr-[10px] border-[#93B4C7] border-1"
                       type="checkbox"
-                    />item name</th>
-                  <th className="text-[16px] p-[10px] text-[#737373] font-medium text-end capitalize">Quantity</th>
+                    />
+                    item name
+                  </th>
+                  <th className="text-[16px] p-[10px] text-[#737373] font-medium text-end capitalize">
+                    Quantity
+                  </th>
                 </tr>
               </table>
             </div>
@@ -384,7 +419,8 @@ export default function Product() {
             <div className="mx-auto text-center mt-[15px]">
               <p className="text-[#737373] text-[15px]">
                 <span>
-                  <input className="h-[16px] w-[16px] rounded mr-[10px] border-[#93B4C7] border-1"
+                  <input
+                    className="h-[16px] w-[16px] rounded mr-[10px] border-[#93B4C7] border-1"
                     type="checkbox"
                   />
                 </span>
