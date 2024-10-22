@@ -237,7 +237,6 @@ export function* getCategoryByIdRequest(action: {
   yield delay(1000);
   const response: any = yield call(getCategoryByIdAPI, action.payload.itemId);
   yield put(setCategoryFormData(response.data));
-  yield put(changeAddCategoryModelState(true));
   if (action.payload.callback) {
     action.payload.callback();
   }
