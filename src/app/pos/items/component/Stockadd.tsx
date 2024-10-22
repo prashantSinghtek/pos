@@ -3,21 +3,9 @@ import { Formik } from 'formik';
 import { useSession } from 'next-auth/react';
 import React from 'react'
 
-export default function Stockadd({ selectedproduct }: any) {
+export default function Stockadd() {
 
-    if(!selectedproduct){
-        throw Error("First Select the product")
-    }
-    console.log("selectedproduct", selectedproduct)
-    const firmid = localStorage.getItem("selectedStore");
-    if (!firmid) {
-        throw Error("vfdbkn")
-    }
-    console.log("firmisdv", firmid)
-    const session = useSession();
-    const token = localStorage.getItem("authToken");
-    // const auth = new pos_controller()
-    const submitForm = async (
+     const submitForm = async (
         values: any,
         { setFieldError, setSubmitting, resetForm }: any
     ) => {
@@ -26,7 +14,7 @@ export default function Stockadd({ selectedproduct }: any) {
             setSubmitting(true);
             // const res = await ItemStockAdjustment(values, token, selectedproduct.item.id, firmid, "add")
             // console.log(res)
-            resetForm();
+            // resetForm();
         } catch (err) {
             console.log("Error:", err);
         } finally {
@@ -53,7 +41,7 @@ export default function Stockadd({ selectedproduct }: any) {
                                 <div className='flex flex-col space-y-2'>
                                     <div className='text-[#808080]'>Item Name</div>
                                     <div className='text-gray-800 text-[17px] font-semibold'>
-                                        {selectedproduct?.item?.itemName}
+                                       ToothPaste
                                     </div>
 
                                 </div>
