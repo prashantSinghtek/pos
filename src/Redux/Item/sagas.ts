@@ -40,7 +40,10 @@ import { categoryFormInterface, ProductFormInterface } from "./types";
 import {
   addCategoryAPI,
   addItem as addItemAPI,
+  DeleteCategory,
   DeleteItem,
+  getCategoryByFirmId,
+  getCategoryByIdAPI,
   GetItem,
   getProducts,
   GetTrasactionItem,
@@ -198,7 +201,7 @@ export function* getCategoryistRequest(action: {
   const search: string = yield select(selectSearchCategory);
 
   yield delay(1000);
-  const response: any = yield call(getProducts, action.payload.firmId, search);
+  const response: any = yield call(getCategoryByFirmId, action.payload.firmId, search);
   yield put(setCategoryist(response.data));
   if (action.payload.callback) {
     action.payload.callback();
@@ -211,7 +214,7 @@ export function* deleteCategoryByIdequest(action: {
     return;
   }
   yield delay(1000);
-  yield call(DeleteItem, action.payload.itemId);
+  yield call(DeleteCategory, action.payload.itemId);
   if (action.payload.callback) {
     action.payload.callback();
   }
@@ -224,8 +227,8 @@ export function* getCategoryByIdRequest(action: {
     return;
   }
   yield delay(1000);
-  const response: any = yield call(GetItem, action.payload.itemId);
-  yield put(setCategoryFormData(response.data.itemData));
+  const response: any = yield call(getCategoryByIdAPI, action.payload.itemId);
+  yield put(setCategoryFormData(response.data));
   if (action.payload.callback) {
     action.payload.callback();
   }

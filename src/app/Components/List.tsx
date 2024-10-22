@@ -5,7 +5,12 @@ import DeleteConfirmationModal from "./deleteConfirmationModel";
 import { useDispatch, useSelector } from "react-redux";
 import { deletePartyById, getParty } from "@/Redux/Parties/reducer";
 import { selectFirmId } from "@/Redux/Parties/selectors";
-import { deleteItemById, getItemList } from "@/Redux/Item/reducer";
+import {
+  deleteCategoryById,
+  deleteItemById,
+  getCategoryist,
+  getItemList,
+} from "@/Redux/Item/reducer";
 
 const List = ({ listdata, onselected, page, handleEdit }: any) => {
   const path = usePathname();
@@ -48,11 +53,25 @@ const List = ({ listdata, onselected, page, handleEdit }: any) => {
           },
         })
       );
+    } else if (page == "categories") {
+      dispatch(
+        deleteCategoryById({
+          itemId: selected,
+          callback() {
+            dispatch(
+              getCategoryist({
+                firmId: firmId,
+                callback() {
+                  setOpenDeleteModel(false);
+                },
+              })
+            );
+          },
+        })
+      );
     }
   };
   console.log(listdata, page, "listdata");
-
-  
 
   return (
     <>
@@ -63,7 +82,7 @@ const List = ({ listdata, onselected, page, handleEdit }: any) => {
               <li
                 key={itemIndex}
                 className="flex items-center justify-between py-2 space-x-4 mb-3 cursor-pointer border-b-2 border-gray-100"
-                onClick={() =>  onselected(item?.id)}
+                onClick={() => onselected(item?.id)}
               >
                 <div>
                   <div className="text-[18px] font-thin text-[#737373]">

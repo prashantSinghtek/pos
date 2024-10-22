@@ -53,4 +53,6 @@ export class Constants {
   static DeleteTransaction = `${BASE_MAIN}api/party-transactions/`;
   static itemDelete = `${BASE_MAIN}api/Item/`;
   static ItemWiseTrasaction = `${BASE_MAIN}api/item/transaction/summary/`;
+  static CategoryDelete = `${BASE_MAIN}category/delete/`;
+  static GetCategoryByID = `${BASE_MAIN}category/get/`;
 }

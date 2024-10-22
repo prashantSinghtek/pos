@@ -21,7 +21,6 @@ const apiRequest = async (
       data: values,
       headers: {
         Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
       },
       responseType: responseType || "json",
     });
@@ -34,6 +33,8 @@ const apiRequest = async (
       document.body.removeChild(aTag);
       return URL.createObjectURL(data);
     }
+    console.log(url , data , "data");
+    
     if (!data && !data.data.status) {
       return;
     }
@@ -412,14 +413,18 @@ export const addCategoryAPI = (formData: any, firmId: any) => {
   export const getCategory = (id: any) => {
     return apiRequest("get", `${Constants.category}all/firm/${id}`);
   };
-  export const getCategoryById = (id: any) => {
-    return apiRequest("get", `${Constants.category}${id}`);
+  export const getCategoryByIdAPI = (id: any) => {
+    return apiRequest("get", `${Constants.GetCategoryByID}${id}`);
   };
 
   export const getCategoryByFirm = (id: any) => {
     return apiRequest("get", `${Constants.GetCategoryByFirm}/${id}`);
   };
-  export const getCategoryByFirmId = (id: any) => {
-    return apiRequest("get", `${Constants.GetCategoryByFirm}/${id}`);
+  export const getCategoryByFirmId = (id: any , search :string) => {
+    return apiRequest("get", `${Constants.GetCategoryByFirm}/${id}?searchTerm=${search}`);
+  };
+
+  export const DeleteCategory = (id: any) => {
+    return apiRequest("delete", `${Constants.CategoryDelete}${id}`);
   };
   
