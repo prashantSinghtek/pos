@@ -12,12 +12,8 @@ import Modal from "@/app/Components/Modal";
 import Partiescard from "../../parties/component/partiescard";
 import { HiAdjustmentsHorizontal } from "react-icons/hi2";
 import Productfrom from "./Productfrom";
-import Serviceform from "./Serviceform";
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
-
 import Stockadd from "./Stockadd";
-import StockReduce from "./StockReduce";
 import { useDispatch, useSelector } from "react-redux";
 import {
   selectAddItemModel,
@@ -36,8 +32,6 @@ import {
   setSearchItemName,
 } from "@/Redux/Item/reducer";
 import { selectFirmId } from "@/Redux/Parties/selectors";
-// import { PiMapPinAreaBold } from "react-icons/pi";
-
 export default function Product() {
   const [selectedproduct, setSelectedProduct] = useState<any>();
   const [searchTerm, setSearchTerm] = useState("");
@@ -55,13 +49,6 @@ export default function Product() {
     "Price/Unit",
     "Status",
   ];
-
-  const [isChecked, setIsChecked] = useState(false);
-
-  const handleCheckboxChange = () => {
-    setIsChecked(!isChecked);
-  };
-
   const addItemModel = useSelector(selectAddItemModel);
   const dispatch = useDispatch();
   const searchName = useSelector(selectSearch);
@@ -73,22 +60,22 @@ export default function Product() {
     dispatch(
       getItemList({
         firmId: firmId,
-        callback() { },
+        callback() {},
       })
     );
 
-    return () => { };
+    return () => {};
   }, [firmId]);
 
   useEffect(() => {
     dispatch(
       getItemList({
         firmId: firmId,
-        callback() { },
+        callback() {},
       })
     );
 
-    return () => { };
+    return () => {};
   }, [searchName]);
 
   const list = useSelector(selectItemList);
@@ -98,13 +85,13 @@ export default function Product() {
     dispatch(
       getItemById({
         itemId: Id,
-        callback() { },
+        callback() {},
       })
     );
     dispatch(
       getTransactionByItemId({
         itemId: Id,
-        callback() { },
+        callback() {},
       })
     );
   };
@@ -116,10 +103,10 @@ export default function Product() {
     dispatch(
       getTransactionByItemId({
         itemId: setselectedId,
-        callback() { },
+        callback() {},
       })
     );
-    return () => { };
+    return () => {};
   }, [search]);
 
   const transactionList = useSelector(selectTransactionList);
@@ -251,7 +238,11 @@ export default function Product() {
           </div>
 
           <div>
-            <Table headerData={header} bodyData={transactionList} page={"product"} />
+            <Table
+              headerData={header}
+              bodyData={transactionList}
+              page={"product"}
+            />
           </div>
         </div>
       </div>
@@ -279,14 +270,9 @@ export default function Product() {
           <div className="flex items-center gap-4">
             <div className=" flex text-[16px]">Stock Adjustment</div>
             <div className="rounded-b-md">
-              <div
-                className=" text-[13px] text-gray-800  flex items-end gap-5"
-              >
+              <div className=" text-[13px] text-gray-800  flex items-end gap-5">
                 <div className="flex gap-2 items-center">
-                  <span
-                  >
-                    Add Stock
-                  </span>
+                  <span>Add Stock</span>
                   <label className="flex cursor-pointer select-none items-center">
                     <div className="relative">
                       <input
@@ -300,18 +286,14 @@ export default function Product() {
                       ></div>
                     </div>
                   </label>
-                  <span
-
-                  >
-                    Reduce Stock
-                  </span>
+                  <span>Reduce Stock</span>
                 </div>
               </div>
             </div>
           </div>
 
           <div className="mt-5">
-            <Stockadd  />
+            <Stockadd />
           </div>
         </>
       </Modal>

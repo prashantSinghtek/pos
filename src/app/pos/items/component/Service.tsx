@@ -4,19 +4,11 @@ import List from "@/app/Components/List";
 import Table from "@/app/Components/Table";
 import TextInput from "@/app/Components/Textinput";
 import React, { useEffect, useState } from "react";
-import { MdGroupAdd, MdOutlineEmail } from "react-icons/md";
 import { IoPersonOutline, IoPersonSharp } from "react-icons/io5";
-import { RiFileExcel2Line, RiPagesLine } from "react-icons/ri";
 import { IoMdAdd, IoMdCard } from "react-icons/io";
-import { PiMapPinBold } from "react-icons/pi";
 import Modal from "@/app/Components/Modal";
-import Button from "@/app/Components/Button";
 import Partiescard from "../../parties/component/partiescard";
-import { HiAdjustmentsHorizontal } from "react-icons/hi2";
-import Productfrom from "./Productfrom";
 import Serviceform from "./Serviceform";
-import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
 import { getParticularService, getService } from "@/controller/posauth";
 
 // import { PiMapPinAreaBold } from "react-icons/pi";
@@ -25,32 +17,10 @@ export default function Service() {
   const [selectedtab, setSelectedtab] = useState(1);
   const [modalopen, setModalopen] = useState(false);
   const [adjustitemmodalopen, setAdjustitemmodalopen] = useState(false);
-  const Router = useRouter();
   const firmid = localStorage.getItem("selectedStore");
-  const session = useSession();
   const token = localStorage.getItem("authToken");
   const [service, setService] = useState([]);
   const [Particularservice, setParticularService] = useState<any>([]);
-  const [selectedlistitem, setSelectedlistitem] = useState();
-  const [modalOpenFrom, setModalOpenFrom] = useState("");
-  const data = [
-    {
-      id: 1,
-      name: "All",
-      amount: 1234,
-    },
-    {
-      id: 1,
-      name: "prashant",
-      amount: 1234,
-    },
-    {
-      id: 1,
-      name: "rahul",
-      amount: 1234,
-    },
-  ];
-
   const header = [
     "Type",
     "Invoice No.",
@@ -61,11 +31,6 @@ export default function Service() {
     "Status",
   ];
 
-  const [isChecked, setIsChecked] = useState(false);
-
-  const handleCheckboxChange = () => {
-    setIsChecked(!isChecked);
-  };
   useEffect(() => {
     getService(firmid)
       .then((res) => {
@@ -126,9 +91,7 @@ export default function Service() {
                 setSelectedtab(id);
               }}
               page={"service"}
-              setSelectedbank={setSelectedlistitem}
               setModalopen={setModalopen}
-              setModalOpenFrom={setModalOpenFrom}
             />
           </div>
         </div>

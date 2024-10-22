@@ -9,8 +9,6 @@ import * as Yup from "yup"; // Import Yup for validation
 
 export default function Stock() {
   const dispatch = useDispatch();
-
-  // Create a Yup validation schema
   const validationSchema = Yup.object().shape({
     openingQuantity: Yup.number().required("Opening Quantity is required"),
     atPrice: Yup.number().required("At Price is required"),
