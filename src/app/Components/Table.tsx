@@ -128,11 +128,10 @@ const Table = ({
         </table>
 
         {/* Pagination */}
-        <nav
+        {/* <nav
           className="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4 px-3"
           aria-label="Table navigation"
         >
-          {/* Pagination Info */}
           <span className="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">
             Showing{" "}
             <span className="font-semibold text-gray-500 ">
@@ -141,7 +140,6 @@ const Table = ({
             of <span className="font-semibold text-gray-500 ">{count}</span>
           </span>
 
-          {/* Pagination Buttons */}
           <ul className="inline-flex -space-x-px rtl:space-x-reverse text-sm h-14">
             <li>
               <button
@@ -183,7 +181,7 @@ const Table = ({
               </button>
             </li>
           </ul>
-        </nav>
+        </nav> */}
       </div>
     </div>
   );
