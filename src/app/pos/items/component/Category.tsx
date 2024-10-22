@@ -44,7 +44,7 @@ export default function Product() {
     "Sale Price",
     "Whole Sale Price",
     "Quantity",
-    "Opening Quantity",
+    // "Opening Quantity",
   ];
   const [isSubmitting, setIsSubmitting] = useState(false);
   const submitForm = async (values: any, { resetForm }: any) => {

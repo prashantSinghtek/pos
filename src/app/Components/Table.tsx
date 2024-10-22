@@ -119,9 +119,9 @@ const Table = ({
                   <td className="text-sm text-gray-700 text-center px-2 py-1 ">
                     {item.quantity ? item.quantity : "NA"}
                   </td>
-                  <td className="text-sm text-gray-700 text-center px-2 py-1 ">
+                  {/* <td className="text-sm text-gray-700 text-center px-2 py-1 ">
                     {item.openingQuantity ? item.openingQuantity : "NA"}
-                  </td>
+                  </td> */}
                 </tr>
               ))}
           </tbody>
