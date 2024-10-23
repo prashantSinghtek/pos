@@ -36,7 +36,7 @@ export default function Page() {
       });
   }, [token, selectedtab, firmid]);
 
-  const bodyData = ExpensesTranaction.map((item: any) => {
+  const bodyData = ExpensesTranaction?.map((item: any) => {
     console.log(item);
     return {
       value1: item?.billDate,
