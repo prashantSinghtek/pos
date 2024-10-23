@@ -151,6 +151,14 @@ const itemSlice = createSlice({
     setSearchCategoryName: (state, action: PayloadAction<string>) => {
       state.searchCategory = action.payload;
     },
+
+    markToTheCategory: (
+      state,
+      action: PayloadAction<{
+        categoryId: any;
+        callback: () => void;
+      }>
+    ) => {},
   },
 });
 
@@ -183,7 +191,7 @@ export const {
   getCategoryById ,
   getCategoryTransactionById ,
   setSearchCategoryName ,
-  setitemSelectedinCatgory
-
+  setitemSelectedinCatgory,
+  markToTheCategory
 } = itemSlice.actions;
 export default itemSlice.reducer; // Ensure that you're exporting the reducer

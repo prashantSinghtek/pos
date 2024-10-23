@@ -29,6 +29,7 @@ import {
   getCategoryist,
   getCategoryTransactionById,
   getItemList,
+  markToTheCategory,
   setCategoryTransactionSearch,
   setitemSelectedinCatgory,
   setSearchCategoryName,
@@ -38,6 +39,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { selectFirmId } from "@/Redux/Parties/selectors";
 import { IoSearchOutline } from "react-icons/io5";
+import toast from "react-hot-toast";
 
 export default function Product() {
   const [adjustitemmodalopen, setAdjustitemmodalopen] = useState(false);
@@ -169,6 +171,21 @@ export default function Product() {
     }
   };
 
+  const handleMarkToCategory = () => {
+    if (itemSelectedinCatgory.length === 0) {
+      toast.error("Please select item to add to category");
+      return;
+    }
+    if (!setselectedId) {
+      return;
+    }
+    dispatch(
+      markToTheCategory({
+        categoryId: setselectedId,
+        callback() {},
+      })
+    );
+  };
   return (
     <>
       <div className="flex justify-between items-center px-1 mt-5"></div>
@@ -242,9 +259,13 @@ export default function Product() {
                   <div className="flex gap-3 pr-7">
                     <div
                       className={`bg-orange-500 rounded-full px-5 py-2 flex gap-3 text-white items-center`}
-                      onClick={() =>
-                        setAdjustitemmodalopen(!adjustitemmodalopen)
-                      }
+                      onClick={() => {
+                        if (!setselectedId) {
+                          toast.error("Please Select Category");
+                          return;
+                        }
+                        setAdjustitemmodalopen(!adjustitemmodalopen);
+                      }}
                     >
                       <HiAdjustmentsHorizontal size={25} />
                       Move To This Category
@@ -403,7 +424,7 @@ export default function Product() {
             <div className="mx-auto mt-[20px] text-center">
               <button
                 className="bg-[#FF8900] rounded-[30px] text-[18px] font-medium text-white px-[30px] py-[15px]"
-                onClick={() => {}}
+                onClick={() => handleMarkToCategory()}
               >
                 Mark To This Category
               </button>

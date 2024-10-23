@@ -56,4 +56,9 @@ export class Constants {
   static CategoryDelete = `${BASE_MAIN}category/delete/`;
   static GetCategoryByID = `${BASE_MAIN}category/get/`;
   static CategoryItemList = `${BASE_MAIN}api/Item/getItemWithCategory/`;
+  static moveToThiscategory = `${BASE_MAIN}api/Item/moveToThiscategory?firmId=`;
+
+
+
+  
 }

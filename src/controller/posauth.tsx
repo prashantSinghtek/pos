@@ -433,3 +433,9 @@ export const updateCategoryAPI = (formData: any, id: any) => {
   export const GetCategoryByItem = (id: any, search: any, firmid : any) => {
     return apiRequest("get", `${Constants.CategoryItemList}${id}/firm/${firmid}`);
   };
+
+  export const markToTheCategoryAPI = (categoryId: any, firmId: any, selectedItem: any) => {
+    const itemIdsParam = selectedItem.map((item: number) => `itemIds=${item}`).join('&');
+    return apiRequest("post", `${Constants.moveToThiscategory}${firmId}&categoryId=${categoryId}&${itemIdsParam}`);
+  };
+  
