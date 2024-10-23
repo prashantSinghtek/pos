@@ -5,7 +5,7 @@ import React from 'react'
 
 export default function Stockadd() {
 
-     const submitForm = async (
+    const submitForm = async (
         values: any,
         { setFieldError, setSubmitting, resetForm }: any
     ) => {
@@ -37,11 +37,11 @@ export default function Stockadd() {
                 {({ handleChange, handleSubmit, values, errors, touched }: any) => {
                     return (
                         <>
-                            <div className='border-b py-5 flex justify-between'>
+                            <div className='border-b pt-[30px] pb-[20px] flex justify-between'>
                                 <div className='flex flex-col space-y-2'>
-                                    <div className='text-[#808080]'>Item Name</div>
-                                    <div className='text-gray-800 text-[17px] font-semibold'>
-                                       ToothPaste
+                                    <div className='text-[#808080] text-[16px] font-medium'>Item Name</div>
+                                    <div className='text-[#1F1F1F] mt-[10px] text-[16px] font-semibold'>
+                                        ToothPaste
                                     </div>
 
                                 </div>
@@ -55,13 +55,13 @@ export default function Stockadd() {
                                         onChange={handleChange("Date")}
                                         onBlur={handleChange("Date")}
                                         istouched={true}
-                                        className="text-gray-800 text-base w-[30%]"
+                                        className="text-gray-800 text-base w-[30%] focus:outline-none"
                                     />
                                 </div>
 
                             </div>
-                            <div className='flex w-full justify-between py-5'>
-                                <div className="w-[30%]">
+                            <div className='flex w-full items-end justify-between py-5'>
+                                <div className="w-[20%]">
                                     <TextInput
                                         name="qty"
                                         type="text"
@@ -71,8 +71,15 @@ export default function Stockadd() {
                                         onChange={handleChange("qty")}
                                         onBlur={handleChange("qty")}
                                         istouched={true}
-                                        className="text-gray-800 text-base w-[30%]"
+                                        className="text-gray-800 text-base w-[30%] focus:outline-none"
                                     />
+                                </div>
+                                <div className='w-[10%]'>
+                                    <select className='border-[#D0D2D6] border p-[11px] rounded-[6px] w-[100%]'>
+                                        <option value="someOption">Pac
+                                        </option>
+                                        <option value="otherOption">Pcs</option>
+                                    </select>
                                 </div>
                                 <div className="w-[30%]">
                                     <TextInput
@@ -84,7 +91,7 @@ export default function Stockadd() {
                                         onChange={handleChange("price")}
                                         onBlur={handleChange("price")}
                                         istouched={true}
-                                        className="text-gray-800 text-base w-[30%]"
+                                        className="text-gray-800 text-base w-[30%] focus:outline-none"
                                     />
                                 </div>
                                 <div className="w-[30%]">
@@ -97,14 +104,14 @@ export default function Stockadd() {
                                         onChange={handleChange("details")}
                                         onBlur={handleChange("details")}
                                         istouched={true}
-                                        className="text-gray-800 text-base w-[30%]"
+                                        className="text-gray-800 text-base w-[30%] focus:outline-none"
                                     />
                                 </div>
 
                             </div>
-                            <div className='flex justify-center'>
+                            <div className='flex justify-center mt-[40px]'>
                                 <div
-                                    className="bg-[#FF8900] rounded-full px-5 text-white py-2"
+                                    className="bg-[#FF8900] cursor-pointer rounded-full px-[60px] text-[16px] text-white py-[15px]"
                                     onClick={() => handleSubmit()}
                                 >
                                     Save
