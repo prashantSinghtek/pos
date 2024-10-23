@@ -60,22 +60,22 @@ export default function Product() {
     dispatch(
       getItemList({
         firmId: firmId,
-        callback() {},
+        callback() { },
       })
     );
 
-    return () => {};
+    return () => { };
   }, [firmId]);
 
   useEffect(() => {
     dispatch(
       getItemList({
         firmId: firmId,
-        callback() {},
+        callback() { },
       })
     );
 
-    return () => {};
+    return () => { };
   }, [searchName]);
 
   const list = useSelector(selectItemList);
@@ -85,13 +85,13 @@ export default function Product() {
     dispatch(
       getItemById({
         itemId: Id,
-        callback() {},
+        callback() { },
       })
     );
     dispatch(
       getTransactionByItemId({
         itemId: Id,
-        callback() {},
+        callback() { },
       })
     );
   };
@@ -103,10 +103,10 @@ export default function Product() {
     dispatch(
       getTransactionByItemId({
         itemId: setselectedId,
-        callback() {},
+        callback() { },
       })
     );
-    return () => {};
+    return () => { };
   }, [search]);
 
   const transactionList = useSelector(selectTransactionList);

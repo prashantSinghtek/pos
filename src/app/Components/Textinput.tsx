@@ -21,7 +21,7 @@ export default function TextInput(props: ITextInputProps) {
           } flex items-center bg-white justify-between px-1 border rounded-md ${
             props.lefticon && "pl-2"
           }`}
-        >
+        >  
           {props.lefticon && props.lefticon}
           <input
             {...props}
