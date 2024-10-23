@@ -431,7 +431,7 @@ export const updateCategoryAPI = (formData: any, id: any) => {
   };
   
   export const GetCategoryByItem = (id: any, search: any, firmid : any) => {
-    return apiRequest("get", `${Constants.CategoryItemList}${id}/firm/${firmid}`);
+    return apiRequest("get", `${Constants.CategoryItemList}${id}/firm/${firmid}?searchTerm=${search}`);
   };
 
   export const markToTheCategoryAPI = (categoryId: any, firmId: any, selectedItem: any) => {
