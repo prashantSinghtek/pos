@@ -20,6 +20,7 @@ import {
   getItemById,
   getItemList,
   getTransactionByItemId,
+  markToTheCategory,
   setCategoryFormData,
   setCategoryist,
   setCategoryTransactionist,
@@ -30,6 +31,7 @@ import {
 } from "./reducer";
 import {
   selectCategoryForm,
+  selectitemSelectedinCatgory,
   selectProductForm,
   selectSearch,
   selectSearchCategory,
@@ -48,6 +50,7 @@ import {
   GetItem,
   getProducts,
   GetTrasactionItem,
+  markToTheCategoryAPI,
   updateCategoryAPI,
 } from "@/controller/posauth";
 import toast from "react-hot-toast";
@@ -263,6 +266,25 @@ export function* getCategoryTransactionByIdRequest(action: {
   }
 }
 
+
+export function* markToTheCategoryRequest(action: {
+  payload: { categoryId: string; callback: any };
+}): Generator<any, void, any> {
+  if (action.payload.categoryId.length === 0) {
+    return;
+  }
+  yield delay(1000);
+  
+  const firmId: string = yield select(selectFirmId);
+  const selectedItem: number[] = yield select(selectitemSelectedinCatgory);
+
+  const response: any = yield call(markToTheCategoryAPI, action.payload.categoryId , firmId , selectedItem);
+  yield put(setCategoryFormData(response.data));
+  if (action.payload.callback) {
+    action.payload.callback();
+  }
+}
+
 export default function* ItemSaga(): Generator {
   yield takeLatest(addItem, addItemRequest);
   yield takeLatest(getItemList, getItemListRequest);
@@ -279,4 +301,11 @@ export default function* ItemSaga(): Generator {
     getCategoryTransactionById,
     getCategoryTransactionByIdRequest
   );
+  yield takeLatest(
+    markToTheCategory,
+    markToTheCategoryRequest
+  );
+
+
+  
 }

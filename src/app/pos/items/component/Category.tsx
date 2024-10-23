@@ -15,6 +15,9 @@ import {
   selectCategoryList,
   selectCategoryModel,
   selectCategoryTransactionList,
+  selectItemList,
+  selectitemSelectedinCatgory,
+  selectSearch,
   selectSearchCategory,
   selectSearchCategoryTrasaction,
 } from "@/Redux/Item/selectors";
@@ -25,13 +28,18 @@ import {
   getCategoryById,
   getCategoryist,
   getCategoryTransactionById,
+  getItemList,
+  markToTheCategory,
   setCategoryTransactionSearch,
+  setitemSelectedinCatgory,
   setSearchCategoryName,
+  setSearchItemName,
   updateCategoryForm,
 } from "@/Redux/Item/reducer";
 import { useDispatch, useSelector } from "react-redux";
 import { selectFirmId } from "@/Redux/Parties/selectors";
 import { IoSearchOutline } from "react-icons/io5";
+import toast from "react-hot-toast";
 
 export default function Product() {
   const [adjustitemmodalopen, setAdjustitemmodalopen] = useState(false);
@@ -132,6 +140,52 @@ export default function Product() {
 
   const form = useSelector(selectCategoryForm);
   const modelCategory = useSelector(selectCategoryModel);
+
+  const ItemList = useSelector(selectItemList);
+  const searchItem = useSelector(selectSearch);
+  useEffect(() => {
+    if (!firmId) {
+      return;
+    }
+    dispatch(
+      getItemList({
+        firmId: firmId,
+        callback() {},
+      })
+    );
+
+    return () => {};
+  }, [firmId, searchItem]);
+
+  const itemSelectedinCatgory = useSelector(selectitemSelectedinCatgory);
+  const handleCheckboxChange = (index: number) => {
+    if (itemSelectedinCatgory.includes(index)) {
+      // Remove the item from the selected array if it is already selected
+      const updatedSelection = itemSelectedinCatgory.filter(
+        (itemIndex) => itemIndex !== index
+      );
+      dispatch(setitemSelectedinCatgory(updatedSelection));
+    } else {
+      // Add the item to the selected array
+      dispatch(setitemSelectedinCatgory([...itemSelectedinCatgory, index]));
+    }
+  };
+
+  const handleMarkToCategory = () => {
+    if (itemSelectedinCatgory.length === 0) {
+      toast.error("Please select item to add to category");
+      return;
+    }
+    if (!setselectedId) {
+      return;
+    }
+    dispatch(
+      markToTheCategory({
+        categoryId: setselectedId,
+        callback() {},
+      })
+    );
+  };
   return (
     <>
       <div className="flex justify-between items-center px-1 mt-5"></div>
@@ -205,9 +259,13 @@ export default function Product() {
                   <div className="flex gap-3 pr-7">
                     <div
                       className={`bg-orange-500 rounded-full px-5 py-2 flex gap-3 text-white items-center`}
-                      onClick={() =>
-                        setAdjustitemmodalopen(!adjustitemmodalopen)
-                      }
+                      onClick={() => {
+                        if (!setselectedId) {
+                          toast.error("Please Select Category");
+                          return;
+                        }
+                        setAdjustitemmodalopen(!adjustitemmodalopen);
+                      }}
                     >
                       <HiAdjustmentsHorizontal size={25} />
                       Move To This Category
@@ -313,14 +371,21 @@ export default function Product() {
         onClose={() => setAdjustitemmodalopen(false)}
       >
         <>
-          {/* // Move to this Category form design  */}
-
           <div className="">
             <p className="text-[#1F1F1F] text-[20px] font-semibold">
               Select Items
             </p>
             <div className="mt-[18px] relative">
-              <input className="border border-[#D0D2D6] rounded-[6px] min-h-[46px] ps-[40px] w-[100%]"></input>
+              <input
+                className="border border-[#D0D2D6] rounded-[6px] min-h-[46px] ps-[40px] w-[100%]"
+                name="search"
+                type="text"
+                placeholder="Search By"
+                value={searchItem}
+                onChange={(e) => {
+                  dispatch(setSearchItemName(e.target.value));
+                }}
+              ></input>
               <IoSearchOutline className="absolute top-[30%] left-[10px] text-[24px]" />
             </div>
             <div className="mt-[20px] min-h-[350px] h-[350px] overflow-auto">
@@ -337,86 +402,35 @@ export default function Product() {
                     Quantity
                   </th>
                 </tr>
-                <tr className="">
-                  <th className="text-[16px] p-[10px] text-[#737373] font-medium text-start capitalize">
-                    <input
-                      className="h-[16px] w-[16px] rounded mr-[10px] border-[#93B4C7] border-1"
-                      type="checkbox"
-                    />
-                    item name
-                  </th>
-                  <th className="text-[16px] p-[10px] text-[#737373] font-medium text-end capitalize">
-                    Quantity
-                  </th>
-                </tr>
-                <tr className="">
-                  <th className="text-[16px] p-[10px] text-[#737373] font-medium text-start capitalize">
-                    <input
-                      className="h-[16px] w-[16px] rounded mr-[10px] border-[#93B4C7] border-1"
-                      type="checkbox"
-                    />
-                    item name
-                  </th>
-                  <th className="text-[16px] p-[10px] text-[#737373] font-medium text-end capitalize">
-                    Quantity
-                  </th>
-                </tr>
-                <tr className="">
-                  <th className="text-[16px] p-[10px] text-[#737373] font-medium text-start capitalize">
-                    <input
-                      className="h-[16px] w-[16px] rounded mr-[10px] border-[#93B4C7] border-1 capitalize"
-                      type="checkbox"
-                    />
-                    item name
-                  </th>
-                  <th className="text-[16px] p-[10px] text-[#737373] font-medium text-end capitalize">
-                    Quantity
-                  </th>
-                </tr>
-                <tr className="">
-                  <th className="text-[16px] p-[10px] text-[#737373] font-medium text-start">
-                    <input
-                      className="h-[16px] w-[16px] rounded mr-[10px] border-[#93B4C7] border-1 capitalize"
-                      type="checkbox"
-                    />
-                    item name
-                  </th>
-                  <th className="text-[16px] p-[10px] text-[#737373] font-medium text-end capitalize">
-                    Quantity
-                  </th>
-                </tr>
-                <tr className="">
-                  <th className="text-[16px] p-[10px] text-[#737373] font-medium text-start capitalize">
-                    <input
-                      className="h-[16px] w-[16px] rounded mr-[10px] border-[#93B4C7] border-1 "
-                      type="checkbox"
-                    />
-                    item name
-                  </th>
-                  <th className="text-[16px] p-[10px] text-[#737373] font-medium text-end capitalize">
-                    Quantity
-                  </th>
-                </tr>
-                <tr className="">
-                  <th className="text-[16px] p-[10px] text-[#737373] font-medium text-start capitalize">
-                    <input
-                      className="h-[16px] w-[16px] rounded mr-[10px] border-[#93B4C7] border-1"
-                      type="checkbox"
-                    />
-                    item name
-                  </th>
-                  <th className="text-[16px] p-[10px] text-[#737373] font-medium text-end capitalize">
-                    Quantity
-                  </th>
-                </tr>
+
+                {ItemList.map((data: any, index: number) => (
+                  <tr key={index}>
+                    <th className="text-[16px] p-[10px] text-[#737373] font-medium text-start capitalize">
+                      <input
+                        className="h-[16px] w-[16px] rounded mr-[10px] border-[#93B4C7] border-1"
+                        type="checkbox"
+                        checked={itemSelectedinCatgory.includes(data.id)}
+                        onChange={() => handleCheckboxChange(data.id)}
+                      />
+                      {data.itemName}
+                    </th>
+                    <th className="text-[16px] p-[10px] text-[#737373] font-medium text-end capitalize">
+                      {data.itemPricing?.quantity}
+                    </th>
+                  </tr>
+                ))}
               </table>
             </div>
             <div className="mx-auto mt-[20px] text-center">
-              <button className="bg-[#FF8900] rounded-[30px] text-[18px] font-medium text-white px-[30px] py-[15px]">
+              <button
+                className="bg-[#FF8900] rounded-[30px] text-[18px] font-medium text-white px-[30px] py-[15px]"
+                onClick={() => handleMarkToCategory()}
+              >
                 Mark To This Category
               </button>
             </div>
-            <div className="mx-auto text-center mt-[15px]">
+            {/* comment out as per Bhavna maam  */}
+            {/* <div className="mx-auto text-center mt-[15px]">
               <p className="text-[#737373] text-[15px]">
                 <span>
                   <input
@@ -426,7 +440,7 @@ export default function Product() {
                 </span>
                 Remove existing category for selected items
               </p>
-            </div>
+            </div> */}
           </div>
         </>
       </Modal>
