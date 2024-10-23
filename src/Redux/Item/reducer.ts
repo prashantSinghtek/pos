@@ -99,6 +99,9 @@ const itemSlice = createSlice({
     changeAddCategoryModelState: (state, action: PayloadAction<boolean>) => {
       state.categoryModel = action.payload;
     },
+    setitemSelectedinCatgory: (state, action: PayloadAction<number[]>) => {
+      state.itemSelectedinCatgory = action.payload;
+    },
     setCategoryFormData: (
       state,
       action: PayloadAction<categoryFormInterface>
@@ -180,6 +183,7 @@ export const {
   getCategoryById ,
   getCategoryTransactionById ,
   setSearchCategoryName ,
+  setitemSelectedinCatgory
 
 } = itemSlice.actions;
 export default itemSlice.reducer; // Ensure that you're exporting the reducer

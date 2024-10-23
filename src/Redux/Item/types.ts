@@ -72,13 +72,16 @@ export interface CombinedInitialState {
   transactionList : Array<TransactionInterface>;
   search : string;
 
-
+// Category
   categoryForm: categoryFormInterface;
   categoryModel: boolean;
   categoryList: Array<any>;
   searchCategory: string;
   categoryTransactionList : Array<TransactionInterface>;
   searchCategoryTrasaction : string
+  itemSelectedinCatgory :Array<number>
+
+
 }
 
 export const initialState: CombinedInitialState = {
@@ -141,5 +144,6 @@ export const initialState: CombinedInitialState = {
   categoryList: [],
   searchCategory: "",
   categoryTransactionList: [],
-  searchCategoryTrasaction: ""
+  searchCategoryTrasaction: "",
+  itemSelectedinCatgory :[]
 };

@@ -19,3 +19,6 @@ export const selectCategoryList = (state: RootState) => state.item.categoryList
 export const selectCategoryTransactionList = (state: RootState) => state.item.categoryTransactionList
 export const selectSearchCategory = (state: RootState) => state.item.searchCategory
 export const selectSearchCategoryTrasaction = (state: RootState) => state.item.searchCategoryTrasaction
+export const selectitemSelectedinCatgory = (state: RootState) => state.item.itemSelectedinCatgory
+
+
