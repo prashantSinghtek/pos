@@ -60,22 +60,22 @@ export default function Product() {
     dispatch(
       getItemList({
         firmId: firmId,
-        callback() {},
+        callback() { },
       })
     );
 
-    return () => {};
+    return () => { };
   }, [firmId]);
 
   useEffect(() => {
     dispatch(
       getItemList({
         firmId: firmId,
-        callback() {},
+        callback() { },
       })
     );
 
-    return () => {};
+    return () => { };
   }, [searchName]);
 
   const list = useSelector(selectItemList);
@@ -85,13 +85,13 @@ export default function Product() {
     dispatch(
       getItemById({
         itemId: Id,
-        callback() {},
+        callback() { },
       })
     );
     dispatch(
       getTransactionByItemId({
         itemId: Id,
-        callback() {},
+        callback() { },
       })
     );
   };
@@ -103,10 +103,10 @@ export default function Product() {
     dispatch(
       getTransactionByItemId({
         itemId: setselectedId,
-        callback() {},
+        callback() { },
       })
     );
-    return () => {};
+    return () => { };
   }, [search]);
 
   const transactionList = useSelector(selectTransactionList);
@@ -268,30 +268,30 @@ export default function Product() {
       >
         <>
           <div className="flex items-center gap-4">
-            <div className=" flex text-[16px]">Stock Adjustment</div>
+            <div className=" flex text-[20px] text-[#1F1F1F] font-semibold">Stock Adjustment</div>
             <div className="rounded-b-md">
-              <div className=" text-[13px] text-gray-800  flex items-end gap-5">
-                <div className="flex gap-2 items-center">
-                  <span>Add Stock</span>
+              <div
+                className=" text-[13px] text-gray-800  flex items-end gap-5"
+              >
+                <div className="flex gap-5 items-center">
+                  <span className="text-[16px] text-[#2D9CDB]"
+                  >
+                    Add Stock
+                  </span>
                   <label className="flex cursor-pointer select-none items-center">
-                    <div className="relative">
-                      <input
-                        title="check"
-                        type="checkbox"
-                        className="sr-only"
-                      />
-                      <div className="block h-8 w-16 rounded-full border border-[#2D9CDB] bg-white"></div>
-                      <div
-                        className={`dot bg-[#2D9CDB] absolute duration-100 top-1 h-6 w-6 rounded-full transition`}
-                      ></div>
-                    </div>
+                    <label className="inline-flex items-center cursor-pointer">
+                      <input type="checkbox" value="" className="sr-only peer" />
+                      <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                    </label>
                   </label>
-                  <span>Reduce Stock</span>
+                  <span className="text-[#7D7D7D] text-[16px]"
+                  >
+                    Reduce Stock
+                  </span>
                 </div>
               </div>
             </div>
           </div>
-
           <div className="mt-5">
             <Stockadd />
           </div>

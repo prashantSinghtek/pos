@@ -185,7 +185,7 @@ export default function Unit() {
                 <div className="pb-3 border-b border-groove flex">
                   Add Units
                 </div>
-                <div className="flex gap-5 my-5 w-full">
+                <div className="flex gap-5  my-5 w-full">
                   <div className="w-[25%]">
                     <TextInput
                       name="Unitname"
@@ -229,26 +229,16 @@ export default function Unit() {
         onClose={() => setAdjustitemmodalopen(false)}
       >
         <>
-          <div className="pb-2 flex">Add Conversation</div>
-          <div className="flex flex-wrap gap-5 my-5 w-full">
-            <div className="w-[25%]">
-              <div className="w-[100%] flex flex-col space-y-2 ">
-                <div className="text-[#808080] ">Base unit</div>
-                <div className="flex items-center">
-                  <Select
-                    name="Accountdisplayname"
-                    options={allbank}
-                    value={Selectedbank?.value}
-                    onChange={handleChangedbank}
-                    styles={customStyles}
-                    className="w-full  bg-white  rounded-md outline-none font-medium font-optima  text-primary text-sm focus-within:outline-gray-200 focus-within:outline focus-within:outline-2"
-                  />
-                  <div className="text-xl font-bold text-black ml-4">=</div>
-                </div>
-              </div>
-            </div>
+          <div className="flex mb-[20px]">
+            <p className="text-[#1F1F1F] text-[20px] font-semibold">
+              Add Conversation
+            </p>
+          </div>
+          {/* <div className="flex flex-wrap gap-5 my-5 w-full"> */}
 
-            <div className="w-[5%]">
+
+
+          {/* <div className="w-[5%]">
               <TextInput
                 name="Price"
                 type="number"
@@ -257,10 +247,32 @@ export default function Unit() {
                 istouched={"Touch"}
                 className="text-gray-800 text-base"
               />
-            </div>
-            <div className="w-[25%]">
-              <div className="w-[100%] flex flex-col space-y-2 ">
+            </div> */}
+          {/* <div className="w-[10%]">
+
+              <div className="text-[#808080] text-[16px] ">Rate</div>
+              <input className="[box-shadow:2px_3px_18px_0px_#AAB4B914] border border-[#D0D2D6] rounded-[6px] px-3 py-[6px]">
+              </input>
+              <div className="flex items-center">
+                <Select
+                    name="Accountdisplayname"
+                    options={allbank}
+                    value={Selectedbank?.value}
+                    onChange={handleChangedbank}
+                    styles={customStyles}
+                    className="w-full  bg-white  rounded-md outline-none font-medium font-optima  text-primary text-sm focus-within:outline-gray-200 focus-within:outline focus-within:outline-2"
+                  />
+              </div>
+            </div> */}
+          {/* <div className="w-[25%]">
+              <div className="w-[100%] flex">
                 <div className="text-[#808080]">Secondary unit</div>
+                <select
+
+                  className="[box-shadow:2px_3px_18px_0px_#AAB4B914] border border-[#D0D2D6] rounded-[6px]">
+                  <option value="someOption">Some option</option>
+                  <option value="otherOption">Other option</option>
+                </select>
                 <Select
                   name="Accountdisplayname"
                   options={allbank}
@@ -270,16 +282,46 @@ export default function Unit() {
                   className="w-full  bg-white  rounded-md outline-none font-medium font-optima  text-primary text-sm focus-within:outline-gray-200 focus-within:outline focus-within:outline-2"
                 />
               </div>
+            </div> */}
+          {/* </div> */}
+          <div className="flex gap-5 items-end">
+            <div className="w-[25%]">
+              <div className="w-[100%] flex flex-col space-y-2">
+                <div className="text-[#808080] ">Base unit</div>
+                <select
+                  className="[box-shadow:2px_3px_18px_0px_#AAB4B914] border border-[#D0D2D6] rounded-[6px]">
+                  <option value="someOption">Some option</option>
+                  <option value="otherOption">Other option</option>
+                </select>
+              </div>
+            </div>
+            <div className="w-[2%] items-center flex mt-[16px]">
+              <div className="text-xl font-bold text-black ml-4">=</div>
+            </div>
+            <div className="w-[5%]">
+              <input className="[box-shadow:2px_3px_18px_0px_#AAB4B914] border border-[#D0D2D6] rounded-[6px] px-2 py-2 max-w-[50px] min-w-[50px]">
+              </input>
+            </div>
+            <div className="w-[25%]">
+              <div className="w-[100%] flex flex-col space-y-2">
+                <div className="text-[#808080] ">Secondary Unit</div>
+                <select
+
+                  className="[box-shadow:2px_3px_18px_0px_#AAB4B914] border border-[#D0D2D6] rounded-[6px]">
+                  <option value="someOption">Some option</option>
+                  <option value="otherOption">Other option</option>
+                </select>
+              </div>
             </div>
           </div>
-          <div className="flex flex-wrap gap-10">
+          <div className="flex flex-wrap gap-10 justify-start mt-[60px]">
             <div>
-              <button className="px-4 py-2 rounded-full border-blue-500 text-blue-500 border-2 w-36">
+              <button className="text-[18px] font-medium rounded-full border border-[#2F9DDB] text-[#2F9DDB] border-2 max-w-[166px] min-w-[166px] py-[15px]">
                 Save & New
               </button>
             </div>
             <div>
-              <button className="px-4 py-2 rounded-full bg-[#FF8900] text-white  w-36">
+              <button className="text-[18px] text-[#FF8900] font-medium  rounded-full bg-[#FF8900] border border-[#FF8900] text-white max-w-[166px] min-w-[166px] py-[15px]">
                 Save
               </button>
             </div>
