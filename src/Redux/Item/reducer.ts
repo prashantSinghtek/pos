@@ -159,6 +159,33 @@ const itemSlice = createSlice({
         callback: () => void;
       }>
     ) => {},
+
+    // unit 
+
+    updateUnitForm: (
+      state,
+      action: PayloadAction<{ key: string; value: any }>
+    ) => {
+      set(state, `unitForm.${action.payload.key}`, action.payload.value);
+    },
+    addUnit: (
+      state,
+      action: PayloadAction<{
+        callback: () => void;
+      }>
+    ) => {},
+    changeUnitModelState: (state, action: PayloadAction<boolean>) => {
+      state.unitModel = action.payload;
+    },
+    setUnitFormData: (
+      state,
+      action: PayloadAction<categoryFormInterface>
+    ) => {
+      state.categoryForm = action.payload;
+    },
+    setUnitist: (state, action: PayloadAction<Array<any>>) => {
+      state.categoryList = action.payload;
+    },
   },
 });
 
@@ -192,6 +219,15 @@ export const {
   getCategoryTransactionById ,
   setSearchCategoryName ,
   setitemSelectedinCatgory,
-  markToTheCategory
+  markToTheCategory,
+
+  // unitt 
+  updateUnitForm,
+  addUnit ,
+  changeUnitModelState ,
+  setUnitFormData ,
+  setUnitist ,
+
+
 } = itemSlice.actions;
 export default itemSlice.reducer; // Ensure that you're exporting the reducer

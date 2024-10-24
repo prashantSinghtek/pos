@@ -3,98 +3,53 @@ import CardPrototype from "@/app/Components/CardPrototype";
 import List from "@/app/Components/List";
 import Table from "@/app/Components/Table";
 import TextInput from "@/app/Components/Textinput";
-import React, { useEffect, useState } from "react";
-import { MdGroupAdd, MdOutlineEmail } from "react-icons/md";
-import { IoPersonOutline, IoPersonSharp } from "react-icons/io5";
-import { RiFileExcel2Line, RiPagesLine } from "react-icons/ri";
+import React, { useState } from "react";
 import { IoMdAdd, IoMdCard } from "react-icons/io";
-import { PiMapPinBold } from "react-icons/pi";
 import Modal from "@/app/Components/Modal";
-import Button from "@/app/Components/Button";
-import Partiescard from "../../parties/component/partiescard";
 import { HiAdjustmentsHorizontal } from "react-icons/hi2";
-import Productfrom from "./Productfrom";
-import Serviceform from "./Serviceform";
-import { useRouter } from "next/navigation";
 import { Formik } from "formik";
-
-import { useSession } from "next-auth/react";
 import Select from "react-select";
 import { customStyles } from "@/app/Components/Customstyle";
-import { addUnits, getUnits } from "@/controller/posauth";
-// import { PiMapPinAreaBold } from "react-icons/pi";
+import { useDispatch, useSelector } from "react-redux";
+import { selectUnitForm } from "@/Redux/Item/selectors";
+import * as Yup from "yup"; // Import Yup for validation
+import { addUnit } from "@/Redux/Item/reducer";
 
 export default function Unit() {
-  const [selectedtab, setSelectedtab] = useState(1);
   const [modalopen, setModalopen] = useState(false);
   const [adjustitemmodalopen, setAdjustitemmodalopen] = useState(false);
   const [unit, setUnit] = useState();
-  const session = useSession();
-  const token = localStorage.getItem("authToken");
-  const Router = useRouter();
-  const [Selectedbank, setSelectedbank] = useState<any>();
-  useEffect(() => {
-    getUnits()
-      .then((res) => setUnit(res))
-      .catch((err) => console.log(err, "unit error"));
-  }, [token]);
 
-  const submitForm = async (
-    values: any,
-    { setFieldError, setSubmitting, resetForm }: any
-  ) => {
+  const [Selectedbank, setSelectedbank] = useState<any>();
+  const dispatch = useDispatch();
+  const submitForm = async (values: any, { resetForm }: any) => {
     console.log("Form values:", values);
     try {
-      setSubmitting(true);
-      const value = {
-        name: values.Unitname,
-        shortName: values.shortname,
-      };
-      const res = await addUnits(value);
-      console.log(">>>>", res);
+      dispatch(
+        addUnit({
+          callback() {},
+        })
+      );
+
       resetForm();
     } catch (err) {
       console.log("Error:", err);
     } finally {
-      setSubmitting(false);
     }
   };
-  const data = [
-    {
-      id: 1,
-      name: "All",
-      amount: 1234,
-    },
-    {
-      id: 1,
-      name: "prashant",
-      amount: 1234,
-    },
-    {
-      id: 1,
-      name: "rahul",
-      amount: 1234,
-    },
-  ];
 
   const header = ["Conversion"];
 
-  const [isChecked, setIsChecked] = useState(false);
-
-  const handleCheckboxChange = () => {
-    setIsChecked(!isChecked);
-  };
-
-  const allbank = data?.map((option: any) => ({
-    value: option?.displayName?.toUpperCase(),
-    label: option?.displayName?.toUpperCase(),
-    id: option?.id,
-  }));
   const handleChangedbank = (selectedOption: any) => {
     console.log("selected csssssswwwwwss--->>>", selectedOption);
     setSelectedbank(selectedOption.id);
   };
 
+  const formData = useSelector(selectUnitForm);
+  const validationSchema = Yup.object().shape({
+    name: Yup.string().required("Name is required"),
+    shortName: Yup.string().required("Short Name is required"),
+  });
   return (
     <>
       <div className="flex justify-between items-center px-1 mt-5"></div>
@@ -132,7 +87,7 @@ export default function Unit() {
             <List
               listdata={unit}
               onselected={(id: number) => {
-                setSelectedtab(id);
+                // setSelectedtab(id);
               }}
               page={"unit"}
             />
@@ -175,9 +130,9 @@ export default function Unit() {
       </div>
       <Modal isOpen={modalopen} onClose={() => setModalopen(false)}>
         <Formik
-          initialValues={{ Unitname: "", shortname: "" }}
+          initialValues={{ name: formData.name, shortName: formData.shortName }}
           onSubmit={submitForm}
-          validationSchema={""}
+          validationSchema={validationSchema} // Add validation schema here
         >
           {({ handleChange, handleSubmit, values, errors, touched }: any) => {
             return (
@@ -186,29 +141,27 @@ export default function Unit() {
                   Add Units
                 </div>
                 <div className="flex gap-5  my-5 w-full">
-                  <div className="w-[25%]">
+                  <div className="w-[30%]">
                     <TextInput
-                      name="Unitname"
+                      name="name"
                       type="text"
-                      placeholder=""
-                      label="Unit Name"
-                      value={values.Unitname}
-                      onChange={handleChange("Unitname")}
-                      onBlur={handleChange("Unitname")}
-                      istouched={true}
+                      label="Name"
+                      value={values.name}
+                      error={errors.name}
+                      onChange={handleChange("name")}
+                      istouched={touched.name}
                       className="text-gray-800 text-base w-[30%]"
                     />
                   </div>
-                  <div className="w-[25%]">
+                  <div className="w-[30%]">
                     <TextInput
-                      name="shortname"
+                      name="shortName"
                       type="text"
-                      placeholder=""
                       label="Short Name"
-                      value={values.shortname}
-                      onChange={handleChange("shortname")}
-                      onBlur={handleChange("shortname")}
-                      istouched={true}
+                      value={values.shortName}
+                      error={errors.shortName}
+                      onChange={handleChange("shortName")}
+                      istouched={touched.shortName}
                       className="text-gray-800 text-base w-[30%]"
                     />
                   </div>
@@ -234,83 +187,37 @@ export default function Unit() {
               Add Conversation
             </p>
           </div>
-          {/* <div className="flex flex-wrap gap-5 my-5 w-full"> */}
-
-
-
-          {/* <div className="w-[5%]">
-              <TextInput
-                name="Price"
-                type="number"
-                placeholder=""
-                label="Rate"
-                istouched={"Touch"}
-                className="text-gray-800 text-base"
-              />
-            </div> */}
-          {/* <div className="w-[10%]">
-
-              <div className="text-[#808080] text-[16px] ">Rate</div>
-              <input className="[box-shadow:2px_3px_18px_0px_#AAB4B914] border border-[#D0D2D6] rounded-[6px] px-3 py-[6px]">
-              </input>
-              <div className="flex items-center">
-                <Select
-                    name="Accountdisplayname"
-                    options={allbank}
-                    value={Selectedbank?.value}
-                    onChange={handleChangedbank}
-                    styles={customStyles}
-                    className="w-full  bg-white  rounded-md outline-none font-medium font-optima  text-primary text-sm focus-within:outline-gray-200 focus-within:outline focus-within:outline-2"
-                  />
-              </div>
-            </div> */}
-          {/* <div className="w-[25%]">
-              <div className="w-[100%] flex">
-                <div className="text-[#808080]">Secondary unit</div>
-                <select
-
-                  className="[box-shadow:2px_3px_18px_0px_#AAB4B914] border border-[#D0D2D6] rounded-[6px]">
-                  <option value="someOption">Some option</option>
-                  <option value="otherOption">Other option</option>
-                </select>
+          <div className="flex gap-5 items-end">
+            <div className="w-[25%]">
+              <div className="w-[100%] flex flex-col space-y-2">
+                <div className="text-[#808080] ">Base unit</div>
                 <Select
                   name="Accountdisplayname"
-                  options={allbank}
+                  options={[{}, {}, {}]}
                   value={Selectedbank?.value}
                   onChange={handleChangedbank}
                   styles={customStyles}
                   className="w-full  bg-white  rounded-md outline-none font-medium font-optima  text-primary text-sm focus-within:outline-gray-200 focus-within:outline focus-within:outline-2"
                 />
               </div>
-            </div> */}
-          {/* </div> */}
-          <div className="flex gap-5 items-end">
-            <div className="w-[25%]">
-              <div className="w-[100%] flex flex-col space-y-2">
-                <div className="text-[#808080] ">Base unit</div>
-                <select
-                  className="[box-shadow:2px_3px_18px_0px_#AAB4B914] border border-[#D0D2D6] rounded-[6px]">
-                  <option value="someOption">Some option</option>
-                  <option value="otherOption">Other option</option>
-                </select>
-              </div>
             </div>
             <div className="w-[2%] items-center flex mt-[16px]">
               <div className="text-xl font-bold text-black ml-4">=</div>
             </div>
             <div className="w-[5%]">
-              <input className="[box-shadow:2px_3px_18px_0px_#AAB4B914] border border-[#D0D2D6] rounded-[6px] px-2 py-2 max-w-[50px] min-w-[50px]">
-              </input>
+              <input className="[box-shadow:2px_3px_18px_0px_#AAB4B914] border border-[#D0D2D6] rounded-[6px] px-2 py-2 max-w-[50px] min-w-[50px]"></input>
             </div>
             <div className="w-[25%]">
               <div className="w-[100%] flex flex-col space-y-2">
                 <div className="text-[#808080] ">Secondary Unit</div>
-                <select
-
-                  className="[box-shadow:2px_3px_18px_0px_#AAB4B914] border border-[#D0D2D6] rounded-[6px]">
-                  <option value="someOption">Some option</option>
-                  <option value="otherOption">Other option</option>
-                </select>
+                <Select
+                  name="Accountdisplayname"
+                  options={[{}, {}, {}, {}]}
+                  value={Selectedbank?.value}
+                  onChange={handleChangedbank}
+                  styles={customStyles}
+                  className="w-full  bg-white  rounded-md outline-none font-medium font-optima  text-primary text-sm focus-within:outline-gray-200 focus-within:outline focus-within:outline-2"
+                />
               </div>
             </div>
           </div>

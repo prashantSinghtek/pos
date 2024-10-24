@@ -438,4 +438,24 @@ export const updateCategoryAPI = (formData: any, id: any) => {
     const itemIdsParam = selectedItem.map((item: number) => `itemIds=${item}`).join('&');
     return apiRequest("post", `${Constants.moveToThiscategory}${firmId}&categoryId=${categoryId}&${itemIdsParam}`);
   };
-  
+  // unit
+  export const addUnitAPI = (formData: any) => {
+    const url = `${Constants.unit}`;
+    return apiRequest("post", url , formData);
+  };
+  // export const updateUnitAPI = (formData: any, id: any) => {
+  //   const url = `${Constants.unit}update/${id}`;
+  //   return apiRequest("put", url , formData);
+  // };
+  // export const getUnit = (id: any) => {
+  //   return apiRequest("get", `${Constants.unit}all/firm/${id}`);
+  // };
+  // export const getUnitByIdAPI = (id: any) => {
+  //   return apiRequest("get", `${Constants.GetUnitById}${id}`);
+  // };
+  // export const DeleteUnit = (id: any) => {
+  //   return apiRequest("delete", `${Constants.UnitDelete}${id}`);
+  // };
+  // export const GetUnitByItem = (id: any, search: any, firmid : any) => {
+  //   return apiRequest("get", `${Constants.UnitItemList}${id}/firm/${firmid}?searchTerm=${search}`);
+  // };
