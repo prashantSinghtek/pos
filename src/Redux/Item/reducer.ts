@@ -184,8 +184,26 @@ const itemSlice = createSlice({
       state.categoryForm = action.payload;
     },
     setUnitist: (state, action: PayloadAction<Array<any>>) => {
-      state.categoryList = action.payload;
+      state.unitList = action.payload;
     },
+    getUnitList: (
+      state,
+      action: PayloadAction<{
+        callback: () => void;
+      }>
+    ) => {},
+
+    setSearchUnit: (state, action: PayloadAction<string>) => {
+      state.searchunit = action.payload;
+    },
+    deleteUnitById: (
+      state,
+      action: PayloadAction<{
+        itemId: any;
+        callback: () => void;
+      }>
+    ) => {},
+
   },
 });
 
@@ -227,7 +245,9 @@ export const {
   changeUnitModelState ,
   setUnitFormData ,
   setUnitist ,
-
+  getUnitList,
+  setSearchUnit,
+  deleteUnitById
 
 } = itemSlice.actions;
 export default itemSlice.reducer; // Ensure that you're exporting the reducer

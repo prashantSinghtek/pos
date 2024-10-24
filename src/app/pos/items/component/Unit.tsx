@@ -3,7 +3,7 @@ import CardPrototype from "@/app/Components/CardPrototype";
 import List from "@/app/Components/List";
 import Table from "@/app/Components/Table";
 import TextInput from "@/app/Components/Textinput";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoMdAdd, IoMdCard } from "react-icons/io";
 import Modal from "@/app/Components/Modal";
 import { HiAdjustmentsHorizontal } from "react-icons/hi2";
@@ -11,9 +11,15 @@ import { Formik } from "formik";
 import Select from "react-select";
 import { customStyles } from "@/app/Components/Customstyle";
 import { useDispatch, useSelector } from "react-redux";
-import { selectUnitForm } from "@/Redux/Item/selectors";
+import { selectSearchunit, selectUnitForm, selectUnitList, selectUnitModel } from "@/Redux/Item/selectors";
 import * as Yup from "yup"; // Import Yup for validation
-import { addUnit } from "@/Redux/Item/reducer";
+import {
+  addUnit,
+  changeUnitModelState,
+  getUnitList,
+  setSearchUnit,
+  updateUnitForm,
+} from "@/Redux/Item/reducer";
 
 export default function Unit() {
   const [modalopen, setModalopen] = useState(false);
@@ -23,20 +29,31 @@ export default function Unit() {
   const [Selectedbank, setSelectedbank] = useState<any>();
   const dispatch = useDispatch();
   const submitForm = async (values: any, { resetForm }: any) => {
-    console.log("Form values:", values);
+    Object.entries(values).forEach(([key, value]) => {
+      dispatch(updateUnitForm({ key: key, value: value }));
+    });
     try {
       dispatch(
         addUnit({
-          callback() {},
+          callback() {
+            resetForm();
+          },
         })
       );
-
-      resetForm();
     } catch (err) {
       console.log("Error:", err);
     } finally {
     }
   };
+
+  useEffect(() => {
+    dispatch(getUnitList({
+      callback() {
+          
+      },
+    }));
+    return () => {};
+  }, []);
 
   const header = ["Conversion"];
 
@@ -50,6 +67,18 @@ export default function Unit() {
     name: Yup.string().required("Name is required"),
     shortName: Yup.string().required("Short Name is required"),
   });
+  const unitAddModel = useSelector(selectUnitModel);
+  const list = useSelector(selectUnitList)
+  const search = useSelector(selectSearchunit)
+
+  useEffect(() => {
+    dispatch(getUnitList({
+      callback() {
+          
+      },
+    }));
+    return () => {};
+  }, [search]);
   return (
     <>
       <div className="flex justify-between items-center px-1 mt-5"></div>
@@ -61,8 +90,10 @@ export default function Unit() {
                 <TextInput
                   name="search"
                   type="text"
+                  value={search}
                   placeholder="Search By"
-                  label=""
+                  label="Search Unit"
+                  onChange={(e) => {dispatch(setSearchUnit(e.target.value))}}
                   istouched={"Touch"}
                   className="text-gray-800 text-base w-full"
                 />
@@ -73,7 +104,7 @@ export default function Unit() {
               >
                 <div
                   className="flex items-center"
-                  onClick={() => setModalopen(!modalopen)}
+                  onClick={() => dispatch(changeUnitModelState(true))}
                 >
                   <IoMdAdd size={25} />
                   Add Unit
@@ -85,7 +116,7 @@ export default function Unit() {
               <div>Short Name</div>
             </div>
             <List
-              listdata={unit}
+              listdata={list}
               onselected={(id: number) => {
                 // setSelectedtab(id);
               }}
@@ -128,7 +159,10 @@ export default function Unit() {
           </div>
         </div>
       </div>
-      <Modal isOpen={modalopen} onClose={() => setModalopen(false)}>
+      <Modal
+        isOpen={unitAddModel}
+        onClose={() => dispatch(changeUnitModelState(false))}
+      >
         <Formik
           initialValues={{ name: formData.name, shortName: formData.shortName }}
           onSubmit={submitForm}

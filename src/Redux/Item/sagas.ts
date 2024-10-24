@@ -22,6 +22,7 @@ import {
   getItemById,
   getItemList,
   getTransactionByItemId,
+  getUnitList,
   markToTheCategory,
   setCategoryFormData,
   setCategoryist,
@@ -30,6 +31,7 @@ import {
   setProductFormData,
   setSearch,
   setTransactionist,
+  setUnitist,
 } from "./reducer";
 import {
   selectCategoryForm,
@@ -39,6 +41,7 @@ import {
   selectSearchCategory,
   selectSearchCategoryTrasaction,
   selectSearchItem,
+  selectSearchunit,
   selectUnitForm,
 } from "./selectors";
 import { categoryFormInterface, ProductFormInterface, unitFormInterface } from "./types";
@@ -54,6 +57,7 @@ import {
   GetItem,
   getProducts,
   GetTrasactionItem,
+  getUnit,
   markToTheCategoryAPI,
   updateCategoryAPI,
 } from "@/controller/posauth";
@@ -312,6 +316,23 @@ export function* addUnitRequest(action: {
     console.error("Error updating item:", error);
   }
 }
+export function* getUnitListRequest(action: {
+  payload: { callback: any };
+}): Generator<any, void, any> {
+  const firmId: string = yield select(selectFirmId);
+  const search: string = yield select(selectSearchunit);
+  yield delay(1000);
+  const response: any = yield call(
+    getUnit,   firmId,
+    search
+ 
+  ); 
+  yield put(setUnitist(response.data));
+  if (action.payload.callback) {
+    action.payload.callback();
+  }
+}
+
 
 export default function* ItemSaga(): Generator {
   yield takeLatest(addItem, addItemRequest);
@@ -335,4 +356,5 @@ export default function* ItemSaga(): Generator {
   );
   // Unit
   yield takeLatest(addUnit, addUnitRequest);
+  yield takeLatest(getUnitList, getUnitListRequest);
 }

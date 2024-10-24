@@ -101,7 +101,7 @@ export default function ProductForm() {
     if (!firmId) {
       return;
     }
-    getUnit(firmId)
+    getUnit(firmId, "")
       .then((res) => {
         setUnit(res.data);
       })
