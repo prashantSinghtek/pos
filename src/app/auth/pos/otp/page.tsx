@@ -69,7 +69,7 @@ const router = useRouter()
     <div className="w-screen h-screen">
       <div className="flex bg-white">
         <div className="w-1/2">
-          <Image src="/loginpage.png" alt="" />
+          <Image src="/loginpage.png" alt="" width={500} height={500} layout="responsive" />
         </div>
         <div className="w-1/2 px-20">
           <div className="mt-14">

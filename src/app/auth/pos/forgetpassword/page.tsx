@@ -11,7 +11,7 @@ import axios from "axios";
 import { BASE_MAIN } from "@/app/config/Constant";
 import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
-import Image from "next/image";
+  import Image from "next/image";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -84,7 +84,8 @@ function ForgetpasswordPage() {
     <div className="w-screen h-screen">
       <div className="flex bg-white">
         <div className="w-1/2">
-          <Image src="/loginpage.png" alt="Login page" />
+        <Image src="/loginpage.png" alt="Login page" width={500} height={500} layout="responsive" />
+
         </div>
         <div className="w-1/2 px-20">
           <div className="mt-14">
