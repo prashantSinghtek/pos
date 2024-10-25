@@ -474,3 +474,9 @@ export const getUnit = (id?: any, search?: string) => {
 // export const GetUnitByItem = (id: any, search: any, firmid : any) => {
 //   return apiRequest("get", `${Constants.UnitItemList}${id}/firm/${firmid}?searchTerm=${search}`);
 // };
+
+
+export const addUnitConversionAPI = (formData: any , firmId : any) => {
+  const url = `${Constants.unitConversion}${firmId}`;
+  return apiRequest("post", url, formData);
+};

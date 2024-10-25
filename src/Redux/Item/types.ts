@@ -68,6 +68,13 @@ export interface unitFormInterface {
   shortName: string;
 }
 
+export interface unitConversionFormInterface {
+  id: number;
+  baseUnit: string;
+  secondaryUnit: string;
+  conversionRate: string;
+}
+
 export interface CombinedInitialState {
   serviceForm: ServiceItem;
   itemProductForm: ProductFormInterface;
@@ -92,6 +99,12 @@ export interface CombinedInitialState {
   unitModel: boolean;
   unitList: Array<any>;
   searchunit: string;
+
+  // unit_Conversion
+  unitConversionForm: unitConversionFormInterface;
+  unitConversionModel: boolean;
+  unitConversionList: Array<any>;
+  searchConversionUnit: string;
 }
 
 export const initialState: CombinedInitialState = {
@@ -164,4 +177,13 @@ export const initialState: CombinedInitialState = {
   unitModel: false,
   unitList: [],
   searchunit: "",
+  unitConversionForm: {
+    id: 0,
+    baseUnit: "",
+    secondaryUnit: "",
+    conversionRate: ""
+  },
+  unitConversionModel: false,
+  unitConversionList: [],
+  searchConversionUnit: ""
 };

@@ -5,6 +5,7 @@ import {
   initialState,
   ProductFormInterface,
   TransactionInterface,
+  unitConversionFormInterface,
 } from "./types";
 import { get, set } from "lodash";
 const itemSlice = createSlice({
@@ -204,6 +205,42 @@ const itemSlice = createSlice({
       }>
     ) => {},
 
+    // unit_Conversion
+
+    setSearchUnitConversion: (state, action: PayloadAction<string>) => {
+      state.searchConversionUnit = action.payload;
+    },
+    updateUnitConversionForm: (
+      state,
+      action: PayloadAction<{ key: string; value: any }>
+    ) => {
+      set(state, `unitConversionForm.${action.payload.key}`, action.payload.value);
+    },
+    addUnitConversion: (
+      state,
+      action: PayloadAction<{
+        callback: () => void;
+      }>
+    ) => {},
+    changeUnitConversionModelState: (state, action: PayloadAction<boolean>) => {
+      state.unitConversionModel = action.payload;
+    },
+    setUnitConversionFormData: (
+      state,
+      action: PayloadAction<unitConversionFormInterface>
+    ) => {
+      state.unitConversionForm = action.payload;
+    },
+    setUnitConversionist: (state, action: PayloadAction<Array<any>>) => {
+      state.unitConversionList = action.payload;
+    },
+    getUnitConversionList: (
+      state,
+      action: PayloadAction<{
+        callback: () => void;
+      }>
+    ) => {},
+
   },
 });
 
@@ -247,7 +284,11 @@ export const {
   setUnitist ,
   getUnitList,
   setSearchUnit,
-  deleteUnitById
+  deleteUnitById,
+
+  updateUnitConversionForm,
+  addUnitConversion,
+  changeUnitConversionModelState
 
 } = itemSlice.actions;
 export default itemSlice.reducer; // Ensure that you're exporting the reducer

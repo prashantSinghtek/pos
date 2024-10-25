@@ -58,7 +58,7 @@ export class Constants {
   static CategoryItemList = `${BASE_MAIN}api/Item/getItemWithCategory/`;
   static moveToThiscategory = `${BASE_MAIN}api/Item/moveToThiscategory?firmId=`;
 
-
+  static unitConversion = `${BASE_MAIN}api/Item/saveSelectUnit/`;
 
   
 }

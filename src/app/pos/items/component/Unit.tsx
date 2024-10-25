@@ -7,26 +7,31 @@ import React, { useEffect, useState } from "react";
 import { IoMdAdd, IoMdCard } from "react-icons/io";
 import Modal from "@/app/Components/Modal";
 import { HiAdjustmentsHorizontal } from "react-icons/hi2";
-import { Formik } from "formik";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 import Select from "react-select";
 import { customStyles } from "@/app/Components/Customstyle";
 import { useDispatch, useSelector } from "react-redux";
-import { selectSearchunit, selectUnitForm, selectUnitList, selectUnitModel } from "@/Redux/Item/selectors";
+import {
+  selectSearchunit,
+  selectUnitConversionForm,
+  selectUnitForm,
+  selectUnitList,
+  selectUnitModel,
+} from "@/Redux/Item/selectors";
 import * as Yup from "yup"; // Import Yup for validation
 import {
   addUnit,
+  addUnitConversion,
+  changeUnitConversionModelState,
   changeUnitModelState,
   getUnitList,
   setSearchUnit,
+  updateUnitConversionForm,
   updateUnitForm,
 } from "@/Redux/Item/reducer";
 
 export default function Unit() {
-  const [modalopen, setModalopen] = useState(false);
   const [adjustitemmodalopen, setAdjustitemmodalopen] = useState(false);
-  const [unit, setUnit] = useState();
-
-  const [Selectedbank, setSelectedbank] = useState<any>();
   const dispatch = useDispatch();
   const submitForm = async (values: any, { resetForm }: any) => {
     Object.entries(values).forEach(([key, value]) => {
@@ -47,20 +52,15 @@ export default function Unit() {
   };
 
   useEffect(() => {
-    dispatch(getUnitList({
-      callback() {
-          
-      },
-    }));
+    dispatch(
+      getUnitList({
+        callback() {},
+      })
+    );
     return () => {};
   }, []);
 
   const header = ["Conversion"];
-
-  const handleChangedbank = (selectedOption: any) => {
-    console.log("selected csssssswwwwwss--->>>", selectedOption);
-    setSelectedbank(selectedOption.id);
-  };
 
   const formData = useSelector(selectUnitForm);
   const validationSchema = Yup.object().shape({
@@ -68,17 +68,60 @@ export default function Unit() {
     shortName: Yup.string().required("Short Name is required"),
   });
   const unitAddModel = useSelector(selectUnitModel);
-  const list = useSelector(selectUnitList)
-  const search = useSelector(selectSearchunit)
+  const list = useSelector(selectUnitList);
+  const search = useSelector(selectSearchunit);
 
   useEffect(() => {
-    dispatch(getUnitList({
-      callback() {
-          
-      },
-    }));
+    dispatch(
+      getUnitList({
+        callback() {},
+      })
+    );
     return () => {};
   }, [search]);
+
+  const allUnit = list?.map((option: any) => ({
+    value: option.id,
+    label: option.name.toUpperCase(),
+    id: option.id,
+  }));
+  const unitConversionform = useSelector(selectUnitConversionForm)
+
+
+  const handleSubmit = (values: any) => {
+    Object.entries(values).forEach(([key, value]) => {
+      // Check if the value is an object and contains a 'value' key
+      if (typeof value === 'object' && value !== null && 'value' in value) {
+        dispatch(updateUnitConversionForm({ key: key, value: value.value }));
+      } else {
+        // For non-object values, dispatch the value directly
+        dispatch(updateUnitConversionForm({ key: key, value: value }));
+      }
+    });
+    dispatch(
+      addUnitConversion({
+        callback() {
+          dispatch(changeUnitConversionModelState(false));
+        },
+      })
+    );
+
+};
+  const validationSchemaConvertion = Yup.object({
+    baseUnit: Yup.object().required("Base Unit is required"), // Base Unit is required
+    secondaryUnit: Yup.object().required("Secondary Unit is required"), // Secondary Unit is required
+    conversionRate: Yup.number()
+      .required("Conversion Rate is required")
+      .positive("Conversion Rate must be positive")
+      .integer("Conversion Rate must be an integer"), // Conversion Rate validation
+  });
+  const getOptionByValue = (value :any) => allUnit.find(option => option.value === value);
+  const initialValues = {      
+    baseUnit:  getOptionByValue(unitConversionform.baseUnit) || null, // Initial value for base unit
+    secondaryUnit:  getOptionByValue(unitConversionform.secondaryUnit) || null, // Initial value for secondary unit
+    conversionRate: unitConversionform.conversionRate, // Initial value for conversion rate
+  };
+
   return (
     <>
       <div className="flex justify-between items-center px-1 mt-5"></div>
@@ -93,7 +136,9 @@ export default function Unit() {
                   value={search}
                   placeholder="Search By"
                   label="Search Unit"
-                  onChange={(e) => {dispatch(setSearchUnit(e.target.value))}}
+                  onChange={(e) => {
+                    dispatch(setSearchUnit(e.target.value));
+                  }}
                   istouched={"Touch"}
                   className="text-gray-800 text-base w-full"
                 />
@@ -216,57 +261,108 @@ export default function Unit() {
         onClose={() => setAdjustitemmodalopen(false)}
       >
         <>
-          <div className="flex mb-[20px]">
-            <p className="text-[#1F1F1F] text-[20px] font-semibold">
-              Add Conversation
-            </p>
-          </div>
-          <div className="flex gap-5 items-end">
-            <div className="w-[25%]">
-              <div className="w-[100%] flex flex-col space-y-2">
-                <div className="text-[#808080] ">Base unit</div>
-                <Select
-                  name="Accountdisplayname"
-                  options={[{}, {}, {}]}
-                  value={Selectedbank?.value}
-                  onChange={handleChangedbank}
-                  styles={customStyles}
-                  className="w-full  bg-white  rounded-md outline-none font-medium font-optima  text-primary text-sm focus-within:outline-gray-200 focus-within:outline focus-within:outline-2"
-                />
-              </div>
-            </div>
-            <div className="w-[2%] items-center flex mt-[16px]">
-              <div className="text-xl font-bold text-black ml-4">=</div>
-            </div>
-            <div className="w-[5%]">
-              <input className="[box-shadow:2px_3px_18px_0px_#AAB4B914] border border-[#D0D2D6] rounded-[6px] px-2 py-2 max-w-[50px] min-w-[50px]"></input>
-            </div>
-            <div className="w-[25%]">
-              <div className="w-[100%] flex flex-col space-y-2">
-                <div className="text-[#808080] ">Secondary Unit</div>
-                <Select
-                  name="Accountdisplayname"
-                  options={[{}, {}, {}, {}]}
-                  value={Selectedbank?.value}
-                  onChange={handleChangedbank}
-                  styles={customStyles}
-                  className="w-full  bg-white  rounded-md outline-none font-medium font-optima  text-primary text-sm focus-within:outline-gray-200 focus-within:outline focus-within:outline-2"
-                />
-              </div>
-            </div>
-          </div>
-          <div className="flex flex-wrap gap-10 justify-start mt-[60px]">
-            <div>
-              <button className="text-[18px] font-medium rounded-full border border-[#2F9DDB] text-[#2F9DDB] border-2 max-w-[166px] min-w-[166px] py-[15px]">
-                Save & New
-              </button>
-            </div>
-            <div>
-              <button className="text-[18px] text-[#FF8900] font-medium  rounded-full bg-[#FF8900] border border-[#FF8900] text-white max-w-[166px] min-w-[166px] py-[15px]">
-                Save
-              </button>
-            </div>
-          </div>
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchemaConvertion}
+            onSubmit={handleSubmit}
+          >
+            {({ values, setFieldValue }) => (
+              <Form>
+                <div className="flex mb-[20px]">
+                  <p className="text-[#1F1F1F] text-[20px] font-semibold">
+                    Add Conversation
+                  </p>
+                </div>
+
+                <div className="flex gap-5 items-end">
+                  {/* Base Unit */}
+                  <div className="w-[25%]">
+                    <div className="w-[100%] flex flex-col space-y-2">
+                      <div className="text-[#808080]">Base Unit</div>
+                      <Select
+                        name="baseUnit"
+                        options={allUnit}
+                        value={values.baseUnit} 
+                        onChange={(selectedOption) => {
+                          setFieldValue("baseUnit", selectedOption);
+                        }}
+                        styles={customStyles}
+                        className="w-full bg-white rounded-md outline-none font-medium font-optima text-primary text-sm focus-within:outline-gray-200 focus-within:outline focus-within:outline-2"
+                      />
+                      <ErrorMessage
+                        name="baseUnit"
+                        component="div"
+                        className="text-red-500 text-sm"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Equal Sign */}
+                  <div className="w-[2%] items-center flex mt-[16px]">
+                    <div className="text-xl font-bold text-black ml-4">=</div>
+                  </div>
+
+                  {/* Conversion Rate */}
+                  <div className="w-[25%]">
+                  <div className="w-[100%] ">
+                    <Field
+                      name="conversionRate"
+                      type="number"
+                      className="[box-shadow:2px_3px_18px_0px_#AAB4B914] border border-[#D0D2D6] rounded-[6px] px-2 py-2 "
+                    />
+                    <ErrorMessage
+                      name="conversionRate"
+                      component="div"
+                      className="text-red-500 text-sm"
+                    />
+                    </div>
+                  </div>
+
+                  {/* Secondary Unit */}
+                  <div className="w-[25%]">
+                    <div className="w-[100%] flex flex-col space-y-2">
+                      <div className="text-[#808080]">Secondary Unit</div>
+                      <Select
+                        name="secondaryUnit"
+                        options={allUnit}
+                        value={values.secondaryUnit}
+                        onChange={(selectedOption) => {
+                          setFieldValue("secondaryUnit", selectedOption);
+                        }}
+                        styles={customStyles}
+                        className="w-full bg-white rounded-md outline-none font-medium font-optima text-primary text-sm focus-within:outline-gray-200 focus-within:outline focus-within:outline-2"
+                      />
+                      <ErrorMessage
+                        name="secondaryUnit"
+                        component="div"
+                        className="text-red-500 text-sm"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Buttons */}
+                <div className="flex flex-wrap gap-10 justify-start mt-[60px]">
+                  {/* <div>
+                    <button
+                      type="button"
+                      className="text-[18px] font-medium rounded-full border border-[#2F9DDB] text-[#2F9DDB] border-2 max-w-[166px] min-w-[166px] py-[15px]"
+                    >
+                      Save & New
+                    </button>
+                  </div> */}
+                  <div>
+                    <button
+                      type="submit"
+                      className="text-[18px] text-[#FF8900] font-medium rounded-full bg-[#FF8900] border border-[#FF8900] text-white max-w-[166px] min-w-[166px] py-[15px]"
+                    >
+                      Save
+                    </button>
+                  </div>
+                </div>
+              </Form>
+            )}
+          </Formik>
         </>
       </Modal>
     </>
