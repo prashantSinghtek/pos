@@ -18,7 +18,7 @@ import { getPaymentOut } from "@/controller/posauth";
 export default function Page() {
   const [open, setOpen] = useState(false);
   const session = useSession();
-  const token = localStorage.getItem("authToken");
+  const token = ""
 
   const [data, setData] = useState([]);
   const [allFirm, setAllFirm] = useState(["All Firm", "Sheela Business"]);

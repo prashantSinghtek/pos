@@ -115,8 +115,7 @@ export default function ResetpasswordPage() {
                                                     value={values.email}
                                                     onChange={handleChange("email")}
                                                     onBlur={handleChange("email")}
-                                                    istouched={touched.email}
-                                                />
+                                                    istouched={touched.email} className={undefined}                                                />
                                             </div>
                                             {errors?.email && touched?.email && (
                                                 <p className="text-xs text-red-500">{errors.email}</p>
@@ -143,8 +142,7 @@ export default function ResetpasswordPage() {
                                                             e.preventDefault();
                                                             handleSubmit();
                                                         }
-                                                    }}
-                                                />
+                                                    } } className={undefined}                                                />
                                                 <div
                                                     className="absolute right-3 top-5 cursor-pointer"
                                                     onClick={handleVisible}
@@ -181,8 +179,7 @@ export default function ResetpasswordPage() {
                                                             e.preventDefault();
                                                             handleSubmit();
                                                         }
-                                                    }}
-                                                />
+                                                    } } className={undefined}                                                />
                                                 <div
                                                     className="absolute right-3 top-5 cursor-pointer"
                                                     onClick={handleVisible}

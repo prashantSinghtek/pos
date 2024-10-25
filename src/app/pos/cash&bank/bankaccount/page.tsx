@@ -28,7 +28,7 @@ import Adjustmentbank from "./Component/Adjustmentbank";
 export default function Product() {
   const [selectedtab, setSelectedtab] = useState<any>();
   const [selectedbank, setSelectedbank] = useState<any>();
-  const [modalopen, setModalopen] = useState(false);
+  const [modalopen, setModalopen] = useState(false);    
   const [modalOpenFrom, setModalOpenFrom] = useState("");
   const [adjustitemmodalopen, setAdjustitemmodalopen] = useState(false);
   const [depositwithdraw, setDepositwithdraw] = useState(false);
@@ -39,7 +39,7 @@ export default function Product() {
   const Router = useRouter();
   const [checkedItems, setCheckedItems] = useState<string[]>([]);
   const session = useSession();
-  const token = localStorage.getItem("authToken");
+  const token = ""
   const [data, setData] = useState([]);
   const [data1, setData1] = useState<any>();
 

@@ -163,13 +163,13 @@ const Example = () => {
           {
             accessorKey: "taxPercent",
             header: "%",
-            cell: (info) => `${taxRate * 100}%`,
+            cell: (info :any) => `${taxRate * 100}%`,
             footer: "Tax Rate",
           },
           {
             accessorKey: "taxAmount",
             header: "Amount",
-            cell: (info) =>
+            cell: (info :any) =>
               totalTax.toLocaleString("en-US", {
                 style: "currency",
                 currency: "USD",

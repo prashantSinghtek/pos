@@ -33,7 +33,7 @@ const validationSchema = Yup.object({
 export default function AddExpenses() {
     // console.log("product", product)
     const session = useSession();
-    const token = localStorage.getItem("authToken");
+    const token = ""
     const [modalopen, setModalopen] = useState(false);
     const [update, setupdate] = useState(false);
     const [selectedProducts, setSelectedProducts] = useState([]);

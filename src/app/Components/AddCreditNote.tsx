@@ -29,7 +29,6 @@ const validationSchema = Yup.object({
 export default function AddSaleCredit({ product }: any) {
     console.log("product", product)
     const session = useSession();
-    const token = localStorage.getItem("authToken");
     // useEffect(() => {
     //     getParty(firmid)
     //         .then((res) => { console.log(">>>>>>>>>>>", res); setParties(res?.data?.data) })
@@ -127,7 +126,7 @@ export default function AddSaleCredit({ product }: any) {
             setSubmitting(false);
         }
     };
-
+const token = ""
     useEffect(() => {
         getState().then((res) => {
             setData(res?.data);

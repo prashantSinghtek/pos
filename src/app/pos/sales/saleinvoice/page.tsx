@@ -24,7 +24,7 @@ export default function Page() {
   const [open1, setOpen1] = useState(false);
   const [id1, setId1] = useState()
   const session = useSession();
-  const token = localStorage.getItem("authToken");
+  const token = ""
   const PAGE_SIZE = 10;
   const [saleupdate,setSaleupdate] = useState(false)
 

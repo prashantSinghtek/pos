@@ -2,12 +2,12 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import Link from "next/link";
-import { useCallback, useState } from "react";
+import { useCallback, useState, Suspense } from "react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import TextInput from "@/app/Components/Textinput";
 import { AiFillGooglePlusCircle } from "react-icons/ai";
 import { IoArrowBackCircleOutline } from "react-icons/io5";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { BASE_MAIN } from "@/app/config/Constant";
 import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
@@ -23,13 +23,13 @@ interface FormValues {
   email: string;
 }
 
-export default function ForgetpasswordPage() {
+function ForgetpasswordPage() {
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
 
   const searchParams = useSearchParams();
-
   const router = useRouter();
+
   const handleVisible = () => {
     setVisible(!visible);
   };
@@ -84,7 +84,7 @@ export default function ForgetpasswordPage() {
     <div className="w-screen h-screen">
       <div className="flex bg-white">
         <div className="w-1/2">
-          <Image src="/loginpage.png" alt="" />
+          <Image src="/loginpage.png" alt="Login page" />
         </div>
         <div className="w-1/2 px-20">
           <div className="mt-14">
@@ -140,5 +140,14 @@ export default function ForgetpasswordPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+// Wrapper component with Suspense boundary
+export default function ForgetPasswordWrapper() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ForgetpasswordPage />
+    </Suspense>
   );
 }

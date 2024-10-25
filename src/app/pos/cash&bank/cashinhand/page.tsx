@@ -7,7 +7,7 @@ import { BsThreeDotsVertical } from 'react-icons/bs';
 
 function Page() {
     const session = useSession();
-    const token = localStorage.getItem("authToken");
+    const token = ""
     const [body, setBody] = useState<any>([]);
     const [selecteduser, setSelecteduser] = useState<any>();
     console.log("selecteduser",selecteduser)

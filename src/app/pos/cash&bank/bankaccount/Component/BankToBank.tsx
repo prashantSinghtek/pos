@@ -15,7 +15,7 @@ export default function BankToBank({ data , SetBankToBankTransfer }: any) {
     const [Selectedbank, setSelectedbank] = useState<any>()
     const [Selectedbankto, setSelectedbankto] = useState<any>()
 
-    const token = localStorage.getItem("authToken");
+    const token = ""
 
     const allbank = data?.map((option: any) => ({
         value: option?.displayName?.toUpperCase(),

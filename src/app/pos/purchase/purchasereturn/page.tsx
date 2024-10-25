@@ -31,7 +31,7 @@ function Page() {
 
   const [open, setOpen] = useState(false);
   const session = useSession();
-  const token = localStorage.getItem("authToken");
+  const token = ""
   const PAGE_SIZE = 10;
 
   const [data, setData] = useState([]);

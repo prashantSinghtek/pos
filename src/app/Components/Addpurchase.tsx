@@ -28,7 +28,7 @@ const validationSchema = Yup.object({
 export default function Addpurchase({ product }: any) {
   console.log("product", product)
   const session = useSession();
-  const token = localStorage.getItem("authToken");
+  const token = ""
   // useEffect(() => {
   //   Getparty(token, firmid)
   //     .then((res) => { console.log(">>>>>>>>>>>", res); setParties(res?.data?.data) })

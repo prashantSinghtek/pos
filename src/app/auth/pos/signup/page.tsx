@@ -139,8 +139,7 @@ export default function Signup() {
                         onChange={handleChange("firstname")}
                         onBlur={handleChange("firstname")}
                         istouched={touched.firstname}
-                        label={""}
-                      />
+                        label={""} className={undefined}                      />
                       {errors.firstname && touched.firstname && (
                         <p className="text-xs text-red-500">
                           {errors.firstname}
@@ -159,8 +158,7 @@ export default function Signup() {
                         onChange={handleChange("lastname")}
                         onBlur={handleChange("lastname")}
                         istouched={touched.lastname}
-                        label={""}
-                      />
+                        label={""} className={undefined}                      />
                       {errors.lastname && touched.lastname && (
                         <p className="text-xs text-red-500">
                           {errors.lastname}
@@ -179,8 +177,7 @@ export default function Signup() {
                       onChange={handleChange("email")}
                       onBlur={handleChange("email")}
                       istouched={touched.email}
-                      label={""}
-                    />
+                      label={""} className={undefined}                    />
                     {errors.email && touched.email && (
                       <p className="text-xs text-red-500">{errors.email}</p>
                     )}
@@ -198,8 +195,7 @@ export default function Signup() {
                       onChange={handleChange("phonenumber")}
                       onBlur={handleChange("phonenumber")}
                       istouched={touched.phonenumber}
-                      label={""}
-                    />
+                      label={""} className={undefined}                    />
                     {errors.phonenumber && touched.phonenumber && (
                       <p className="text-xs text-red-500">
                         {errors.phonenumber}
@@ -224,9 +220,8 @@ export default function Signup() {
                           e.preventDefault();
                           handleSubmit();
                         }
-                      }}
-                      label={""}
-                    />
+                      } }
+                      label={""} className={undefined}                    />
                     <div
                       className="absolute right-3 top-5 cursor-pointer"
                       onClick={handleVisible}
@@ -259,9 +254,8 @@ export default function Signup() {
                           e.preventDefault();
                           handleSubmit();
                         }
-                      }}
-                      label={""}
-                    />
+                      } }
+                      label={""} className={undefined}                    />
                     <div
                       className="absolute right-3 top-5 cursor-pointer"
                       onClick={handleVisible}

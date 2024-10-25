@@ -12,7 +12,6 @@ export default function Page() {
     const [activeTab, setActiveTab] = useState<any>(1);
     const [product, setProduct] = useState()
     const session = useSession();
-    const token = localStorage.getItem("authToken");
     
 
     const addNewTab = () => {

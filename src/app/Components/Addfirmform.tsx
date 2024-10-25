@@ -30,7 +30,7 @@ export default function Addfirmform() {
   });
 
   const session = useSession();
-  const token = localStorage.getItem("authToken");
+  const token = ""
 
   const [firmId, setFirmId] = useState("");
   console.log(firmId, "firmId");

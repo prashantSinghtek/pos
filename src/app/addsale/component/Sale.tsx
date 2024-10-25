@@ -14,7 +14,6 @@ export default function Sale({res}:any) {
   const [activeTab, setActiveTab] = useState<any>(1);
   const [product, setProduct] = useState()
   const session = useSession();
-  const token = localStorage.getItem("authToken");
   console.log(res)
 
   const addNewTab = () => {

@@ -21,7 +21,7 @@ import { getExpensesCategory, getExpensesTransaction } from "@/controller/posaut
 export default function Page() {
   const [selectedtab, setSelectedtab] = useState(1);
   const session = useSession();
-  const token = localStorage.getItem("authToken");
+  const token = ""
   const [ExpensesTranaction, setExpensesTranaction] = useState([]);
   const [Expenses, setExpenses] = useState<any>([]);
   // useEffect(() => {
@@ -79,7 +79,7 @@ export default function Page() {
           value={1}
           className={`flex-1 text-center py-2 font-medium transition-colors duration-300 ${
             selectedTab === 1
-              ? "border-b-4 border-[#FF8900] text-black text-[#FF8900]"
+              ? "border-b-4 border-[#FF8900] text-black"
               : "border-b-4 border-transparent text-gray-500"
           } hover:bg-gray-100 focus:outline-none`}
         >

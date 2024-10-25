@@ -27,7 +27,7 @@
 
 // export default function AddEstimmate({ product, estimatedata }: any) {
 //     const session = useSession();
-//     const token = localStorage.getItem("authToken");
+//     const token = ""
 //     const auth = new pos_controller()
 //     const [parties, setParties] = useState<any>([]);
 //     console.log(">>>>>>>>>>>>>>>>>>>", estimatedata.partiesname)
@@ -370,7 +370,7 @@ import { addSaleEstimate,  getState } from "@/controller/posauth";
 
 export default function AddEstimmate({ product, estimatedata }: any) {
     const session = useSession();
-    const token = localStorage.getItem("authToken");
+    const token = ""
     const [parties, setParties] = useState<any>([]);
     const [SelectedParties, setSelectedParties] = useState<any>({
         value: estimatedata?.partiesname,

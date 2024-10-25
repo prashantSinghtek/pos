@@ -30,7 +30,6 @@ const validationSchema = Yup.object({
 export default function AddCreditSale({ product }: any) {
   console.log("product", product)
   const session = useSession();
-  const token = localStorage.getItem("authToken");
 
   const [parties, setParties] = useState<any>([]);
   const allparties = parties?.map((option: any) => ({
@@ -119,13 +118,13 @@ export default function AddCreditSale({ product }: any) {
     }
   };
 
-  useEffect(() => {
-    getState().then((res) => {
-      setData(res?.data);
-    }).catch((err) => {
-      console.log(err);
-    });
-  }, [token]);
+  // useEffect(() => {
+  //   getState().then((res) => {
+  //     setData(res?.data);
+  //   }).catch((err) => {
+  //     console.log(err);
+  //   });
+  // }, [token]);
   const stateoption = data?.map((option: any) => ({
     value: option?.name.toUpperCase(),
     label: option?.name.toUpperCase(),

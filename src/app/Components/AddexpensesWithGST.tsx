@@ -30,7 +30,7 @@ const validationSchema = Yup.object({
 export default function AddexpensesWithGST({ product }: any) {
     console.log("product", product)
     const session = useSession();
-    const token = localStorage.getItem("authToken");
+    const token = ""
     const [parties, setParties] = useState<any>([]);
     const allparties = parties?.map((option: any) => ({
         value: option?.partyName?.toUpperCase(),

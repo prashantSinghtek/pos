@@ -12,7 +12,7 @@ import * as Yup from 'yup';
 export default function Payment({ setOpen,defaultdata }: any) {
 
     const session = useSession();
-    const token = localStorage.getItem("authToken");
+    const token = ""
     const [parties, setParties] = useState<any[]>([]);
     const path = usePathname()
     // useEffect(() => {

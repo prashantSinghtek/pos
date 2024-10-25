@@ -16,7 +16,7 @@ export default function CashToBank({ data , SetCashToBankTransfer }: any) {
 
     // const auth = new pos_controller()
     const session = useSession();
-    const token = localStorage.getItem("authToken");
+    const token = ""
 
     const allbank = data?.map((option: any) => ({
         value: option?.displayName?.toUpperCase(),

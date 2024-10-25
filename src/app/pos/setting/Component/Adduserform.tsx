@@ -7,7 +7,7 @@ import React from "react";
 
 export default function Adduserform() {
   const session = useSession();
-  const token = localStorage.getItem("authToken");
+  const token = ""
   const handleFormSubmit = async (values: any, actions: any) => {
     console.log("values>>>>>>>>>>>>>>>>>", values);
     try {

@@ -1,4 +1,3 @@
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { customStyles } from '@/app/Components/Customstyle';
 import TextInput from '@/app/Components/Textinput';
 import { Formik } from 'formik';
@@ -15,7 +14,7 @@ export default function BankToCash({ data,SetBankToCashTransfer }: any) {
     };
     const [Selectedbank, setSelectedbank] = useState<any>()
     const session = useSession();
-    const token = localStorage.getItem("authToken");
+    const token = ""
 
     const allbank = data?.map((option: any) => ({
       value: option?.displayName?.toUpperCase(),

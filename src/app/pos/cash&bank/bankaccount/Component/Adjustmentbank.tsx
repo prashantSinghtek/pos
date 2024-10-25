@@ -18,7 +18,7 @@ export default function Adjustmentbank({ data, SetAdjusmentBankEntry }: any) {
     const [Selectedpaymenttype, setSelectedpaymenttype] = useState<any>()
     const [paymenttype, setPaymenttype] = useState<any>(["REDUCE_BALANCE", "ADD_BALANCE"])
     const session = useSession();
-    const token = localStorage.getItem("authToken");
+    const token = ""
 
     const allbank = data?.map((option: any) => ({
         value: option?.displayName?.toUpperCase(),

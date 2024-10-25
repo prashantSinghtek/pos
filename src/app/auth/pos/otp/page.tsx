@@ -2,7 +2,7 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import TextInput from "@/app/Components/Textinput";
 import { AiFillGooglePlusCircle } from "react-icons/ai";
@@ -21,7 +21,7 @@ interface schema {
   otp: string;
 }
 
-export default function Otppage() {
+function OtpPage() {
     const searchParams = useSearchParams()
     const search = searchParams.get('email')
   const [loading, setLoading] = useState(false);
@@ -122,5 +122,14 @@ const router = useRouter()
         </div>
       </div>
     </div>
+  );
+}
+
+
+export default function OtpPageWrapper() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <OtpPage />
+    </Suspense>
   );
 }
