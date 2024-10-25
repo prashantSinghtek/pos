@@ -20,21 +20,20 @@ import { getExpensesCategory, getExpensesTransaction } from "@/controller/posaut
 
 export default function Page() {
   const [selectedtab, setSelectedtab] = useState(1);
-  const firmid = localStorage.getItem("selectedStore");
   const session = useSession();
   const token = localStorage.getItem("authToken");
   const [ExpensesTranaction, setExpensesTranaction] = useState([]);
   const [Expenses, setExpenses] = useState<any>([]);
-  useEffect(() => {
-   getExpensesTransaction(selectedtab, firmid)
-      .then((res) => {
-        console.log(res);
-        setExpensesTranaction(res?.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [token, selectedtab, firmid]);
+  // useEffect(() => {
+  //  getExpensesTransaction(selectedtab, firmid)
+  //     .then((res) => {
+  //       console.log(res);
+  //       setExpensesTranaction(res?.data);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }, [token, selectedtab, firmid]);
 
   const bodyData = ExpensesTranaction?.map((item: any) => {
     console.log(item);
@@ -58,16 +57,16 @@ export default function Page() {
     " ",
   ];
 
-  useEffect(() => {
-    getExpensesCategory(firmid)
-      .then((res) => {
-        setExpenses(res?.data);
-        console.log("res", res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [token, firmid]);
+  // useEffect(() => {
+  //   getExpensesCategory(firmid)
+  //     .then((res) => {
+  //       setExpenses(res?.data);
+  //       console.log("res", res);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }, [token, firmid]);
   const [selectedTab, setSelectedTab] = useState(1);
 
   const handleChange = (event: any, newValue: any) => {

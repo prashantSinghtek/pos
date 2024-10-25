@@ -38,10 +38,8 @@ export default function Product() {
   const [AdjusmentBankEntry, SetAdjusmentBankEntry] = useState(false)
   const Router = useRouter();
   const [checkedItems, setCheckedItems] = useState<string[]>([]);
-  const firmid = localStorage.getItem("selectedStore");
   const session = useSession();
   const token = localStorage.getItem("authToken");
-  const auth = new pos_controller()
   const [data, setData] = useState([]);
   const [data1, setData1] = useState<any>();
 
@@ -66,28 +64,28 @@ export default function Product() {
     });
   };
 
-  useEffect(() => {
-    GetBankAccount(token, firmid)
-      .then((res) => {
-        setData(res.data)
-        console.log(res)
-      })
-      .catch((err) => {
-        console.error(err)
-      })
-  }, [token, firmid])
+  // useEffect(() => {
+  //   GetBankAccount(token, firmid)
+  //     .then((res) => {
+  //       setData(res.data)
+  //       console.log(res)
+  //     })
+  //     .catch((err) => {
+  //       console.error(err)
+  //     })
+  // }, [token, firmid])
 
 
-  useEffect(() => {
-    GetBankAccountbyid(token, selectedtab)
-      .then((res) => {
-        setData1(res.data)
-        console.log(res)
-      })
-      .catch((err) => {
-        console.error(err)
-      })
-  }, [token, selectedtab])
+  // useEffect(() => {
+  //   GetBankAccountbyid(token, selectedtab)
+  //     .then((res) => {
+  //       setData1(res.data)
+  //       console.log(res)
+  //     })
+  //     .catch((err) => {
+  //       console.error(err)
+  //     })
+  // }, [token, selectedtab])
   
   
 
@@ -264,8 +262,8 @@ export default function Product() {
                   "accountHolderName": values.Accountholdername,
 
                 }
-                const res = await PutBankAccount(token, firmid, value);
-                console.log(">>>>>>>>", res)
+                // const res = await PutBankAccount(token, firmid, value);
+                // console.log(">>>>>>>>", res)
                 setModalopen(false)
                 // toast.success("Bank Created.")
               } catch (error) {
@@ -452,8 +450,8 @@ export default function Product() {
                   "accountHolderName": values.Accountholdername,
 
                 }
-                const res = await AddBankAccount(token, firmid, value);
-                console.log(">>>>>>>>", res)
+                // const res = await AddBankAccount(token, firmid, value);
+                // console.log(">>>>>>>>", res)
                 setModalopen(false)
                 // toast.success("Bank Created.")
               } catch (error) {

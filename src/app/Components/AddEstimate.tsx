@@ -24,7 +24,6 @@
 //     description: Yup.string().required("Required"),
 // });
 
-// const firmid = localStorage.getItem("selectedStore");
 
 // export default function AddEstimmate({ product, estimatedata }: any) {
 //     const session = useSession();
@@ -355,7 +354,7 @@ import { customStyles } from "./Customstyle";
 
 import Table from "./Addsaletable";
 import EditTable from "./edittable";
-import { addSaleEstimate, getParty, getState } from "@/controller/posauth";
+import { addSaleEstimate,  getState } from "@/controller/posauth";
 
 // const validationSchema = Yup.object({
 //     partiesName: Yup.string().required("Required"),
@@ -368,7 +367,6 @@ import { addSaleEstimate, getParty, getState } from "@/controller/posauth";
 //     description: Yup.string().required("Required"),
 // });
 
-const firmid = localStorage.getItem("selectedStore");
 
 export default function AddEstimmate({ product, estimatedata }: any) {
     const session = useSession();
@@ -398,15 +396,6 @@ export default function AddEstimmate({ product, estimatedata }: any) {
 
     const router = useRouter();
 
-    useEffect(() => {
-        getParty( firmid)
-            .then((res) => {
-                setParties(res?.data?.data);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    }, [token, firmid]);
 
     const allparties = parties?.map((option: any) => ({
         value: option?.partyName?.toUpperCase(),
@@ -467,9 +456,9 @@ export default function AddEstimmate({ product, estimatedata }: any) {
                 totalQuantity: 1,
                 items: selectedProduct,
             };
-            const res = await addSaleEstimate(firmid, value);
-            router.push(res);
-            console.log("AddsaleEstimate added", res);
+            // const res = await addSaleEstimate(firmid, value);
+            // router.push(res);
+            // console.log("AddsaleEstimate added", res);
         } catch (error) {
             console.error("Error:", error);
         } finally {

@@ -36,7 +36,6 @@ export default function Page() {
   const [id1, setId1] = useState()
   const session = useSession();
   const token = localStorage.getItem("authToken");
-  const firmid = localStorage.getItem("selectedStore");
   const PAGE_SIZE = 4;
 
   const [data, setData] = useState([]);
@@ -66,16 +65,16 @@ export default function Page() {
 
 
 
-  useEffect(() => {
-    getEstimate(firmid)
-      .then((res) => {
-        setData(res.data)
-        // console.log(res)
-      })
-      .catch((err) => {
-        console.error(err)
-      })
-  }, [token, firmid])
+  // useEffect(() => {
+  //   getEstimate(firmid)
+  //     .then((res) => {
+  //       setData(res.data)
+  //       // console.log(res)
+  //     })
+  //     .catch((err) => {
+  //       console.error(err)
+  //     })
+  // }, [token, firmid])
 
 
   const startIndex = (currentPage - 1) * PAGE_SIZE;

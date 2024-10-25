@@ -12,9 +12,7 @@ import { FaShare } from "react-icons/fa";
 import { HiDotsVertical } from "react-icons/hi";
 import { IoMdPrint } from "react-icons/io";
 import { IoPrintOutline } from "react-icons/io5";
-import { MdCurrencyRupee } from "react-icons/md";
 import { RiBillLine, RiFileExcel2Line } from "react-icons/ri";
-import { VscGraph } from "react-icons/vsc";
 
 function Page() {
   const header = [
@@ -34,24 +32,23 @@ function Page() {
   const [open, setOpen] = useState(false);
   const session = useSession();
   const token = localStorage.getItem("authToken");
-  const firmid = localStorage.getItem("selectedStore");
   const PAGE_SIZE = 10;
 
   const [data, setData] = useState([]);
 
   const [currentPage, setCurrentPage] = useState(1);
 
-  useEffect(() => {
-    getPurchaseReturn(firmid)
-      .then((res) => {
-        setData(res.data);
-        console.log(res, "===res");
+  // useEffect(() => {
+  //   getPurchaseReturn(firmid)
+  //     .then((res) => {
+  //       setData(res.data);
+  //       console.log(res, "===res");
 
-      })
-      .catch((error) => {
-        console.error(error);
-      })
-  }, [token, firmid])
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     })
+  // }, [token, firmid])
 
 
 

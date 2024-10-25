@@ -1,13 +1,11 @@
 import { customStyles } from '@/app/Components/Customstyle';
 import TextInput from '@/app/Components/Textinput';
-import pos_controller from '@/controller/posauth';
 import { Formik } from 'formik';
 import { useSession } from 'next-auth/react';
 import React, { useState } from 'react'
 import Select from "react-select";
 
 export default function BankToBank({ data , SetBankToBankTransfer }: any) {
-    const firmid = localStorage.getItem("selectedStore");
     const [fieldValues, setFieldValues] = useState<File[]>([]);
     const handleImageChanges = (newFiles: FileList | null) => {
         if (newFiles) {
@@ -17,8 +15,6 @@ export default function BankToBank({ data , SetBankToBankTransfer }: any) {
     const [Selectedbank, setSelectedbank] = useState<any>()
     const [Selectedbankto, setSelectedbankto] = useState<any>()
 
-    const auth = new pos_controller()
-    const session = useSession();
     const token = localStorage.getItem("authToken");
 
     const allbank = data?.map((option: any) => ({
@@ -60,13 +56,13 @@ export default function BankToBank({ data , SetBankToBankTransfer }: any) {
                         formData.append("adjustmentDate", values.date || "");
                         formData.append("description", values.Discription || "");
                         formData.append("bankAccountId", Selectedbank || "");
-                        formData.append("firmId", firmid || "");
+                        formData.append("firmId",  "");
                         fieldValues.forEach((file: File) => {
                             formData.append("file", file);
                         });
 
-                        const response = await AddBankToBank(token,Selectedbank,Selectedbankto, formData);
-                        console.log(response);
+                        // const response = await AddBankToBank(token,Selectedbank,Selectedbankto, formData);
+                        // console.log(response);
                         SetBankToBankTransfer(false);
                         // toast.success("Bank Created.")
                     } catch (error) {

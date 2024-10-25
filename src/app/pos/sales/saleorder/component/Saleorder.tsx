@@ -30,7 +30,6 @@ export default function Saleorder() {
   const [id1, setId1] = useState()
   const session = useSession();
   const token = localStorage.getItem("authToken");
-  const firmid = localStorage.getItem("selectedStore");
   const PAGE_SIZE = 10;
 
   const [data, setData] = useState([]);
@@ -45,16 +44,16 @@ export default function Saleorder() {
   const itemEndIndex = Math.min(startIndex + PAGE_SIZE, data.length);
 
 
-  useEffect(() => {
-    getSaleOrder(firmid)
-      .then((res) => {
-        setData(res.data);
-        console.log(res, "===res");
-      })
-      .catch((error) => {
-        console.error(error);
-      })
-  }, [token, firmid])
+  // useEffect(() => {
+  //   getSaleOrder(firmid)
+  //     .then((res) => {
+  //       setData(res.data);
+  //       console.log(res, "===res");
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     })
+  // }, [token, firmid])
 
   return (
     <div>

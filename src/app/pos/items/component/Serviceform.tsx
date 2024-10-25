@@ -40,7 +40,7 @@ export default function ProductForm() {
 
   const allUnits = unit?.map((option: any) => ({
     value: option.id,
-    label: option.unit.toUpperCase(),
+    label: option.unit?.toUpperCase(),
     id: option.id,
   }));
 
@@ -101,7 +101,7 @@ export default function ProductForm() {
     if (!firmId) {
       return;
     }
-    getUnit(firmId)
+    getUnit(firmId , "")
       .then((res) => {
         setUnit(res.data);
       })

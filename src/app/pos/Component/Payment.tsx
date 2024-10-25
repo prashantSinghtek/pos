@@ -1,7 +1,7 @@
 import { customStyles } from '@/app/Components/Customstyle';
 import Textarea from '@/app/Components/Textarea';
 import TextInput from '@/app/Components/Textinput';
-import { addPaymentIn, getParty } from '@/controller/posauth';
+import { addPaymentIn } from '@/controller/posauth';
 import { Field, Formik } from 'formik';
 import { useSession } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
@@ -10,26 +10,22 @@ import Select from "react-select";
 import * as Yup from 'yup';
 
 export default function Payment({ setOpen,defaultdata }: any) {
-    const firmid = localStorage.getItem("selectedStore");
-    if (!firmid) {
-        throw new Error("Firm ID not found");
-    }
 
     const session = useSession();
     const token = localStorage.getItem("authToken");
     const [parties, setParties] = useState<any[]>([]);
     const path = usePathname()
-    useEffect(() => {
-        if (token && firmid) {
-            getParty(firmid)
-                .then((res) => {
-                    setParties(res?.data?.data);
-                })
-                .catch((err) => {
-                    console.error(err);
-                });
-        }
-    }, [token, firmid]);
+    // useEffect(() => {
+    //     if (token && firmid) {
+    //         getParty(firmid)
+    //             .then((res) => {
+    //                 setParties(res?.data?.data);
+    //             })
+    //             .catch((err) => {
+    //                 console.error(err);
+    //             });
+    //     }
+    // }, [token, firmid]);
 
     const allparties = parties?.map((option: any) => ({
         value: option?.partyName?.toUpperCase(),
@@ -78,7 +74,7 @@ export default function Payment({ setOpen,defaultdata }: any) {
             }
             formData.append("amount", values.ReceivedAmount.toString());
             formData.append("description", values.description);
-            formData.append("firmId", firmid);
+            // formData.append("firmId", firmid);
 
             if (fieldValues.length > 0) {
                 fieldValues.forEach((file: File) => {

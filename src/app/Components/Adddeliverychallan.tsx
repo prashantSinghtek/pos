@@ -24,20 +24,12 @@ const validationSchema = Yup.object({
     description: Yup.string().required("Required"),
 });
 
-const firmid = localStorage.getItem("selectedStore");
 
 export default function AddDeliveryChallan({ product }: any) {
     console.log("product", product)
     const session = useSession();
     const token = localStorage.getItem("authToken");
-    const auth = new pos_controller()
-    useEffect(() => {
-        Getparty(token, firmid)
-            .then((res) => { console.log(">>>>>>>>>>>", res); setParties(res?.data?.data) })
-            .catch((err) => {
-                console.log(err);
-            });
-    }, [token, firmid]);
+
     const [parties, setParties] = useState<any>([]);
     const allparties = parties?.map((option: any) => ({
         value: option?.partyName?.toUpperCase(),
@@ -111,10 +103,9 @@ export default function AddDeliveryChallan({ product }: any) {
 
             }
             console.log(value)
-            console.log("token, firmid, value",token, firmid, value)
-            const res = await AddDeliveryChallan(token, firmid, value)
-            alert("Delivery challan created successfully")
-            console.log("AddDeliveryChallan added", res)
+            // const res = await AddDeliveryChallan(token, "", value)
+            // alert("Delivery challan created successfully")
+            // console.log("AddDeliveryChallan added", res)
 
 
 
@@ -127,11 +118,11 @@ export default function AddDeliveryChallan({ product }: any) {
     };
 
     useEffect(() => {
-        State(token).then((res) => {
-            setData(res?.data);
-        }).catch((err) => {
-            console.log(err);
-        });
+        // State(token).then((res) => {
+        //     setData(res?.data);
+        // }).catch((err) => {
+        //     console.log(err);
+        // });
     }, [token]);
     const stateoption = data?.map((option: any) => ({
         value: option?.name.toUpperCase(),

@@ -9,7 +9,6 @@ import { useSession } from "next-auth/react";
 import AddEstimmate from "../Components/AddEstimate";
 import AddSaleOrder from "../Components/AddSaleOrder";
 import { getProducts } from "@/controller/posauth";
-const firmid = localStorage.getItem("selectedStore");
 export default function Page() {
     const [tabs, setTabs] = useState([{ id: 1, isChecked: false }]);
     const [activeTab, setActiveTab] = useState<any>(1);
@@ -30,9 +29,7 @@ export default function Page() {
             )
         );
     };
-    useEffect(() => {
-        getProducts(firmid).then((res) => { setProduct(res.data) }).catch((err) => console.log(err))
-    }, [token, firmid])
+
 
     const removeTab = (tabId: any) => {
         const newTabs = tabs.filter((tab) => tab.id !== tabId);

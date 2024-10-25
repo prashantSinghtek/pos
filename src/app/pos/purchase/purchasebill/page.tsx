@@ -35,23 +35,22 @@ export default function Page() {
   const [open, SetOpen] = useState(false);
   const session = useSession();
   const token = localStorage.getItem("authToken");
-  const firmid = localStorage.getItem("selectedStore");
   const PAGE_SIZE = 10;
 
   const [data, setData] = useState([{},{}]);
 
   const [currentPage, setCurrentPage] = useState(1);
 
-  useEffect(() => {
-    getPurchaseBill( firmid)
-      .then((res) => {
-        setData(res.data);
-        console.log(res, "===res");
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, [token, firmid]);
+  // useEffect(() => {
+  //   getPurchaseBill( firmid)
+  //     .then((res) => {
+  //       setData(res.data);
+  //       console.log(res, "===res");
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     });
+  // }, [token, firmid]);
 
   const startIndex = (currentPage - 1) * PAGE_SIZE;
   const endIndex = startIndex + PAGE_SIZE;

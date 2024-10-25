@@ -26,20 +26,11 @@ const validationSchema = Yup.object({
     description: Yup.string().required("Required"),
 });
 
-const firmid = localStorage.getItem("selectedStore");
 
 export default function AddexpensesWithGST({ product }: any) {
     console.log("product", product)
     const session = useSession();
     const token = localStorage.getItem("authToken");
-    const auth = new pos_controller()
-    useEffect(() => {
-        Getparty(token, firmid)
-            .then((res) => { console.log(">>>>>>>>>>>", res); setParties(res?.data?.data) })
-            .catch((err) => {
-                console.log(err);
-            });
-    }, [token, firmid]);
     const [parties, setParties] = useState<any>([]);
     const allparties = parties?.map((option: any) => ({
         value: option?.partyName?.toUpperCase(),
@@ -98,13 +89,7 @@ export default function AddexpensesWithGST({ product }: any) {
     const [Expenses, setExpenses] = useState<any>([]);
 
     const [update, setupdate] = useState(false);
-    useEffect(() => {
-        GetExpensesCategory(token, firmid)
-            .then((res) => { setExpenses(res?.data), setupdate(false) })
-            .catch((err) => {
-                console.log(err);
-            });
-    }, [token, firmid, update]);
+
     const allExpenses = Expenses?.map((option: any) => ({
         value: option?.expenseCategoryName?.toUpperCase(),
         label: option?.expenseCategoryName?.toUpperCase(),
@@ -136,7 +121,7 @@ export default function AddexpensesWithGST({ product }: any) {
                 shipping: values.Shipping,
                 adjustment: values.AdjustmentPrice,
                 roundOff: values.roundoff ?? 0,
-                totalExpenseAmount: totalAmount + values.roundoff ?? 0,
+                // totalExpenseAmount: totalAmount + values.roundoff ?? 0,
                 totalQuantity: 1,
                 totalTax: totalTax,
                 totalDiscount: discountAmount,
@@ -146,8 +131,8 @@ export default function AddexpensesWithGST({ product }: any) {
 
             }
             console.log(value)
-            const res = await AddExpensesWithoutGST(token, firmid, "withGST", value,SelectedExpenses)
-            console.log("AddExpensesWithoutGST added", res)
+            // const res = await AddExpensesWithoutGST(token, firmid, "withGST", value,SelectedExpenses)
+            // console.log("AddExpensesWithoutGST added", res)
             reset()
             // router.push(res)
 
@@ -163,13 +148,13 @@ export default function AddexpensesWithGST({ product }: any) {
         }
     };
 
-    useEffect(() => {
-        State(token).then((res) => {
-            setData(res?.data);
-        }).catch((err) => {
-            console.log(err);
-        });
-    }, [token]);
+    // useEffect(() => {
+    //     State(token).then((res) => {
+    //         setData(res?.data);
+    //     }).catch((err) => {
+    //         console.log(err);
+    //     });
+    // }, [token]);
     const stateoption = data?.map((option: any) => ({
         value: option?.name.toUpperCase(),
         label: option?.name.toUpperCase(),
