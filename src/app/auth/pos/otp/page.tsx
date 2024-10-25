@@ -10,6 +10,7 @@ import { IoArrowBackCircleOutline } from "react-icons/io5";
 import { BASE_MAIN } from "@/app/config/Constant";
 import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
+import Image from "next/image";
 
 
 const validationSchema = Yup.object().shape({
@@ -68,7 +69,7 @@ const router = useRouter()
     <div className="w-screen h-screen">
       <div className="flex bg-white">
         <div className="w-1/2">
-          <img src="/loginpage.png" alt="" />
+          <Image src="/loginpage.png" alt="" />
         </div>
         <div className="w-1/2 px-20">
           <div className="mt-14">

@@ -93,7 +93,10 @@ export default function ProductForm() {
     }
   };
 
-  const content = [<Pricing />, <Stock />];
+  const content = [
+    <Pricing key="pricing" />,
+    <Stock key="stock" />
+  ];
 
   const formData = useSelector(selectProductForm);
 
