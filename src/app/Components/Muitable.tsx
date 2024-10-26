@@ -447,7 +447,7 @@ function useUpdateUsers() {
     onMutate: (newUsers: User[]) => {
       queryClient.setQueryData(["users"], (prevUsers: any) =>
         prevUsers?.map((user: User) => {
-          const newUser = newUsers.find((u) => u.id === user.id);
+          const newUser = newUsers?.find((u) => u.id === user.id);
           return newUser ? newUser : user;
         })
       );

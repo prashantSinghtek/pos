@@ -95,7 +95,7 @@ export default function Gstaddress({ setShowButton }: any) {
                   <Select
                     options={gsttypeoption}
                     placeholder=""
-                    value={gsttypeoption.find(
+                    value={gsttypeoption?.find(
                       (opt: { value: string }) => opt.value === field.value
                     )}
                     onChange={(option) => {

@@ -45,7 +45,7 @@
 //     }));
 //     useEffect(() => {
 //         if (allparties.length > 0) {
-//             const defaultParty = allparties.find(
+//             const defaultParty = allparties?.find(
 //                 (party:any) => party.label === estimatedata.partiesname.toUpperCase()
 //             );
 //             console.log(">>>>>>>>>>>>>>>>>>>", defaultParty);

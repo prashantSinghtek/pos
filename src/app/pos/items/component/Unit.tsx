@@ -115,7 +115,7 @@ export default function Unit() {
       .positive("Conversion Rate must be positive")
       .integer("Conversion Rate must be an integer"), // Conversion Rate validation
   });
-  const getOptionByValue = (value :any) => allUnit.find(option => option.value === value);
+  const getOptionByValue = (value :any) => allUnit?.find(option => option.value === value);
   const initialValues = {      
     baseUnit:  getOptionByValue(unitConversionform.baseUnit) || null, // Initial value for base unit
     secondaryUnit:  getOptionByValue(unitConversionform.secondaryUnit) || null, // Initial value for secondary unit

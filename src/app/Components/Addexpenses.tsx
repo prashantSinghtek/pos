@@ -221,7 +221,7 @@ export default function AddExpenses() {
                                         <Select
                                             name="ExpensesName"
                                             options={[...allExpenses, { label: 'ADD_CATEGORY', value: 'ADD_CATEGORY' }]}
-                                            value={allExpenses.find((expense: any) => expense.id === SelectedExpenses)}
+                                            value={allExpenses?.find((expense: any) => expense.id === SelectedExpenses)}
                                             onChange={handleChangedExpenses}
                                             styles={customStyles}
                                             className="w-full bg-white rounded-md outline-none font-medium font-optima text-primary text-sm focus-within:outline-gray-200 focus-within:outline focus-within:outline-2"
