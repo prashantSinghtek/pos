@@ -1,5 +1,4 @@
-import { BASE_MAIN } from "@/app/config/Constant";
-
+const BASE_MAIN = process.env.BASE_MAIN;
 export class Constants {
   static X_API_KEY = "X API Key";
   static firm = `${BASE_MAIN}api/Firm/firm`;

@@ -7,7 +7,6 @@ import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import TextInput from "@/app/Components/Textinput";
 import { AiFillGooglePlusCircle } from "react-icons/ai";
 import { IoArrowBackCircleOutline } from "react-icons/io5";
-import { BASE_MAIN } from "@/app/config/Constant";
 import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
@@ -46,7 +45,7 @@ const router = useRouter()
         otp: values.otp,
       };
       const res = await axios.post(
-        `${BASE_MAIN}loginAPI/otpVerification`,
+        `${process.env.BASE_MAIN}loginAPI/otpVerification`,
         data,
         {
           headers: {

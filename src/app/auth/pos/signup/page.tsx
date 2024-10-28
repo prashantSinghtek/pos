@@ -7,7 +7,6 @@ import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import TextInput from "@/app/Components/Textinput";
 import { AiFillGooglePlusCircle } from "react-icons/ai";
 import axios from "axios";
-import { BASE_MAIN } from "@/app/config/Constant";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 const validationSchema = Yup.object().shape({
@@ -66,7 +65,7 @@ export default function Signup() {
         confirmedPassword: values.confirmpassword,
       };
       const res: any = await axios.post(
-        `${BASE_MAIN}loginAPI/createUser`,
+        `${process.env.BASE_MAIN}loginAPI/createUser`,
         data,
         {
           headers: {

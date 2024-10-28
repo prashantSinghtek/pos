@@ -8,7 +8,6 @@ import TextInput from "@/app/Components/Textinput";
 import { AiFillGooglePlusCircle } from "react-icons/ai";
 import { IoArrowBackCircleOutline } from "react-icons/io5";
 import axios from "axios";
-import { BASE_MAIN } from "@/app/config/Constant";
 import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
   import Image from "next/image";
@@ -55,7 +54,7 @@ function ForgetpasswordPage() {
         email: values.email,
       };
       const res = await axios.post(
-        `${BASE_MAIN}loginAPI/forgotPassword`,
+        `${process.env.BASE_MAIN}loginAPI/forgotPassword`,
         data,
         {
           headers: {

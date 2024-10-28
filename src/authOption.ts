@@ -1,7 +1,6 @@
 import { NextAuthOptions } from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
 import CredentialProvider from "next-auth/providers/credentials";
-import { BASE_MAIN } from "@/app/config/Constant";
 import axios from "axios";
 
 import https from "https";
@@ -84,7 +83,7 @@ export const authOptions: NextAuthOptions = {
   
           try {
             const { data } = await axiosInstance.post(
-              `${BASE_MAIN}loginAPI/login`,
+              `${process.env.BASE_MAIN}loginAPI/login`,
               {
                 email: credentials.email,
                 password: credentials.password,

@@ -8,7 +8,6 @@ import TextInput from "@/app/Components/Textinput";
 import { AiFillGooglePlusCircle } from "react-icons/ai";
 import { IoArrowBackCircleOutline } from "react-icons/io5";
 import axios from "axios";
-import { BASE_MAIN } from "@/app/config/Constant";
 
 const validationSchema = Yup.object().shape({
     email: Yup.string()
@@ -49,7 +48,7 @@ export default function ResetpasswordPage() {
               confirmedPassword: values.confirmPassword,
             };
             const res = await axios.post(
-              `${BASE_MAIN}loginAPI/resetPassword`,
+              `${process.env.BASE_MAIN}loginAPI/resetPassword`,
               data,
               {
                 headers: {
