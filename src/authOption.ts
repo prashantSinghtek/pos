@@ -6,7 +6,7 @@ import axios from "axios";
 
 import https from "https";
 const agent = new https.Agent({
-  rejectUnauthorized: false, // Bypasses SSL certificate validation
+  rejectUnauthorized: false,
 });
 const axiosInstance = axios.create({
     httpsAgent: agent,
@@ -48,14 +48,14 @@ export const authOptions: NextAuthOptions = {
                 id: savedUser.data.id,
                 email: savedUser.data.email,
                 type: "user",
-                token: accessData.data.token, // Add the token property
+                token: accessData.data.token,
               };
             } else {
               return {
                 id: data.user.id.toString(),
                 email: data.user.email.toString(),
                 type: "user",
-                token: data.access.toString(), // Add the token property
+                token: data.access.toString(), 
               };
             }
           } catch (err) {
