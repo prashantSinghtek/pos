@@ -65,7 +65,7 @@ export default function Signup() {
         confirmedPassword: values.confirmpassword,
       };
       const res: any = await axios.post(
-        `${process.env.BASE_MAIN}loginAPI/createUser`,
+        `${process.env.NEXT_PUBLIC_BASE_MAIN}loginAPI/createUser`,
         data,
         {
           headers: {

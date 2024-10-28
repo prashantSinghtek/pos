@@ -45,7 +45,7 @@ const router = useRouter()
         otp: values.otp,
       };
       const res = await axios.post(
-        `${process.env.BASE_MAIN}loginAPI/otpVerification`,
+        `${process.env.NEXT_PUBLIC_BASE_MAIN}loginAPI/otpVerification`,
         data,
         {
           headers: {

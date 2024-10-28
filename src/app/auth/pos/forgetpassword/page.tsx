@@ -54,7 +54,7 @@ function ForgetpasswordPage() {
         email: values.email,
       };
       const res = await axios.post(
-        `${process.env.BASE_MAIN}loginAPI/forgotPassword`,
+        `${process.env.NEXT_PUBLIC_BASE_MAIN}loginAPI/forgotPassword`,
         data,
         {
           headers: {

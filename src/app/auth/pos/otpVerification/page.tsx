@@ -42,7 +42,7 @@ function OTPVerificationForm() {
         email: email,
         otp: values.otp,
       };
-      const res = await axios.post(`${process.env.BASE_MAIN}loginAPI/verifyOtp`, data, {
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_BASE_MAIN}loginAPI/verifyOtp`, data, {
         headers: {
           "Content-Type": "application/json",
         },
