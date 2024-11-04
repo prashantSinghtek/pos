@@ -4,11 +4,16 @@ import List from "@/app/Components/List";
 import Table from "@/app/Components/Table";
 import TextInput from "@/app/Components/Textinput";
 import React, { useEffect, useState } from "react";
-import { IoPersonOutline,  } from "react-icons/io5";
-import { RiFileExcel2Line,  } from "react-icons/ri";
-import { IoMdAdd,  } from "react-icons/io";
+import { MdOutlineEmail } from "react-icons/md";
+import { IoPersonOutline, IoPersonSharp } from "react-icons/io5";
+import { RiFileExcel2Line, RiPagesLine } from "react-icons/ri";
+import { IoMdAdd, IoMdCard } from "react-icons/io";
 import Modal from "@/app/Components/Modal";
 import Partiescard from "../../parties/component/partiescard";
+import { HiAdjustmentsHorizontal } from "react-icons/hi2";
+import Productfrom from "./Productfrom";
+import { useRouter } from "next/navigation";
+import Stockadd from "./Stockadd";
 import { useDispatch, useSelector } from "react-redux";
 import {
   selectAddItemModel,
@@ -30,7 +35,10 @@ import { selectFirmId } from "@/Redux/Parties/selectors";
 import Serviceform from "./Serviceform";
 export default function Service() {
   const [selectedproduct, setSelectedProduct] = useState<any>();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [modalOpenFrom, setModalOpenFrom] = useState("");
   const [adjustitemmodalopen, setAdjustitemmodalopen] = useState(false);
+  const Router = useRouter();
   const [activeTab, setActiveTab] = useState<any>(1);
 
   const header = [
@@ -53,22 +61,22 @@ export default function Service() {
     dispatch(
       getItemList({
         firmId: firmId,
-        callback() {},
+        callback() { },
       })
     );
 
-    return () => {};
+    return () => { };
   }, [firmId]);
 
   useEffect(() => {
     dispatch(
       getItemList({
         firmId: firmId,
-        callback() {},
+        callback() { },
       })
     );
 
-    return () => {};
+    return () => { };
   }, [searchName]);
 
   const list = useSelector(selectItemList);
@@ -78,13 +86,13 @@ export default function Service() {
     dispatch(
       getItemById({
         itemId: Id,
-        callback() {},
+        callback() { },
       })
     );
     dispatch(
       getTransactionByItemId({
         itemId: Id,
-        callback() {},
+        callback() { },
       })
     );
   };
@@ -96,10 +104,10 @@ export default function Service() {
     dispatch(
       getTransactionByItemId({
         itemId: setselectedId,
-        callback() {},
+        callback() { },
       })
     );
-    return () => {};
+    return () => { };
   }, [search]);
 
   const transactionList = useSelector(selectTransactionList);

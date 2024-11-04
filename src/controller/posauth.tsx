@@ -70,11 +70,30 @@ export const myCompany = (id?: any) => {
   return apiRequest("get", url);
 };
 
-export const addFirmParty = (values: any, id: any) => {
+export const addFirmParty = async (values: any, id: any) => {
   const url = `${Constants.AddfirmParty}?firmId=${id}`;
-  return apiRequest("post", url, values);
+
+  try {
+    const response = await apiRequest("post", url, values);
+    console.log("API response:", response); // Log to verify timing and content of response
+    return response;
+  } catch (error) {
+    console.error("Error in addFirmParty:", error);
+    throw error; // Re-throw to handle in calling function
+  }
 };
 
+export const getPartyDetailAPI = async (id: any) => {
+  try {
+    const response = await apiRequest(
+      "get",
+      `${Constants.Getpartiesbyfirm}${id}`
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
 export const addItem = (values: any) => {
   const url = `${Constants.AddItem}`;
   return apiRequest("post", url, values);
@@ -353,10 +372,6 @@ export const getParticularService = (id: any) => {
   return apiRequest("get", `${Constants.Service}${id}`);
 };
 
-export const getPartyDetailAPI = (id: any) => {
-  return apiRequest("get", `${Constants.Getpartiesbyfirm}${id}`);
-};
-
 export const getPartyTransactionApi = (partieId: any, search: any) => {
   return apiRequest(
     "get",
@@ -475,8 +490,7 @@ export const getUnit = (id?: any, search?: string) => {
 //   return apiRequest("get", `${Constants.UnitItemList}${id}/firm/${firmid}?searchTerm=${search}`);
 // };
 
-
-export const addUnitConversionAPI = (formData: any , firmId : any) => {
+export const addUnitConversionAPI = (formData: any, firmId: any) => {
   const url = `${Constants.unitConversion}${firmId}`;
   return apiRequest("post", url, formData);
 };

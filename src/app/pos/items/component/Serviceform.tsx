@@ -6,8 +6,8 @@ import { RiDropboxFill } from "react-icons/ri";
 import Pricing from "./Pricing";
 import Stock from "./Stock";
 import { customStyles } from "@/app/Components/Customstyle";
-import Select from "react-select";
 import { Formik } from "formik";
+import Select from "react-select";
 import * as Yup from "yup"; // Import Yup for validation
 import { useDispatch, useSelector } from "react-redux";
 import { selectProductForm } from "@/Redux/Item/selectors";
@@ -92,6 +92,7 @@ export default function ProductForm() {
       setIsSubmitting(false);
     }
   };
+
   const content = [
     <Pricing key="pricing" />,
     <Stock key="stock" />
@@ -103,7 +104,7 @@ export default function ProductForm() {
     if (!firmId) {
       return;
     }
-    getUnit(firmId , "")
+    getUnit(firmId, "")
       .then((res) => {
         setUnit(res.data);
       })
