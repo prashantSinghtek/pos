@@ -252,15 +252,7 @@ export default function Product() {
           dispatch(chnageAddItemModelState(false));
         }}
       >
-        {modalOpenFrom == "FromList" ? (
-          <>
-            <Productfrom />
-          </>
-        ) : (
-          <>
-            <Productfrom />
-          </>
-        )}
+       <Productfrom />
       </Modal>
       <Modal
         isOpen={adjustitemmodalopen}

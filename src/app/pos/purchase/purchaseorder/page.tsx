@@ -30,25 +30,24 @@ function Page() {
   const [open, setOpen] = useState(false);
 
   const session = useSession();
-  const token = localStorage.getItem("authToken");
-  const firmid = localStorage.getItem("selectedStore");
+  const token = ""
   const PAGE_SIZE = 10;
 
   const [data, setData] = useState([]);
 
   const [currentPage, setCurrentPage] = useState(1);
 
-  useEffect(() => {
-    getPurchaseOrder(firmid)
-      .then((res) => {
-        setData(res);
-        console.log(res, "===res");
+  // useEffect(() => {
+  //   getPurchaseOrder(firmid)
+  //     .then((res) => {
+  //       setData(res);
+  //       console.log(res, "===res");
 
-      })
-      .catch((error) => {
-        console.error(error);
-      })
-  }, [token, firmid])
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     })
+  // }, [token, firmid])
 
 
 

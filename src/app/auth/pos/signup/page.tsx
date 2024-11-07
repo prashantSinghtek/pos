@@ -7,7 +7,6 @@ import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import TextInput from "@/app/Components/Textinput";
 import { AiFillGooglePlusCircle } from "react-icons/ai";
 import axios from "axios";
-import { BASE_MAIN } from "@/app/config/Constant";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 const validationSchema = Yup.object().shape({
@@ -66,7 +65,7 @@ export default function Signup() {
         confirmedPassword: values.confirmpassword,
       };
       const res: any = await axios.post(
-        `${BASE_MAIN}loginAPI/createUser`,
+        `${process.env.NEXT_PUBLIC_BASE_MAIN}loginAPI/createUser`,
         data,
         {
           headers: {
@@ -139,8 +138,7 @@ export default function Signup() {
                         onChange={handleChange("firstname")}
                         onBlur={handleChange("firstname")}
                         istouched={touched.firstname}
-                        label={""}
-                      />
+                        label={""} className={undefined}                      />
                       {errors.firstname && touched.firstname && (
                         <p className="text-xs text-red-500">
                           {errors.firstname}
@@ -159,8 +157,7 @@ export default function Signup() {
                         onChange={handleChange("lastname")}
                         onBlur={handleChange("lastname")}
                         istouched={touched.lastname}
-                        label={""}
-                      />
+                        label={""} className={undefined}                      />
                       {errors.lastname && touched.lastname && (
                         <p className="text-xs text-red-500">
                           {errors.lastname}
@@ -179,8 +176,7 @@ export default function Signup() {
                       onChange={handleChange("email")}
                       onBlur={handleChange("email")}
                       istouched={touched.email}
-                      label={""}
-                    />
+                      label={""} className={undefined}                    />
                     {errors.email && touched.email && (
                       <p className="text-xs text-red-500">{errors.email}</p>
                     )}
@@ -198,8 +194,7 @@ export default function Signup() {
                       onChange={handleChange("phonenumber")}
                       onBlur={handleChange("phonenumber")}
                       istouched={touched.phonenumber}
-                      label={""}
-                    />
+                      label={""} className={undefined}                    />
                     {errors.phonenumber && touched.phonenumber && (
                       <p className="text-xs text-red-500">
                         {errors.phonenumber}
@@ -224,9 +219,8 @@ export default function Signup() {
                           e.preventDefault();
                           handleSubmit();
                         }
-                      }}
-                      label={""}
-                    />
+                      } }
+                      label={""} className={undefined}                    />
                     <div
                       className="absolute right-3 top-5 cursor-pointer"
                       onClick={handleVisible}
@@ -259,9 +253,8 @@ export default function Signup() {
                           e.preventDefault();
                           handleSubmit();
                         }
-                      }}
-                      label={""}
-                    />
+                      } }
+                      label={""} className={undefined}                    />
                     <div
                       className="absolute right-3 top-5 cursor-pointer"
                       onClick={handleVisible}

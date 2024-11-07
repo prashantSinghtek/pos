@@ -6,7 +6,6 @@ import { useSession } from "next-auth/react";
 
 import Addpurchase from "../Components/Addpurchase";
 import { getProducts } from "@/controller/posauth";
-const firmid = localStorage.getItem("selectedStore");
 
 
 export default function Page() {
@@ -14,7 +13,6 @@ export default function Page() {
   const [activeTab, setActiveTab] = useState<any>(1);
   const [product, setProduct] = useState()
   const session = useSession();
-  const token = localStorage.getItem("authToken");
   const addNewTab = () => {
     const newId = tabs.length ? tabs[tabs.length - 1].id + 1 : 1;
     setTabs([...tabs, { id: newId, isChecked: false }]);
@@ -28,9 +26,7 @@ export default function Page() {
       )
     );
   };
-  useEffect(() => {
-    getProducts( firmid).then((res) => { setProduct(res.data) }).catch((err) => console.log(err))
-  }, [token, firmid])
+
 
   const removeTab = (tabId:any) => {
     const newTabs = tabs.filter((tab) => tab.id !== tabId);

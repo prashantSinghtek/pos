@@ -8,7 +8,6 @@ import TextInput from "@/app/Components/Textinput";
 import { AiFillGooglePlusCircle } from "react-icons/ai";
 import { IoArrowBackCircleOutline } from "react-icons/io5";
 import axios from "axios";
-import { BASE_MAIN } from "@/app/config/Constant";
 
 const validationSchema = Yup.object().shape({
     email: Yup.string()
@@ -49,7 +48,7 @@ export default function ResetpasswordPage() {
               confirmedPassword: values.confirmPassword,
             };
             const res = await axios.post(
-              `${BASE_MAIN}loginAPI/resetPassword`,
+              `${process.env.NEXT_PUBLIC_BASE_MAIN}loginAPI/resetPassword`,
               data,
               {
                 headers: {
@@ -115,8 +114,7 @@ export default function ResetpasswordPage() {
                                                     value={values.email}
                                                     onChange={handleChange("email")}
                                                     onBlur={handleChange("email")}
-                                                    istouched={touched.email}
-                                                />
+                                                    istouched={touched.email} className={undefined}                                                />
                                             </div>
                                             {errors?.email && touched?.email && (
                                                 <p className="text-xs text-red-500">{errors.email}</p>
@@ -143,8 +141,7 @@ export default function ResetpasswordPage() {
                                                             e.preventDefault();
                                                             handleSubmit();
                                                         }
-                                                    }}
-                                                />
+                                                    } } className={undefined}                                                />
                                                 <div
                                                     className="absolute right-3 top-5 cursor-pointer"
                                                     onClick={handleVisible}
@@ -181,8 +178,7 @@ export default function ResetpasswordPage() {
                                                             e.preventDefault();
                                                             handleSubmit();
                                                         }
-                                                    }}
-                                                />
+                                                    } } className={undefined}                                                />
                                                 <div
                                                     className="absolute right-3 top-5 cursor-pointer"
                                                     onClick={handleVisible}

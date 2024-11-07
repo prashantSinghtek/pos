@@ -27,15 +27,13 @@ const validationSchema = Yup.object({
     description: Yup.string().required("Required"),
 });
 
-const firmid = localStorage.getItem("selectedStore");
 
 
 
 export default function AddExpenses() {
     // console.log("product", product)
     const session = useSession();
-    const token = localStorage.getItem("authToken");
-    const auth = new pos_controller()
+    const token = ""
     const [modalopen, setModalopen] = useState(false);
     const [update, setupdate] = useState(false);
     const [selectedProducts, setSelectedProducts] = useState([]);
@@ -61,13 +59,13 @@ export default function AddExpenses() {
         </components.Option>
     );
     console.log("Expenses", Expenses)
-    useEffect(() => {
-        GetExpensesCategory(token, firmid)
-            .then((res) => { setExpenses(res?.data), setupdate(false) })
-            .catch((err) => {
-                console.log(err);
-            });
-    }, [token, firmid, update]);
+    // useEffect(() => {
+    //     GetExpensesCategory(token, firmid)
+    //         .then((res) => { setExpenses(res?.data), setupdate(false) })
+    //         .catch((err) => {
+    //             console.log(err);
+    //         });
+    // }, [token, firmid, update]);
     const allExpenses = Expenses?.map((option: any) => ({
         value: option?.expenseCategoryName?.toUpperCase(),
         label: option?.expenseCategoryName?.toUpperCase(),
@@ -147,8 +145,8 @@ export default function AddExpenses() {
                 paymentType:[SelectedPaymenttype],
             }
             console.log(value)
-            const res = await AddExpensesWithoutGST(token, firmid, "withoutGST", value,SelectedExpenses)
-            console.log("AddsaleEstimate added", res)
+            // const res = await AddExpensesWithoutGST(token, firmid, "withoutGST", value,SelectedExpenses)
+            // console.log("AddsaleEstimate added", res)
 
 
 
@@ -160,13 +158,13 @@ export default function AddExpenses() {
         }
     };
 
-    useEffect(() => {
-        State(token).then((res) => {
-            setData(res?.data);
-        }).catch((err) => {
-            console.log(err);
-        });
-    }, [token]);
+    // useEffect(() => {
+    //     State(token).then((res) => {
+    //         setData(res?.data);
+    //     }).catch((err) => {
+    //         console.log(err);
+    //     });
+    // }, [token]);
     const stateoption = data?.map((option: any) => ({
         value: option?.name.toUpperCase(),
         label: option?.name.toUpperCase(),
@@ -182,8 +180,8 @@ export default function AddExpenses() {
         console.log("Form values:", values);
         try {
             setSubmitting(true);
-            const res = await AddExpensesCategory(token, firmid, values.Categoryname, selectedExpensestype)
-            console.log("defv", res)
+            // const res = await AddExpensesCategory(token, firmid, values.Categoryname, selectedExpensestype)
+            // console.log("defv", res)
             resetForm();
             setupdate(true)
             setModalopen(false)
@@ -223,7 +221,7 @@ export default function AddExpenses() {
                                         <Select
                                             name="ExpensesName"
                                             options={[...allExpenses, { label: 'ADD_CATEGORY', value: 'ADD_CATEGORY' }]}
-                                            value={allExpenses.find((expense: any) => expense.id === SelectedExpenses)}
+                                            value={allExpenses?.find((expense: any) => expense.id === SelectedExpenses)}
                                             onChange={handleChangedExpenses}
                                             styles={customStyles}
                                             className="w-full bg-white rounded-md outline-none font-medium font-optima text-primary text-sm focus-within:outline-gray-200 focus-within:outline focus-within:outline-2"

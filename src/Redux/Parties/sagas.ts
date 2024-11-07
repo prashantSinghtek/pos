@@ -34,6 +34,7 @@ import {
   setTrasactionList,
   updateParty,
 } from "./reducer";
+import toast from "react-hot-toast";
 
 interface Party {
   id: number;
@@ -47,9 +48,11 @@ export function* addPartyRequest(action: {
 
   try {
     const response: any = yield call(addFirmParty, form, action.payload.firmId);
-    if (response && !response.data.status) {
+    if (response.status !== 200 || response == undefined) {
+      toast.error(response?.message);
       return;
     }
+    toast.success(response?.message);
     if (action.payload.callback) {
       action.payload.callback();
     }
@@ -94,11 +97,9 @@ export function* getPartyDetailRequest(action: {
     return;
   }
   yield delay(1000);
-  
-  const response : AxiosResponse =  yield call(
-    getPartyDetailAPI,
-    action.payload.partieId,
-  );
+  const response: any = yield call(getPartyDetailAPI, action.payload.partieId);
+  console.log(response, "response");
+
   yield put(setPartiesDashboardData(response?.data));
   yield put(setPartieDetailForm(response?.data));
   if (action.payload.callback) {

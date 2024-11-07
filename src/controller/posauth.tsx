@@ -32,7 +32,7 @@ const apiRequest = async (
       aTag.click();
       document.body.removeChild(aTag);
       return URL.createObjectURL(data);
-    }   
+    }
     if (!data && !data.data.status) {
       return;
     }
@@ -69,17 +69,32 @@ export const myCompany = (id?: any) => {
   const url = id ? `${Constants.firm}/${id}` : Constants.firm;
   return apiRequest("get", url);
 };
-export const getUnit = (id?: any) => {
-  const url =  `${Constants.Getunit}?firmId=${id}`;
-  return apiRequest("get", url);
-};
 
-export const addFirmParty = (values: any, id: any) => {
+export const addFirmParty = async (values: any, id: any) => {
   const url = `${Constants.AddfirmParty}?firmId=${id}`;
-  return apiRequest("post", url, values);
+
+  try {
+    const response = await apiRequest("post", url, values);
+    console.log("API response:", response); // Log to verify timing and content of response
+    return response;
+  } catch (error) {
+    console.error("Error in addFirmParty:", error);
+    throw error; // Re-throw to handle in calling function
+  }
 };
 
-export const addItem = (values: any,) => {
+export const getPartyDetailAPI = async (id: any) => {
+  try {
+    const response = await apiRequest(
+      "get",
+      `${Constants.Getpartiesbyfirm}${id}`
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+export const addItem = (values: any) => {
   const url = `${Constants.AddItem}`;
   return apiRequest("post", url, values);
 };
@@ -110,12 +125,10 @@ export const getUnits = () => {
   return apiRequest("get", Constants.unit);
 };
 
-export const getProducts = (firmid: any , search: string) => {
+export const getProducts = (firmid: any, search: string) => {
   const url = `${Constants.getproduct}${firmid}?searchTerm=${search}`;
   return apiRequest("get", url);
 };
-
-
 
 export const getParticularCategory = (id: any) => {
   return apiRequest("get", `${Constants.category}get/${id}`);
@@ -359,10 +372,6 @@ export const getParticularService = (id: any) => {
   return apiRequest("get", `${Constants.Service}${id}`);
 };
 
-export const getPartyDetailAPI = (id: any) => {
-  return apiRequest("get", `${Constants.Getpartiesbyfirm}${id}`);
-};
-
 export const getPartyTransactionApi = (partieId: any, search: any) => {
   return apiRequest(
     "get",
@@ -384,7 +393,6 @@ export const deletePartyByIdAPI = (id: any) => {
   return apiRequest("delete", `${Constants.DeleteParty}${id}`);
 };
 
-
 export const DeleteTransaction = (id: any) => {
   return apiRequest("delete", `${Constants.DeleteTransaction}${id}`);
 };
@@ -396,46 +404,93 @@ export const GetItem = (id: any) => {
   return apiRequest("get", `${Constants.itemDelete}${id}`);
 };
 
-
 export const GetTrasactionItem = (id: any, search: any) => {
-  return apiRequest("get", `${Constants.ItemWiseTrasaction}${id}?searchTerm=${search}`);
+  return apiRequest(
+    "get",
+    `${Constants.ItemWiseTrasaction}${id}?searchTerm=${search}`
+  );
 };
 
 // Category
 
 export const addCategoryAPI = (formData: any, firmId: any) => {
   const url = `${Constants.category}add?firmId=${firmId}`;
-  return apiRequest("post", url , formData);
+  return apiRequest("post", url, formData);
 };
 export const updateCategoryAPI = (formData: any, id: any) => {
   const url = `${Constants.category}update/${id}`;
-  return apiRequest("put", url , formData);
+  return apiRequest("put", url, formData);
 };
 
-  export const getCategory = (id: any) => {
-    return apiRequest("get", `${Constants.category}all/firm/${id}`);
-  };
-  export const getCategoryByIdAPI = (id: any) => {
-    return apiRequest("get", `${Constants.GetCategoryByID}${id}`);
-  };
+export const getCategory = (id: any) => {
+  return apiRequest("get", `${Constants.category}all/firm/${id}`);
+};
+export const getCategoryByIdAPI = (id: any) => {
+  return apiRequest("get", `${Constants.GetCategoryByID}${id}`);
+};
 
-  export const getCategoryByFirm = (id: any) => {    
+export const getCategoryByFirm = (id: any) => {
   return apiRequest("get", `${Constants.GetCategoryByFirm}/${id}?searchTerm=`);
-  };
-  export const getCategoryByFirmId = (id: any , search :string) => {
-    return apiRequest("get", `${Constants.GetCategoryByFirm}/${id}?searchTerm=${search}`);
-  };
+};
+export const getCategoryByFirmId = (id: any, search: string) => {
+  return apiRequest(
+    "get",
+    `${Constants.GetCategoryByFirm}/${id}?searchTerm=${search}`
+  );
+};
 
-  export const DeleteCategory = (id: any) => {
-    return apiRequest("delete", `${Constants.CategoryDelete}${id}`);
-  };
-  
-  export const GetCategoryByItem = (id: any, search: any, firmid : any) => {
-    return apiRequest("get", `${Constants.CategoryItemList}${id}/firm/${firmid}?searchTerm=${search}`);
-  };
+export const DeleteCategory = (id: any) => {
+  return apiRequest("delete", `${Constants.CategoryDelete}${id}`);
+};
 
-  export const markToTheCategoryAPI = (categoryId: any, firmId: any, selectedItem: any) => {
-    const itemIdsParam = selectedItem.map((item: number) => `itemIds=${item}`).join('&');
-    return apiRequest("post", `${Constants.moveToThiscategory}${firmId}&categoryId=${categoryId}&${itemIdsParam}`);
-  };
-  
+export const GetCategoryByItem = (id: any, search: any, firmid: any) => {
+  return apiRequest(
+    "get",
+    `${Constants.CategoryItemList}${id}/firm/${firmid}?searchTerm=${search}`
+  );
+};
+
+export const markToTheCategoryAPI = (
+  categoryId: any,
+  firmId: any,
+  selectedItem: any
+) => {
+  const itemIdsParam = selectedItem
+    .map((item: number) => `itemIds=${item}`)
+    .join("&");
+  return apiRequest(
+    "post",
+    `${Constants.moveToThiscategory}${firmId}&categoryId=${categoryId}&${itemIdsParam}`
+  );
+};
+// unit
+export const addUnitAPI = (formData: any) => {
+  const url = `${Constants.unit}`;
+  return apiRequest("post", url, formData);
+};
+// export const updateUnitAPI = (formData: any, id: any) => {
+//   const url = `${Constants.unit}update/${id}`;
+//   return apiRequest("put", url , formData);
+// };
+// export const getUnit = (id: any) => {
+//   return apiRequest("get", `${Constants.unit}all/firm/${id}`);
+// };
+
+export const getUnit = (id?: any, search?: string) => {
+  const url = `${Constants.unit}?searchTerm=${search}`;
+  return apiRequest("get", url);
+};
+// export const getUnitByIdAPI = (id: any) => {
+//   return apiRequest("get", `${Constants.GetUnitById}${id}`);
+// };
+// export const DeleteUnit = (id: any) => {
+//   return apiRequest("delete", `${Constants.UnitDelete}${id}`);
+// };
+// export const GetUnitByItem = (id: any, search: any, firmid : any) => {
+//   return apiRequest("get", `${Constants.UnitItemList}${id}/firm/${firmid}?searchTerm=${search}`);
+// };
+
+export const addUnitConversionAPI = (formData: any, firmId: any) => {
+  const url = `${Constants.unitConversion}${firmId}`;
+  return apiRequest("post", url, formData);
+};

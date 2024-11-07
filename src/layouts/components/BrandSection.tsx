@@ -1,18 +1,11 @@
 "use client";
-import { useContext, useEffect, useState } from "react";
+import {  useEffect, useState } from "react";
 import DrawerToggle from "./DrawerToggle";
-import { LayoutContext } from "../context";
-import Image from "next/image";
 import Modal from "@/app/Components/Modal";
 import Addfirmform from "@/app/Components/Addfirmform";
-
-import { useSession } from "next-auth/react";
 import { myCompany } from "@/controller/posauth";
 
 export default function BrandSection() {
-  const { isDrawerCollapsed } = useContext(LayoutContext);
-  const session = useSession();
-  const token = localStorage.getItem("authToken");
   const [data, setData] = useState<any>([]);
   useEffect(() => {
     myCompany()
@@ -22,7 +15,7 @@ export default function BrandSection() {
       .catch((err) => {
         console.log("error", err);
       });
-  }, [token]);
+  }, []);
   
 
   const [open, setOpen] = useState(false);

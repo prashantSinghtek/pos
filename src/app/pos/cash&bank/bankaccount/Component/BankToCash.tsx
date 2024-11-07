@@ -1,14 +1,11 @@
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { customStyles } from '@/app/Components/Customstyle';
 import TextInput from '@/app/Components/Textinput';
-import pos_controller from '@/controller/posauth';
 import { Formik } from 'formik';
 import { useSession } from 'next-auth/react';
 import React, { useState } from 'react'
 import Select from "react-select";
 
 export default function BankToCash({ data,SetBankToCashTransfer }: any) {
-    const firmid = localStorage.getItem("selectedStore");
     const [fieldValues, setFieldValues] = useState<File[]>([]);
     const handleImageChanges = (newFiles: FileList | null) => {
         if (newFiles) {
@@ -16,9 +13,8 @@ export default function BankToCash({ data,SetBankToCashTransfer }: any) {
         }
     };
     const [Selectedbank, setSelectedbank] = useState<any>()
-    const auth = new pos_controller()
     const session = useSession();
-    const token = localStorage.getItem("authToken");
+    const token = ""
 
     const allbank = data?.map((option: any) => ({
       value: option?.displayName?.toUpperCase(),
@@ -55,15 +51,15 @@ export default function BankToCash({ data,SetBankToCashTransfer }: any) {
                         formData.append("adjustmentDate", values.date);
                         formData.append("description", values.Discription);
                         formData.append("bankAccountId", Selectedbank);
-                        formData.append("firmId", firmid || "");
+                        formData.append("firmId",  "");
                         fieldValues.forEach((file: File) => {
                             formData.append("file", file);
                         });
 
-                        const response = await AddBankToCash(token , formData)
+                        // const response = await AddBankToCash(token , formData)
                         SetBankToCashTransfer(false)
                         // toast.success("Bank Created.")
-                        console.log(response);
+                        // console.log(response);
                     } catch (error) {
                         console.error("Error submitting form:", error);
                         // toast.error("Error In Creating the Bank.")

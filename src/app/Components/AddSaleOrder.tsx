@@ -24,20 +24,18 @@ const validationSchema = Yup.object({
     description: Yup.string().required("Required"),
 });
 
-const firmid = localStorage.getItem("selectedStore");
 
 export default function AddSaleOrder({ product }: any) {
     console.log("product", product)
     const session = useSession();
-    const token = localStorage.getItem("authToken");
-    const auth = new pos_controller()
-    useEffect(() => {
-        Getparty(token, firmid)
-            .then((res) => { console.log(">>>>>>>>>>>", res); setParties(res?.data?.data) })
-            .catch((err) => {
-                console.log(err);
-            });
-    }, [token, firmid]);
+    const token = ""
+    // useEffect(() => {
+    //     Getparty(token, firmid)
+    //         .then((res) => { console.log(">>>>>>>>>>>", res); setParties(res?.data?.data) })
+    //         .catch((err) => {
+    //             console.log(err);
+    //         });
+    // }, [token, firmid]);
     const [parties, setParties] = useState<any>([]);
     const allparties = parties?.map((option: any) => ({
         value: option?.partyName?.toUpperCase(),
@@ -116,9 +114,9 @@ export default function AddSaleOrder({ product }: any) {
                 items: selectedProduct
             }
             console.log(value)
-            const res = await AddsaleOrder(token, firmid, value)
-            // console.log("sale added", res)
-            router.push(res)
+            // const res = await AddsaleOrder(token, firmid, value)
+            // // console.log("sale added", res)
+            // router.push(res)
 
             // res.setHeader('Content-Type', 'application/pdf');
             // await CreateInvoiceItem(values,SelectedParties,SelectedPaymenttype, storeid, firm, selectedProduct, totalTax, discountAmount, totalAmount)
@@ -132,13 +130,13 @@ export default function AddSaleOrder({ product }: any) {
         }
     };
 
-    useEffect(() => {
-        State(token).then((res) => {
-            setData(res?.data);
-        }).catch((err) => {
-            console.log(err);
-        });
-    }, [token]);
+    // useEffect(() => {
+    //     State(token).then((res) => {
+    //         setData(res?.data);
+    //     }).catch((err) => {
+    //         console.log(err);
+    //     });
+    // }, [token]);
     const stateoption = data?.map((option: any) => ({
         value: option?.name.toUpperCase(),
         label: option?.name.toUpperCase(),

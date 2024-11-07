@@ -8,14 +8,11 @@ import AddEstimmate from "@/app/Components/AddEstimate";
 import { getProducts } from "@/controller/posauth";
 
 
-const firmid = localStorage.getItem("selectedStore");
 export default function Estimate({res}:any) {
     const [tabs, setTabs] = useState([{ id: 1, isChecked: false }]);
     const [activeTab, setActiveTab] = useState<any>(1);
     const [product, setProduct] = useState()
     const session = useSession();
-    const token = localStorage.getItem("authToken");
-console.log("=>>>>>>>>>>>>>>>>>",res)
     const addNewTab = () => {
         const newId = tabs.length ? tabs[tabs.length - 1].id + 1 : 1;
         setTabs([...tabs, { id: newId, isChecked: false }]);
@@ -29,9 +26,7 @@ console.log("=>>>>>>>>>>>>>>>>>",res)
             )
         );
     };
-    useEffect(() => {
-        getProducts(firmid).then((res) => { setProduct(res.data) }).catch((err) => console.log(err))
-    }, [token, firmid])
+
 
     const removeTab = (tabId: any) => {
         const newTabs = tabs.filter((tab) => tab.id !== tabId);

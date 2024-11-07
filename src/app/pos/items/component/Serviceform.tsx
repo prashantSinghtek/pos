@@ -1,231 +1,273 @@
 import Tabs from "@/app/Components/Tabs";
 import TextInput from "@/app/Components/Textinput";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { IoSettings } from "react-icons/io5";
 import { RiDropboxFill } from "react-icons/ri";
 import Pricing from "./Pricing";
+import Stock from "./Stock";
 import { customStyles } from "@/app/Components/Customstyle";
+import { Formik } from "formik";
 import Select from "react-select";
-import { ErrorMessage, Field, Formik } from "formik";
+import * as Yup from "yup"; // Import Yup for validation
 import { useDispatch, useSelector } from "react-redux";
-import { selectServiceForm } from "@/Redux/Item/selectors";
-import * as Yup from "yup";
+import { selectProductForm } from "@/Redux/Item/selectors";
+import { getCategoryByFirm, getUnit, myCompany } from "@/controller/posauth";
+import {
+  addItem,
+  chnageAddItemModelState,
+  updateProductForm,
+} from "@/Redux/Item/reducer";
+import { FiLoader } from "react-icons/fi";
 
-export default function ProductForm({
-    selectedproduct,
-}: any) {
-  const [selectedunit, setSelectedUnit] = useState<any>(
-    selectedproduct?.service?.unit || null
-  );
-  const [selectedcategory, setSelectedCategory] = useState<any>(null);
-  const [unit, setUnit] = useState<any[]>([]);
-  const [category, setCategory] = useState<any[]>([]);
+export default function ProductForm() {
+  const [selectedUnit, setSelectedUnit] = useState<any>(null);
+  const [selectedCategory, setSelectedCategory] = useState<any>(null);
+  const [unit, setUnit] = useState<any>([]);
+  const [categoryIds, setCategory] = useState<any>([]);
+  const [fieldValue, setFieldValue] = useState<any>([]);
+
   const handleImageChange = (newFiles: FileList | null) => {
     if (newFiles) {
-      // setFieldValue(Array.from(newFiles));
+      setFieldValue(Array.from(newFiles));
     }
   };
-  const formData = useSelector(selectServiceForm);
-  const generateRandomNumber = () => {
+
+  const allCategory = categoryIds?.map((option: any) => ({
+    value: option.id,
+    label: option.name.toUpperCase(),
+    id: option.id,
+  }));
+
+  const allUnits = unit?.map((option: any) => ({
+    value: option.id,
+    label: option.unit?.toUpperCase(),
+    id: option.id,
+  }));
+
+  // Generates random number and sets it in Formik form values
+  const generateRandomNumber = (formikSetFieldValue: any) => {
     const randomNum = Math.floor(Math.random() * 9000000000) + 1000000000;
-    return randomNum.toString(); // Return the random code as a string
+    formikSetFieldValue("itemCode", randomNum.toString());
   };
 
- const handleUnitChange = (selectedOption: any) => {
-    setSelectedUnit(selectedOption);
-  };
+  const [firmId, setFirmId] = useState("");
 
-  const handleCategoryChange = (selectedOption: any) => {
-    setSelectedCategory(selectedOption);
-  };
+  useEffect(() => {
+    myCompany()
+      .then((res) => {
+        setFirmId(res[0].id);
+      })
+      .catch((err: any) => {});
+  }, []);
 
-  const allcategory = category?.map((option: any) => ({
-    value: option.name.toUpperCase(),
-    label: option.name.toUpperCase(),
-    id: option.id,
-  }));
-
-  const allunits = unit?.map((option: any) => ({
-    value: option.name.toUpperCase(),
-    label: option.name.toUpperCase(),
-    id: option.id,
-  }));
-
-  const submitForm = async (
-    values: any,
-    { setSubmitting, resetForm, setTouched }: any
-  ) => {
-    // Mark all fields as touched to trigger validation
-    setTouched({
-      serviceName: true,
-      serviceHSN: true,
-      serviceCode: true,
-      unit: true,
-      Category: true,
-    });
-
-    console.log("submitted values", values);
-
-    // Check if the form is valid
-    const isValid = await validationSchema.isValid(values);
-    if (isValid) {
-      console.log("Form Submitted:", values);
-    } else {
-      console.log("Form validation failed");
-    }
-
-    setSubmitting(false);
-  };
-
-  const validationSchema = Yup.object().shape({
-    serviceName: Yup.string().required("Service name is required"),
-    serviceHSN: Yup.string().required("HSN is required"),
-    serviceCode: Yup.string().required("Service code is required"),
-  });
-
-  const content = [<Pricing />];
   const heading = [
     {
       icon: <RiDropboxFill size={25} />,
       title: "PRICING",
     },
+    {
+      icon: <IoSettings size={25} />,
+      title: "STOCK",
+    },
   ];
+
+  const dispatch = useDispatch();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const submitForm = async (values: any) => {
+    try {
+      setIsSubmitting(true);
+      Object.entries(values).forEach(([key, value]) => {
+        dispatch(updateProductForm({ key: key, value: value }));
+      });
+      dispatch(
+        addItem({
+          callback() {
+            setIsSubmitting(false);
+            dispatch(chnageAddItemModelState(false));
+          },
+        })
+      );
+    } catch (err) {
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const content = [
+    <Pricing key="pricing" />,
+    <Stock key="stock" />
+  ];
+
+  const formData = useSelector(selectProductForm);
+
+  useEffect(() => {
+    if (!firmId) {
+      return;
+    }
+    getUnit(firmId, "")
+      .then((res) => {
+        setUnit(res.data);
+      })
+      .catch((err) => {});
+
+    getCategoryByFirm(firmId)
+      .then((res) => {
+        setCategory(res.data);
+      })
+      .catch((err) => {});
+    dispatch(updateProductForm({ key: "firmId", value: firmId }));
+  }, [firmId]);
+
+  // Validation Schema
+  const validationSchema = Yup.object().shape({
+    itemName: Yup.string().required("Item Name is required"),
+    itemHsn: Yup.string().required("Item HSN is required"),
+    itemCode: Yup.string().required("Item Code is required"),
+    categoryIds: Yup.number().required("Category is required"),
+    unit: Yup.string().required("Unit is required"),
+  });
 
   return (
     <div>
       <Formik
-        initialValues={formData}
-        validationSchema={validationSchema}
+        initialValues={{
+          itemName: formData.itemName || "",
+          itemHsn: formData.itemHsn || "",
+          itemCode: formData.itemCode || "",
+          categoryIds: formData.categoryIds, // Add initial value for categoryIds
+          unit: formData.unit, // Add initial value for unit
+        }}
         onSubmit={submitForm}
-        validateOnMount={true} // Ensure validation is performed on mount
-        validateOnChange={false} // Prevent validation on each change
+        validationSchema={validationSchema} // Use validation schema
       >
-        {({ handleSubmit, isSubmitting, errors, touched, setFieldValue }) => (
+        {({
+          handleChange,
+          handleSubmit,
+          values,
+          setFieldValue,
+          errors,
+          touched,
+        }: any) => (
           <>
-            <form onSubmit={handleSubmit}>
-              <div className="flex justify-between items-center py-3 border-b">
-                <div>Add Product</div>
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="bg-[#fda80c] rounded-lg px-5 py-2 text-white"
-                >
-                  {formData.id ? "Update" : "Add"}
-                </button>
+            <div className="py-3 border-b border-groove flex justify-between items-center">
+              <div>Add Service</div>
+              <button
+                className="bg-[#FF8900] my-5 w-fit rounded-lg px-5 text-white py-2 flex items-center justify-center"
+                onClick={() => handleSubmit()}
+                disabled={isSubmitting} // Disable button while submitting
+              >
+                {isSubmitting ? (
+                  <FiLoader className="animate-spin mr-2" /> // Loader icon
+                ) : (
+                  "Submit"
+                )}
+              </button>
+            </div>
+
+            <div className="flex items-end gap-5 my-5 w-full">
+              <div className="w-[30%]">
+                <TextInput
+                  name="itemName"
+                  type="text"
+                  label="Service Name"
+                  value={values.itemName}
+                  error={errors.itemName}
+                  onChange={handleChange("itemName")}
+                  istouched={touched.itemName}
+                  className="text-gray-800 text-base w-[30%]"
+                />
               </div>
 
-              <div className="flex items-end gap-5 my-5 w-full">
-                <div className="w-[33%]">
-                  <Field name="serviceName">
-                    {({ field }: any) => (
-                      <TextInput
-                        {...field}
-                        type="text"
-                        label="Service Name"
-                        istouched={touched.serviceName}
-                        className="text-gray-800 text-base w-full"
-                      />
-                    )}
-                  </Field>
-                  <ErrorMessage
-                    name="serviceName"
-                    component="div"
-                    className="text-red-500 text-sm"
-                  />
-                </div>
-
-                <div className="w-[33%]">
-                  <Field name="serviceHSN">
-                    {({ field }: any) => (
-                      <TextInput
-                        {...field}
-                        type="text"
-                        label="HSN"
-                        istouched={touched.serviceHSN}
-                        className="text-gray-800 text-base w-full"
-                      />
-                    )}
-                  </Field>
-                  <ErrorMessage
-                    name="serviceHSN"
-                    component="div"
-                    className="text-red-500 text-sm"
-                  />
-                </div>
-
-                <div className="w-[25%] flex flex-col space-y-2">
-                  <div className="text-[#808080]">Unit</div>
-                  <Select
-                    name="unit"
-                    options={allunits}
-                    value={selectedunit}
-                    onChange={handleUnitChange}
-                    styles={customStyles}
-                    className="w-full bg-white rounded-md text-primary text-sm"
-                  />
-                </div>
-              </div>
-              <div className="flex items-end gap-5 my-5 w-full">
-                <div className="w-[30%] flex flex-col space-y-2">
-                  <div className="text-[#808080]">Category</div>
-                  <Select
-                    name="Category"
-                    options={allcategory}
-                    value={selectedcategory}
-                    onChange={handleCategoryChange}
-                    styles={customStyles}
-                    className="w-full bg-white rounded-md text-primary text-sm"
-                  />
-                </div>
-
-                <div className="w-[33%] flex items-center">
-                  {/* Service Code Input */}
-                  <Field name="serviceCode">
-                    {({ field, form }: any) => (
-                      <div className="w-full relative">
-                        <TextInput
-                          {...field}
-                          disabled={true}                               
-                          type="text"
-                          label="Service Code"
-                          istouched={touched.serviceCode}
-                          className="text-gray-800 text-base w-full"
-                        />
-                        <ErrorMessage
-                          name="serviceCode"
-                          component="div"
-                          className="text-red-500 text-sm"
-                        />
-                      </div>
-                    )}
-                  </Field>
-                  {/* Assign Code Button */}
-                  <div
-                    className="ml-3 px-5 h-[40px] text-xs border border-gray-300 bg-[#E1F2FB] text-gray-500 rounded-lg flex justify-center items-center cursor-pointer"
-                    onClick={() => {
-                      const randomCode = generateRandomNumber(); // Generate the random code
-                      setFieldValue("serviceCode", randomCode); // Set the random code in the serviceCode field
-                    }}
-                  >
-                    Assign Code
-                  </div>
-                </div>
+              <div className="w-[30%]">
+                <TextInput
+                  name="itemHsn"
+                  type="text"
+                  label="Service HSN"
+                  value={values.itemHsn}
+                  error={errors.itemHsn}
+                  onChange={handleChange("itemHsn")}
+                  istouched={touched.itemHsn}
+                  className="text-gray-800 text-base w-[30%]"
+                />
               </div>
 
-              <div className="flex items-end gap-5 my-5 w-full">
-                <div className="w-[20%] flex-col space-y-2">
-                  <div>Image</div>
-                  <input
-                    type="file"
-                    onChange={(e) => handleImageChange(e.target.files)}
-                    accept="image/*"
-                    multiple
-                    className="text-gray-500 border-gray-400 border rounded"
-                  />
-                </div>
+              <div className="w-[25%] flex flex-col space-y-2 ">
+                <div className="text-[#808080]">Unit</div>
+                <Select
+                  name="unit"
+                  options={allUnits}
+                  value={selectedUnit}
+                  onChange={(selectedOption) => {
+                    setSelectedUnit(selectedOption);
+                    setFieldValue("unit", selectedOption?.value); // Set the Formik value
+                  }}
+                  styles={customStyles}
+                  className="w-full bg-white rounded-md outline-none font-medium text-primary text-sm"
+                />
+                {errors.unit && touched.unit && (
+                  <div className="text-red-500">{errors.unit}</div>
+                )}
+              </div>
+            </div>
+
+            <div className="flex items-end gap-5 my-5 w-full">
+              <div className="w-[30%] flex flex-col space-y-2 ">
+                <div className="text-[#808080]">Category</div>
+                <Select
+                  name="categoryIds"
+                  options={allCategory}
+                  value={selectedCategory}
+                  onChange={(selectedOption) => {
+                    setSelectedCategory(selectedOption);
+                    setFieldValue("categoryIds", selectedOption?.value); // Set the Formik value
+                  }}
+                  styles={customStyles}
+                  className="w-full bg-white rounded-md outline-none font-medium text-primary text-sm"
+                />
+                {errors.categoryIds && touched.categoryIds && (
+                  <div className="text-red-500">{errors.categoryIds}</div>
+                )}
               </div>
 
-                <Tabs heading={heading} content={content} />
-            </form>
+              <div className="w-[30%]">
+                <TextInput
+                  name="itemCode"
+                  type="text"
+                  disabled
+                  label="Service Code"
+                  value={values.itemCode}
+                  error={errors.itemCode}
+                  onChange={handleChange("itemCode")}
+                  istouched={touched.itemCode}
+                  className="text-gray-800 text-base w-[30%]"
+                />
+              </div>
+
+              <div
+                className="px-5 h-[40px] text-xs border border-gray-300 bg-[#E1F2FB] text-gray-500 rounded-lg flex justify-center items-center cursor-pointer"
+                onClick={() => generateRandomNumber(setFieldValue)}
+              >
+                Assign code
+              </div>
+            </div>
+
+            <div className="flex items-end gap-5 my-5 w-full">
+              <div className="w-[20%] flex-col space-y-2 ">
+                <div>Image</div>
+                <input
+                  type="file"
+                  id="fileInput"
+                  onChange={(e) => {
+                    handleImageChange(e.target.files);
+                    setFieldValue("path", e.target.files);
+                  }}
+                  className="border-dashed border-2 rounded-md px-3 py-2 text-center border-[#FF6E3F] bg-[#FEE8E1] text-[#FF6E3F]"
+                />
+              </div>
+            </div>
+            <div className="py-3 border-t border-groove">
+              <Tabs heading={heading} content={content} />
+            </div>
           </>
         )}
       </Formik>

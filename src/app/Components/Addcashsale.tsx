@@ -25,19 +25,11 @@ const validationSchema = Yup.object({
   description: Yup.string().required("Required"),
 });
 
-const firmid = localStorage.getItem("selectedStore");
 
 export default function AddCashSale({ product ,defaultSelectedproduct}: any) {
 
   const session = useSession();
-  const token = localStorage.getItem("authToken");
-  // useEffect(() => {
-  //   getParty(firmid)
-  //     .then((res) => { console.log(">>>>>>>>>>>", res); setParties(res?.data?.data) })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // }, [token, firmid]);
+
   const [parties, setParties] = useState<any>([]);
   
   
@@ -135,7 +127,7 @@ export default function AddCashSale({ product ,defaultSelectedproduct}: any) {
         items: selectedProduct
       }
       console.log(value)
-      const res = await addSaleCash(firmid, value)
+      const res = await addSaleCash("", value)
       router.push(res)
         } catch (error) {
       console.error("Error:", error);
@@ -144,13 +136,13 @@ export default function AddCashSale({ product ,defaultSelectedproduct}: any) {
     }
   };
 
-  useEffect(() => {
-    getState().then((res) => {
-      setData(res?.data);
-    }).catch((err) => {
-      console.log(err);
-    });
-  }, [token]);
+  // useEffect(() => {
+  //   getState().then((res) => {
+  //     setData(res?.data);
+  //   }).catch((err) => {
+  //     console.log(err);
+  //   });
+  // }, [token]);
   const stateoption = data?.map((option: any) => ({
     value: option?.name.toUpperCase(),
     label: option?.name.toUpperCase(),

@@ -18,9 +18,8 @@ import { getPaymentOut } from "@/controller/posauth";
 export default function Page() {
   const [open, setOpen] = useState(false);
   const session = useSession();
-  const token = localStorage.getItem("authToken");
+  const token = ""
 
-  const firmid = localStorage.getItem("selectedStore");
   const [data, setData] = useState([]);
   const [allFirm, setAllFirm] = useState(["All Firm", "Sheela Business"]);
   const [selectedAllFirmOption, setSelectedAllFirmOptions] = useState(null);
@@ -37,16 +36,16 @@ export default function Page() {
   const PAGE_SIZE = 4;
   const [currentPage, setCurrentPage] = useState(1);
   
-  useEffect(() => {
-    getPaymentOut(firmid)
-      .then((res) => {
-        setData(res);
-        console.log(res)
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }, [token, open,firmid]);
+  // useEffect(() => {
+  //   getPaymentOut(firmid)
+  //     .then((res) => {
+  //       setData(res);
+  //       console.log(res)
+  //     })
+  //     .catch((err) => {
+  //       console.error(err);
+  //     });
+  // }, [token, open,firmid]);
 
   const header = [
     "Date",

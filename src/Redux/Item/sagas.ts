@@ -10,7 +10,11 @@ import axios, { AxiosResponse } from "axios";
 import {
   addCategory,
   addItem,
+  addUnit,
+  addUnitConversion,
   changeAddCategoryModelState,
+  changeUnitConversionModelState,
+  changeUnitModelState,
   chnageAddItemModelState,
   deleteCategoryById,
   deleteItemById,
@@ -20,6 +24,7 @@ import {
   getItemById,
   getItemList,
   getTransactionByItemId,
+  getUnitList,
   markToTheCategory,
   setCategoryFormData,
   setCategoryist,
@@ -28,6 +33,7 @@ import {
   setProductFormData,
   setSearch,
   setTransactionist,
+  setUnitist,
 } from "./reducer";
 import {
   selectCategoryForm,
@@ -37,11 +43,16 @@ import {
   selectSearchCategory,
   selectSearchCategoryTrasaction,
   selectSearchItem,
+  selectSearchunit,
+  selectUnitConversionForm,
+  selectUnitForm,
 } from "./selectors";
-import { categoryFormInterface, ProductFormInterface } from "./types";
+import { categoryFormInterface, ProductFormInterface, unitConversionFormInterface, unitFormInterface } from "./types";
 import {
   addCategoryAPI,
   addItem as addItemAPI,
+  addUnitAPI,
+  addUnitConversionAPI,
   DeleteCategory,
   DeleteItem,
   getCategoryByFirmId,
@@ -50,6 +61,7 @@ import {
   GetItem,
   getProducts,
   GetTrasactionItem,
+  getUnit,
   markToTheCategoryAPI,
   updateCategoryAPI,
 } from "@/controller/posauth";
@@ -285,6 +297,70 @@ export function* markToTheCategoryRequest(action: {
   }
 }
 
+
+export function* addUnitRequest(action: {
+  payload: { callback: any };
+}): Generator<any, void, any> {
+  const form: unitFormInterface = yield select(selectUnitForm);
+  try {
+    let response;
+    if (form.id) {
+      response = yield call(updateCategoryAPI, form, form.id);
+    } else {
+      response = yield call(addUnitAPI, form);
+    }
+    if (!response || response == undefined || response.status != 200) {
+      toast.error(response?.categoryName || "Something went wrong");
+      return;
+    }
+    yield put(changeUnitModelState(false));
+    toast.success(response?.message);
+    action.payload.callback();
+  } catch (error) {
+    console.error("Error updating item:", error);
+  }
+}
+export function* getUnitListRequest(action: {
+  payload: { callback: any };
+}): Generator<any, void, any> {
+  const firmId: string = yield select(selectFirmId);
+  const search: string = yield select(selectSearchunit);
+  yield delay(1000);
+  const response: any = yield call(
+    getUnit,   firmId,
+    search
+ 
+  ); 
+  yield put(setUnitist(response.data));
+  if (action.payload.callback) {
+    action.payload.callback();
+  }
+}
+
+export function* addUnitConversionRequest(action: {
+  payload: { callback: any };
+}): Generator<any, void, any> {
+  const firmId: string = yield select(selectFirmId);
+
+  const form: unitConversionFormInterface = yield select(selectUnitConversionForm);
+  try {
+    let response;
+    if (form.id) {
+      // response = yield call(updateCategoryAPI, form, form.id);
+    } else {
+      response = yield call(addUnitConversionAPI, form , firmId);
+    }
+    if (!response || response == undefined || response.status != 200) {
+      toast.error(response?.categoryName || "Something went wrong");
+      return;
+    }
+    yield put(changeUnitConversionModelState(false));
+    toast.success(response?.message);
+    action.payload.callback();
+  } catch (error) {
+    console.error("Error updating item:", error);
+  }
+}
 export default function* ItemSaga(): Generator {
   yield takeLatest(addItem, addItemRequest);
   yield takeLatest(getItemList, getItemListRequest);
@@ -305,7 +381,11 @@ export default function* ItemSaga(): Generator {
     markToTheCategory,
     markToTheCategoryRequest
   );
+  // Unit
+  yield takeLatest(addUnit, addUnitRequest);
+  yield takeLatest(getUnitList, getUnitListRequest);
 
+  // Unit_Conversion
 
-  
+  yield takeLatest(addUnitConversion, addUnitConversionRequest);
 }

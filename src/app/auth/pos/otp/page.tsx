@@ -2,14 +2,14 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import TextInput from "@/app/Components/Textinput";
 import { AiFillGooglePlusCircle } from "react-icons/ai";
 import { IoArrowBackCircleOutline } from "react-icons/io5";
-import { BASE_MAIN } from "@/app/config/Constant";
 import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
+import Image from "next/image";
 
 
 const validationSchema = Yup.object().shape({
@@ -20,7 +20,7 @@ interface schema {
   otp: string;
 }
 
-export default function Otppage() {
+function OtpPage() {
     const searchParams = useSearchParams()
     const search = searchParams.get('email')
   const [loading, setLoading] = useState(false);
@@ -45,7 +45,7 @@ const router = useRouter()
         otp: values.otp,
       };
       const res = await axios.post(
-        `${BASE_MAIN}loginAPI/otpVerification`,
+        `${process.env.NEXT_PUBLIC_BASE_MAIN}loginAPI/otpVerification`,
         data,
         {
           headers: {
@@ -68,7 +68,7 @@ const router = useRouter()
     <div className="w-screen h-screen">
       <div className="flex bg-white">
         <div className="w-1/2">
-          <img src="/loginpage.png" alt="" />
+          <Image src="/loginpage.png" alt="" width={500} height={500} layout="responsive" />
         </div>
         <div className="w-1/2 px-20">
           <div className="mt-14">
@@ -121,5 +121,14 @@ const router = useRouter()
         </div>
       </div>
     </div>
+  );
+}
+
+
+export default function OtpPageWrapper() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <OtpPage />
+    </Suspense>
   );
 }

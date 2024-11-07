@@ -57,10 +57,22 @@ export interface TransactionInterface {
   dateOfTransaction: any;
 }
 
-
 export interface categoryFormInterface {
   id: number;
-  categoryName : string;
+  categoryName: string;
+}
+
+export interface unitFormInterface {
+  id: number;
+  name: string;
+  shortName: string;
+}
+
+export interface unitConversionFormInterface {
+  id: number;
+  baseUnit: string;
+  secondaryUnit: string;
+  conversionRate: string;
 }
 
 export interface CombinedInitialState {
@@ -69,19 +81,30 @@ export interface CombinedInitialState {
   addItemModel: boolean;
   itemList: Array<any>;
   searchItem: string;
-  transactionList : Array<TransactionInterface>;
-  search : string;
+  transactionList: Array<TransactionInterface>;
+  search: string;
 
-// Category
+  // Category
   categoryForm: categoryFormInterface;
   categoryModel: boolean;
   categoryList: Array<any>;
   searchCategory: string;
-  categoryTransactionList : Array<TransactionInterface>;
-  searchCategoryTrasaction : string
-  itemSelectedinCatgory :Array<number>
+  categoryTransactionList: Array<TransactionInterface>;
+  searchCategoryTrasaction: string;
+  itemSelectedinCatgory: Array<number>;
 
+  // unit
 
+  unitForm: unitFormInterface;
+  unitModel: boolean;
+  unitList: Array<any>;
+  searchunit: string;
+
+  // unit_Conversion
+  unitConversionForm: unitConversionFormInterface;
+  unitConversionModel: boolean;
+  unitConversionList: Array<any>;
+  searchConversionUnit: string;
 }
 
 export const initialState: CombinedInitialState = {
@@ -138,12 +161,29 @@ export const initialState: CombinedInitialState = {
   itemList: [],
   categoryForm: {
     id: 0,
-    categoryName: ""
+    categoryName: "",
   },
   categoryModel: false,
   categoryList: [],
   searchCategory: "",
   categoryTransactionList: [],
   searchCategoryTrasaction: "",
-  itemSelectedinCatgory :[]
+  itemSelectedinCatgory: [],
+  unitForm: {
+    id: 0,
+    name: "",
+    shortName: ""
+  },
+  unitModel: false,
+  unitList: [],
+  searchunit: "",
+  unitConversionForm: {
+    id: 0,
+    baseUnit: "",
+    secondaryUnit: "",
+    conversionRate: ""
+  },
+  unitConversionModel: false,
+  unitConversionList: [],
+  searchConversionUnit: ""
 };

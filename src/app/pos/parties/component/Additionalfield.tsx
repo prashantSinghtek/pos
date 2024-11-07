@@ -11,47 +11,75 @@ export default function Additionalfield({ setShowButton }: any) {
   const dispatch = useDispatch();
   const formState = useSelector(selectPartyForm);
 
-  // Ensure handleChange accepts keys of partiesFormInterface
-  const handleChange = <K extends keyof partiesFormInterface>(field: K, value: partiesFormInterface[K]) => {
+  // Update the Redux form state
+  const handleChange = <K extends keyof partiesFormInterface>(
+    field: K,
+    value: partiesFormInterface[K]
+  ) => {
     dispatch(updatePartyForm({ key: field, value }));
   };
 
   const validationSchema = Yup.object({
-    additionalFieldOne: Yup.string().required("Additional Field One is required"),
-    additionalFieldTwo: Yup.string().required("Additional Field Two is required"),
-    additionalFieldThree: Yup.string().required("Additional Field Three is required"),
-    additionalfieldFour: Yup.string().required("Additional Field Four is required"),
+    additionalFieldOne: Yup.string().required(
+      "Additional Field One is required"
+    ),
+    additionalFieldTwo: Yup.string().required(
+      "Additional Field Two is required"
+    ),
+    additionalFieldThree: Yup.string().required(
+      "Additional Field Three is required"
+    ),
+    additionalfieldFour: Yup.string().required(
+      "Additional Field Four is required"
+    ),
     valueOne: Yup.boolean(),
     valueTwo: Yup.boolean(),
     valueThree: Yup.boolean(),
     valueFour: Yup.boolean(),
   });
 
+  const initialValues: any = {
+    additionalFieldOne: formState.additionalFieldOne,
+    additionalFieldTwo: formState.additionalFieldTwo,
+    additionalFieldThree: formState.additionalFieldThree,
+    additionalfieldFour: formState.additionalfieldFour,
+    valueOne: formState.valueOne,
+    valueTwo: formState.valueTwo,
+    valueThree: formState.valueThree,
+    valueFour: formState.valueFour,
+    isChecked: formState.isChecked,
+  };
   return (
     <Formik
-      initialValues={formState}
+      initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={(values: partiesFormInterface) => {
-        // Update specific fields only
-        handleChange("additionalFieldOne", values.additionalFieldOne);
-        handleChange("additionalFieldTwo", values.additionalFieldTwo);
-        handleChange("additionalFieldThree", values.additionalFieldThree);
-        handleChange("additionalfieldFour", values.additionalfieldFour);
-        handleChange("valueOne", values.valueOne);
-        handleChange("valueTwo", values.valueTwo);
-        handleChange("valueThree", values.valueThree);
-        handleChange("valueFour", values.valueFour);
-
-        // Optionally, you can perform other actions here, such as setting the show button state
+        [
+          "additionalFieldOne",
+          "additionalFieldTwo",
+          "additionalFieldThree",
+          "additionalfieldFour",
+          "valueOne",
+          "valueTwo",
+          "valueThree",
+          "valueFour",
+        ].forEach((key) => {
+          handleChange(
+            key as keyof partiesFormInterface,
+            values[key as keyof partiesFormInterface]
+          );
+        });
         setShowButton(true);
       }}
     >
-      {() => (
+      {({ setFieldValue }) => (
         <Form>
-          {[{ field: "additionalFieldOne", value: "valueOne" },
+          {[
+            { field: "additionalFieldOne", value: "valueOne" },
             { field: "additionalFieldTwo", value: "valueTwo" },
             { field: "additionalFieldThree", value: "valueThree" },
-            { field: "additionalfieldFour", value: "valueFour" }].map((item, index) => (
+            { field: "additionalfieldFour", value: "valueFour" },
+          ].map((item, index) => (
             <div key={index} className="my-4">
               {/* Text input */}
               <Field name={item.field}>
@@ -75,12 +103,19 @@ export default function Additionalfield({ setShowButton }: any) {
               <div className="flex items-center gap-4 my-4">
                 <label>{`Value ${index + 1}`}</label>
                 <Field name={item.value}>
-                  {({ field }: any) => (
+                  {({ field, form }: any) => (
                     <input
                       type="checkbox"
                       {...field}
-                      checked={field.value}
-                      onChange={(e) => handleChange(item.value as keyof partiesFormInterface, e.target.checked)}
+                      checked={form.values[item.value]} // Ensure checked state syncs with Formik
+                      onChange={(e) => {
+                        const checked = e.target.checked;
+                        setFieldValue(item.value, checked); // Update Formik state
+                        handleChange(
+                          item.value as keyof partiesFormInterface,
+                          checked
+                        ); // Update Redux
+                      }}
                       className="w-[20px] h-[20px]"
                     />
                   )}

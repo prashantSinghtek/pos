@@ -1,6 +1,5 @@
 import { customStyles } from '@/app/Components/Customstyle';
 import TextInput from '@/app/Components/Textinput';
-import pos_controller from '@/controller/posauth';
 import { Formik } from 'formik';
 import { useSession } from 'next-auth/react';
 import React, { useState } from 'react'
@@ -9,7 +8,6 @@ import Select from "react-select";
 
 
 export default function Adjustmentbank({ data, SetAdjusmentBankEntry }: any) {
-    const firmid = localStorage.getItem("selectedStore");
     const [fieldValues, setFieldValues] = useState<File[]>([]);
     const handleImageChanges = (newFiles: FileList | null) => {
         if (newFiles) {
@@ -19,9 +17,8 @@ export default function Adjustmentbank({ data, SetAdjusmentBankEntry }: any) {
     const [Selectedbank, setSelectedbank] = useState<any>()
     const [Selectedpaymenttype, setSelectedpaymenttype] = useState<any>()
     const [paymenttype, setPaymenttype] = useState<any>(["REDUCE_BALANCE", "ADD_BALANCE"])
-    const auth = new pos_controller()
     const session = useSession();
-    const token = localStorage.getItem("authToken");
+    const token = ""
 
     const allbank = data?.map((option: any) => ({
         value: option?.displayName?.toUpperCase(),
@@ -66,14 +63,14 @@ export default function Adjustmentbank({ data, SetAdjusmentBankEntry }: any) {
                         formData.append("amount", values.Amount || "");
                         formData.append("adjustmentDate", values.date || "");
                         formData.append("description", values.Discription || "");
-                        formData.append("firmId", firmid || "");
+                        formData.append("firmId",  "");
                         formData.append("bankAdjusmentType", Selectedpaymenttype || "");
                         fieldValues.forEach((file: File) => {
                             formData.append("file", file);
                         });
 
-                        const response = await AddAdjusmentBank(token, Selectedbank, formData);
-                        console.log(response);
+                        // const response = await AddAdjusmentBank(token, Selectedbank, formData);
+                        // console.log(response);
                         SetAdjusmentBankEntry(false);
                         // toast.success("Bank Created.")
                     } catch (error) {

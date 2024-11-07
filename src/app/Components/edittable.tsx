@@ -818,10 +818,10 @@ const EditTable = ({
                                     <input
                                         className="mr-1"
                                         type="checkbox"
-                                        checked={value}
-                                        onChange={() => setValue(!value)}
+                                        // checked={value}
+                                        // onChange={() => setValue(!value)}
                                     />
-                                    <label>{label}</label>
+                                    {/* <label>{label}</label> */}
                                 </div>
                             ))}
                         </div>

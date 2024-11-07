@@ -8,9 +8,12 @@ import { selectFirmId } from "@/Redux/Parties/selectors";
 import {
   deleteCategoryById,
   deleteItemById,
+  deleteUnitById,
   getCategoryist,
   getItemList,
+  getUnitList,
 } from "@/Redux/Item/reducer";
+import { getUnit } from "@/controller/posauth";
 
 const List = ({ listdata, onselected, page, handleEdit }: any) => {
   const path = usePathname();
@@ -69,11 +72,27 @@ const List = ({ listdata, onselected, page, handleEdit }: any) => {
           },
         })
       );
+    } else if (page == "unit") {
+      dispatch( 
+        deleteUnitById({
+          itemId: selected,
+          callback() {
+            dispatch(
+              getUnitList({
+                callback() {},
+              })
+            );
+          },
+        })
+      );
     }
   };
+
+  console.log(listdata, page, "listdata");
+
   return (
     <>
-      <div className="flex flex-col space-y-4 px-4 mt-3">
+      <div className="flex flex-col space-y-4 px-4 mt-3 h-[500px] overflow-y-scroll scrollbar-thin">
         {listdata?.length > 0 && (
           <ul className="list-disc list-inside space-y-3 ">
             {listdata?.map((item: any, itemIndex: number) => (

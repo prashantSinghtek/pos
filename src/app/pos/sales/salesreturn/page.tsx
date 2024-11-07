@@ -45,8 +45,7 @@ export default function Page() {
 
   const [open, setOpen] = useState(false);
   const session = useSession();
-  const token = localStorage.getItem("authToken");
-  const firmid = localStorage.getItem("selectedStore");
+  const token = ""
   const PAGE_SIZE = 4;
 
   const [data, setData] = useState([]);
@@ -79,16 +78,16 @@ export default function Page() {
 
 
 
-  useEffect(() => {
-    getSaleReturn(firmid)
-      .then((res) => {
-        setData(res.data);
-        // console.log(res, "===res");
-      })
-      .catch((error) => {
-        console.error(error);
-      })
-  }, [token, firmid])
+  // useEffect(() => {
+  //   getSaleReturn(firmid)
+  //     .then((res) => {
+  //       setData(res.data);
+  //       // console.log(res, "===res");
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     })
+  // }, [token, firmid])
 
   return (
     <div className="mr-5">

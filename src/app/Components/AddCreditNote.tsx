@@ -11,7 +11,7 @@ import Select from "react-select";
 import { customStyles } from "./Customstyle";
 
 import Table from "./Addsaletable";
-import { addSaleReturn, getParty, getState } from "@/controller/posauth";
+import { addSaleReturn,  getState } from "@/controller/posauth";
 
 const validationSchema = Yup.object({
     partiesName: Yup.string().required("Required"),
@@ -25,19 +25,17 @@ const validationSchema = Yup.object({
     description: Yup.string().required("Required"),
 });
 
-const firmid = localStorage.getItem("selectedStore");
 
 export default function AddSaleCredit({ product }: any) {
     console.log("product", product)
     const session = useSession();
-    const token = localStorage.getItem("authToken");
-    useEffect(() => {
-        getParty(firmid)
-            .then((res) => { console.log(">>>>>>>>>>>", res); setParties(res?.data?.data) })
-            .catch((err) => {
-                console.log(err);
-            });
-    }, [token, firmid]);
+    // useEffect(() => {
+    //     getParty(firmid)
+    //         .then((res) => { console.log(">>>>>>>>>>>", res); setParties(res?.data?.data) })
+    //         .catch((err) => {
+    //             console.log(err);
+    //         });
+    // }, [token, firmid]);
     const [parties, setParties] = useState<any>([]);
     const allparties = parties?.map((option: any) => ({
         value: option?.partyName?.toUpperCase(),
@@ -113,7 +111,7 @@ export default function AddSaleCredit({ product }: any) {
                 items: selectedProduct
             }
             // console.log(value)
-            const res = await addSaleReturn(firmid, value)
+            const res = await addSaleReturn("", value)
             // console.log("AddSaleReturn added", res)
             router.push(res)
 
@@ -128,7 +126,7 @@ export default function AddSaleCredit({ product }: any) {
             setSubmitting(false);
         }
     };
-
+const token = ""
     useEffect(() => {
         getState().then((res) => {
             setData(res?.data);

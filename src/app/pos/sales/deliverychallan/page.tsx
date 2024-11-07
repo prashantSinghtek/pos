@@ -17,10 +17,9 @@ interface Filters {
   [key: string]: string;
 }
 
-const firmid = localStorage.getItem("selectedStore");
 export default function Page() {
   const session = useSession();
-  const token = localStorage.getItem("authToken");
+  const token = ""
   console.log("sessionPage", session)
   const [data, setData] = useState([])
   const [Returndata, setReturnData] = useState([])

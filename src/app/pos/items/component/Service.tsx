@@ -4,23 +4,43 @@ import List from "@/app/Components/List";
 import Table from "@/app/Components/Table";
 import TextInput from "@/app/Components/Textinput";
 import React, { useEffect, useState } from "react";
+import { MdOutlineEmail } from "react-icons/md";
 import { IoPersonOutline, IoPersonSharp } from "react-icons/io5";
+import { RiFileExcel2Line, RiPagesLine } from "react-icons/ri";
 import { IoMdAdd, IoMdCard } from "react-icons/io";
 import Modal from "@/app/Components/Modal";
 import Partiescard from "../../parties/component/partiescard";
+import { HiAdjustmentsHorizontal } from "react-icons/hi2";
+import Productfrom from "./Productfrom";
+import { useRouter } from "next/navigation";
+import Stockadd from "./Stockadd";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  selectAddItemModel,
+  selectItemList,
+  selectProductForm,
+  selectSearch,
+  selectSearchItem,
+  selectTransactionList,
+} from "@/Redux/Item/selectors";
+import {
+  chnageAddItemModelState,
+  getItemById,
+  getItemList,
+  getTransactionByItemId,
+  setSearch,
+  setSearchItemName,
+} from "@/Redux/Item/reducer";
+import { selectFirmId } from "@/Redux/Parties/selectors";
 import Serviceform from "./Serviceform";
-import { getParticularService, getService } from "@/controller/posauth";
-
-// import { PiMapPinAreaBold } from "react-icons/pi";
-
 export default function Service() {
-  const [selectedtab, setSelectedtab] = useState(1);
-  const [modalopen, setModalopen] = useState(false);
+  const [selectedproduct, setSelectedProduct] = useState<any>();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [modalOpenFrom, setModalOpenFrom] = useState("");
   const [adjustitemmodalopen, setAdjustitemmodalopen] = useState(false);
-  const firmid = localStorage.getItem("selectedStore");
-  const token = localStorage.getItem("authToken");
-  const [service, setService] = useState([]);
-  const [Particularservice, setParticularService] = useState<any>([]);
+  const Router = useRouter();
+  const [activeTab, setActiveTab] = useState<any>(1);
+
   const header = [
     "Type",
     "Invoice No.",
@@ -30,33 +50,80 @@ export default function Service() {
     "Price/Unit",
     "Status",
   ];
+  const addItemModel = useSelector(selectAddItemModel);
+  const dispatch = useDispatch();
+  const searchName = useSelector(selectSearch);
+  const firmId = useSelector(selectFirmId);
+  useEffect(() => {
+    if (!firmId) {
+      return;
+    }
+    dispatch(
+      getItemList({
+        firmId: firmId,
+        callback() { },
+      })
+    );
+
+    return () => { };
+  }, [firmId]);
 
   useEffect(() => {
-    getService(firmid)
-      .then((res) => {
-        setService(res.data);
-        console.log(res);
+    dispatch(
+      getItemList({
+        firmId: firmId,
+        callback() { },
       })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [firmid, token]);
-  useEffect(() => {
-    getParticularService(selectedtab)
-      .then((res) => {
-        // setService(res.data)
-        setParticularService(res?.data?.itemService);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [selectedtab, token]);
+    );
 
+    return () => { };
+  }, [searchName]);
+
+  const list = useSelector(selectItemList);
+  const [setselectedId, setSetselectedId] = useState("");
+  const handleEdit = (Id: any) => {
+    setSetselectedId(Id);
+    dispatch(
+      getItemById({
+        itemId: Id,
+        callback() { },
+      })
+    );
+    dispatch(
+      getTransactionByItemId({
+        itemId: Id,
+        callback() { },
+      })
+    );
+  };
+  const search = useSelector(selectSearchItem);
+  useEffect(() => {
+    if (!setselectedId) {
+      return;
+    }
+    dispatch(
+      getTransactionByItemId({
+        itemId: setselectedId,
+        callback() { },
+      })
+    );
+    return () => { };
+  }, [search]);
+
+  const transactionList = useSelector(selectTransactionList);
+  const data = useSelector(selectProductForm);
   return (
     <>
       <div className="flex justify-between items-center px-1 mt-5"></div>
       <div className="flex flex-wrap lg:flex-nowrap mt-5 gap-5">
-        <div className="sm:w-screen lg:w-[25%] rounded-lg overflow-hidden ">
+        <div
+          className="sm:w-screen lg:w-[25%] rounded-lg h-[80vh] overflow-auto "
+          style={{
+            overflowX: "auto",
+            scrollbarWidth: "none",
+            scrollbarColor: "transparent transparent",
+          }}
+        >
           <div className="bg-white  border border-gray-200 rounded-2xl shadow-sm w-full h-full overflow-x-hidden">
             <div className="flex justify-between px-3 pb-3 pt-1 gap-3 w-[100%] items-center">
               <div className="w-[31%]">
@@ -64,21 +131,35 @@ export default function Service() {
                   name="search"
                   type="text"
                   placeholder="Search By"
+                  value={searchName}
                   label=""
+                  onChange={(e) => {
+                    dispatch(setSearchItemName(e.target.value));
+                  }}
                   istouched={"Touch"}
                   className="text-gray-800 text-base w-full"
                 />
               </div>
               <div
-                className=" bg-[#fda80c] text-sm text-white rounded-lg px-3 overflow-hidden gap-2 items-center mt-2 flex h-[45px]"
+                className=" bg-[#fda80c] text-sm text-white rounded-lg pl-1 pr-[1px] overflow-hidden gap-1 items-center mt-2 flex h-[45px]"
                 title="Add Parties"
               >
                 <div
-                  className="flex items-center"
-                  onClick={() => setModalopen(!modalopen)}
+                  className="flex  items-center"
+                  onClick={() => {
+                    dispatch(chnageAddItemModelState(true));
+                  }}
                 >
                   <IoMdAdd size={25} />
                   Add Service
+                </div>
+                <div
+                  className="border-l bg-[#E9A315] py-[14px] px-[10px] cursor-pointer"
+                  // onClick={() => {
+                  //   Router.push("items/importitems");
+                  // }}
+                >
+                  <RiFileExcel2Line />
                 </div>
               </div>
             </div>
@@ -86,21 +167,19 @@ export default function Service() {
               <div>Service Name</div>
             </div>
             <List
-              listdata={service}
+              listdata={list}
               onselected={(id: number) => {
-                setSelectedtab(id);
+                handleEdit(id);
               }}
               page={"service"}
-              setModalopen={setModalopen}
             />
           </div>
         </div>
-
         <div className="sm:w-screen lg:w-[75%] flex-col gap-5">
           <div>
             <CardPrototype>
               <div className="flex justify-between px-7 pb-5">
-                <div>{Particularservice?.serviceName}</div>
+                <div>{selectedproduct?.item?.itemName}</div>
               </div>
               <div className="flex flex-wrap  ">
                 <Partiescard
@@ -118,28 +197,41 @@ export default function Service() {
               <TextInput
                 name="search"
                 type="text"
+                value={search}
                 placeholder="Search By"
                 label=""
                 istouched={"Touch"}
                 className="text-gray-800 text-base w-full"
+                onChange={(e) => {
+                  dispatch(setSearch(e.target.value));
+                }}
               />
             </div>
           </div>
 
           <div>
-            <Table headerData={header} />
+            <Table
+              headerData={header}
+              bodyData={transactionList}
+              page={"service"}
+            />
           </div>
         </div>
       </div>
-      <Modal isOpen={modalopen} onClose={() => setModalopen(false)}>
-          <Serviceform />
+      <Modal
+        isOpen={addItemModel}
+        onClose={() => {
+          dispatch(chnageAddItemModelState(false));
+        }}
+      >
+        <Serviceform />
       </Modal>
       <Modal
         isOpen={adjustitemmodalopen}
         onClose={() => setAdjustitemmodalopen(false)}
       >
         <>
-          <div className="pb-2 flex">Stock Adjustment</div>
+        <div className="pb-2 flex">Stock Adjustment</div>
           <div className="flex justify-between my-5 border-b border-groove pb-3 ">
             <div className="flex flex-col">
               <div className="text-gray-600 text-sm">Item Name</div>

@@ -55,7 +55,7 @@ export default function Page() {
       children: <Items />,
     },
   ];
-  const component: any = data.find((i) => {
+  const component: any = data?.find((i) => {
     return i.id == selectedtab;
   });
 

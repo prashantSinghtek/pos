@@ -5,6 +5,7 @@ import {
   initialState,
   ProductFormInterface,
   TransactionInterface,
+  unitConversionFormInterface,
 } from "./types";
 import { get, set } from "lodash";
 const itemSlice = createSlice({
@@ -159,6 +160,87 @@ const itemSlice = createSlice({
         callback: () => void;
       }>
     ) => {},
+
+    // unit 
+
+    updateUnitForm: (
+      state,
+      action: PayloadAction<{ key: string; value: any }>
+    ) => {
+      set(state, `unitForm.${action.payload.key}`, action.payload.value);
+    },
+    addUnit: (
+      state,
+      action: PayloadAction<{
+        callback: () => void;
+      }>
+    ) => {},
+    changeUnitModelState: (state, action: PayloadAction<boolean>) => {
+      state.unitModel = action.payload;
+    },
+    setUnitFormData: (
+      state,
+      action: PayloadAction<categoryFormInterface>
+    ) => {
+      state.categoryForm = action.payload;
+    },
+    setUnitist: (state, action: PayloadAction<Array<any>>) => {
+      state.unitList = action.payload;
+    },
+    getUnitList: (
+      state,
+      action: PayloadAction<{
+        callback: () => void;
+      }>
+    ) => {},
+
+    setSearchUnit: (state, action: PayloadAction<string>) => {
+      state.searchunit = action.payload;
+    },
+    deleteUnitById: (
+      state,
+      action: PayloadAction<{
+        itemId: any;
+        callback: () => void;
+      }>
+    ) => {},
+
+    // unit_Conversion
+
+    setSearchUnitConversion: (state, action: PayloadAction<string>) => {
+      state.searchConversionUnit = action.payload;
+    },
+    updateUnitConversionForm: (
+      state,
+      action: PayloadAction<{ key: string; value: any }>
+    ) => {
+      set(state, `unitConversionForm.${action.payload.key}`, action.payload.value);
+    },
+    addUnitConversion: (
+      state,
+      action: PayloadAction<{
+        callback: () => void;
+      }>
+    ) => {},
+    changeUnitConversionModelState: (state, action: PayloadAction<boolean>) => {
+      state.unitConversionModel = action.payload;
+    },
+    setUnitConversionFormData: (
+      state,
+      action: PayloadAction<unitConversionFormInterface>
+    ) => {
+      state.unitConversionForm = action.payload;
+    },
+    setUnitConversionist: (state, action: PayloadAction<Array<any>>) => {
+      state.unitConversionList = action.payload;
+    },
+    getUnitConversionList: (
+      state,
+      action: PayloadAction<{
+        callback: () => void;
+      }>
+    ) => {},
+
   },
 });
 
@@ -192,6 +274,21 @@ export const {
   getCategoryTransactionById ,
   setSearchCategoryName ,
   setitemSelectedinCatgory,
-  markToTheCategory
+  markToTheCategory,
+
+  // unitt 
+  updateUnitForm,
+  addUnit ,
+  changeUnitModelState ,
+  setUnitFormData ,
+  setUnitist ,
+  getUnitList,
+  setSearchUnit,
+  deleteUnitById,
+
+  updateUnitConversionForm,
+  addUnitConversion,
+  changeUnitConversionModelState
+
 } = itemSlice.actions;
 export default itemSlice.reducer; // Ensure that you're exporting the reducer

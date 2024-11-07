@@ -26,19 +26,11 @@ const validationSchema = Yup.object({
   description: Yup.string().required("Required"),
 });
 
-const firmid = localStorage.getItem("selectedStore");
 
 export default function AddCreditSale({ product }: any) {
   console.log("product", product)
   const session = useSession();
-  const token = localStorage.getItem("authToken");
-  // useEffect(() => {
-  //   getParty(firmid)
-  //     .then((res) => { console.log(">>>>>>>>>>>", res); setParties(res?.data?.data) })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // }, [token, firmid]);
+
   const [parties, setParties] = useState<any>([]);
   const allparties = parties?.map((option: any) => ({
     value: option?.partyName?.toUpperCase(),
@@ -112,7 +104,7 @@ export default function AddCreditSale({ product }: any) {
         items: selectedProduct
       }
       console.log(value)
-      const res = await addSaleCredit( firmid, value)
+      const res = await addSaleCredit( "", value)
       console.log("sale added", res)
       router.push(res)
       // await CreateInvoiceItem(values,SelectedParties,SelectedPaymenttype, storeid, firm, selectedProduct, totalTax, discountAmount, totalAmount)
@@ -126,13 +118,13 @@ export default function AddCreditSale({ product }: any) {
     }
   };
 
-  useEffect(() => {
-    getState().then((res) => {
-      setData(res?.data);
-    }).catch((err) => {
-      console.log(err);
-    });
-  }, [token]);
+  // useEffect(() => {
+  //   getState().then((res) => {
+  //     setData(res?.data);
+  //   }).catch((err) => {
+  //     console.log(err);
+  //   });
+  // }, [token]);
   const stateoption = data?.map((option: any) => ({
     value: option?.name.toUpperCase(),
     label: option?.name.toUpperCase(),

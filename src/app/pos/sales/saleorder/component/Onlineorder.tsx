@@ -8,7 +8,7 @@ export default function Onlineorder() {
   return (
     <div>
       <div className="flex justify-center mt-20">
-        <Image src={"/onlineorder.png"} alt="" width={500} height={500} />
+        <Image src={"/onlineorder.png"} alt="" width={500} height={500} layout="responsive"  />
       </div>
       <div className="flex flex-col items-center gap-2 justify-center mt-10">
         <div className="text-gray-800 font-semibold text-lg">

@@ -24,8 +24,7 @@ export default function Page() {
   const [open1, setOpen1] = useState(false);
   const [id1, setId1] = useState()
   const session = useSession();
-  const token = localStorage.getItem("authToken");
-  const firmid = localStorage.getItem("selectedStore");
+  const token = ""
   const PAGE_SIZE = 10;
   const [saleupdate,setSaleupdate] = useState(false)
 
@@ -47,17 +46,17 @@ export default function Page() {
 
   // console.log(data,"===data");
 
-  useEffect(() => {
-    getSale(firmid)
-      .then((res) => {
-        setData(res);
-        setSaleupdate(false)
-        console.log(res, "===res");
-      })
-      .catch((error) => {
-        console.error(error);
-      })
-  }, [token, firmid,saleupdate])
+  // useEffect(() => {
+  //   getSale(firmid)
+  //     .then((res) => {
+  //       setData(res);
+  //       setSaleupdate(false)
+  //       console.log(res, "===res");
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     })
+  // }, [token, firmid,saleupdate])
 
 
   const startIndex = (currentPage - 1) * PAGE_SIZE;

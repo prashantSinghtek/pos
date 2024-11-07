@@ -2,12 +2,11 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import TextInput from "@/app/Components/Textinput";
 import { AiFillGooglePlusCircle } from "react-icons/ai";
 import { IoArrowBackCircleOutline } from "react-icons/io5";
-import { BASE_MAIN } from "@/app/config/Constant";
 import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
 
@@ -19,7 +18,7 @@ interface schema {
   otp: string;
 }
 
-function Page() {
+function OTPVerificationForm() {
   const searchParams = useSearchParams();
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -27,13 +26,10 @@ function Page() {
   const firstname = searchParams.get("firstname");
   const lastname = searchParams.get("lastname");
   const phonenumber = searchParams.get("phonenumber");
-
   const password = searchParams.get("password");
   const confirmpassword = searchParams.get("confirmpassword");
-  const handleFormSubmit = async (
-    values: schema,
-    {  setSubmitting, resetForm }: any
-  ) => {
+
+  const handleFormSubmit = async (values: schema, { setSubmitting, resetForm }: any) => {
     try {
       setSubmitting(true);
       setLoading(true);
@@ -46,15 +42,11 @@ function Page() {
         email: email,
         otp: values.otp,
       };
-      const res = await axios.post(
-        `${BASE_MAIN}loginAPI/verifyOtp`,
-        data,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_BASE_MAIN}loginAPI/verifyOtp`, data, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       console.log("====response message===>>>", res);
       resetForm();
       router.push("/");
@@ -70,15 +62,11 @@ function Page() {
     <div className="w-screen h-screen">
       <div className="flex bg-white">
         <div className="w-1/2">
-          <img src="/loginpage.png" alt="" />
+          <img src="/loginpage.png" alt="Login page image" />
         </div>
         <div className="w-1/2 px-20">
           <div className="mt-14">
-            <IoArrowBackCircleOutline
-              color="grey"
-              size={40}
-              className="cursor-pointer"
-            />
+            <IoArrowBackCircleOutline color="grey" size={40} className="cursor-pointer" />
           </div>
           <Formik
             initialValues={{
@@ -100,15 +88,11 @@ function Page() {
                     <div>
                       <Field
                         name="otp"
-                        type="otp"
+                        type="text"
                         placeholder="Enter OTP"
                         className="border border-gray-300 rounded px-3 py-2 w-full"
                       />
-                      <ErrorMessage
-                        name="otp"
-                        component="div"
-                        className="text-xs text-red-500"
-                      />
+                      <ErrorMessage name="otp" component="div" className="text-xs text-red-500" />
                     </div>
                   </div>
                   <div className="flex justify-center">
@@ -130,5 +114,10 @@ function Page() {
   );
 }
 
-
-export default Page;
+export default function Page() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <OTPVerificationForm />
+    </Suspense>
+  );
+}

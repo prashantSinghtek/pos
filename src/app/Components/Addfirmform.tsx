@@ -8,7 +8,6 @@ import { Formik } from "formik";
 import { addFirm, getUnit, myCompany, updateFirm } from "@/controller/posauth";
 import { useSession } from "next-auth/react";
 import * as Yup from "yup";
-import { BASE_MAIN } from "../config/Constant";
 
 export default function Addfirmform() {
   const [moreinformation, setMoreinformation] = useState(false);
@@ -30,7 +29,7 @@ export default function Addfirmform() {
   });
 
   const session = useSession();
-  const token = localStorage.getItem("authToken");
+  const token = ""
 
   const [firmId, setFirmId] = useState("");
   console.log(firmId, "firmId");
