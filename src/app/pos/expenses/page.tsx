@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 import { IoMdAdd } from "react-icons/io";
 import { RiFileExcel2Line, RiPagesLine } from "react-icons/ri";
 import Partiescard from "../parties/component/partiescard";
-import { IoPersonOutline } from "react-icons/io5";
+import { IoPersonOutline, IoSearchOutline } from "react-icons/io5";
 import Table from "@/app/Components/Table";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
@@ -26,7 +26,7 @@ export default function Page() {
   const [ExpensesTranaction, setExpensesTranaction] = useState([]);
   const [Expenses, setExpenses] = useState<any>([]);
   useEffect(() => {
-   getExpensesTransaction(selectedtab, firmid)
+    getExpensesTransaction(selectedtab, firmid)
       .then((res) => {
         console.log(res);
         setExpensesTranaction(res?.data);
@@ -78,21 +78,19 @@ export default function Page() {
       <TabsList className="flex w-full">
         <Tab
           value={1}
-          className={`flex-1 text-center py-2 font-medium transition-colors duration-300 ${
-            selectedTab === 1
-              ? "border-b-4 border-[#FF8900] text-black text-[#FF8900]"
-              : "border-b-4 border-transparent text-gray-500"
-          } hover:bg-gray-100 focus:outline-none`}
+          className={`flex-1 text-center py-2 font-medium transition-colors duration-300 ${selectedTab === 1
+            ? "border-b-4 border-[#FF8900] text-black text-[#FF8900]"
+            : "border-b-4 border-transparent text-gray-500"
+            } hover:bg-gray-100 focus:outline-none`}
         >
           Category
         </Tab>
         <Tab
           value={2}
-          className={`flex-1 text-center py-2 font-medium transition-colors duration-300 ${
-            selectedTab === 2
-              ? "border-b-4 border-[#FF8900] text-black text-[#FF8900]"
-              : "border-b-4 border-transparent text-gray-500"
-          } hover:bg-gray-100 focus:outline-none`}
+          className={`flex-1 text-center py-2 font-medium transition-colors duration-300 ${selectedTab === 2
+            ? "border-b-4 border-[#FF8900] text-black text-[#FF8900]"
+            : "border-b-4 border-transparent text-gray-500"
+            } hover:bg-gray-100 focus:outline-none`}
         >
           Items
         </Tab>
@@ -103,21 +101,22 @@ export default function Page() {
           <div className="w-[25%] rounded-lg overflow-hidden">
             <div className="bg-white border border-gray-200 rounded-2xl shadow-sm w-full h-full overflow-x-hidden">
               <div className="flex justify-between px-3 pb-5 pt-2 gap-3 w-[100%] items-center">
-                <div className="w-[31%]">
+                <div className="w-[38%] relative">
                   <TextInput
                     name="search"
                     type="text"
-                    placeholder="Search By"
+                    placeholder=""
                     label=""
                     istouched={"Touch"}
                     className="text-gray-800 text-base w-full"
                   />
+                  <IoSearchOutline className="absolute top-[40%] right-[10px] bg-white" />
                 </div>
                 <Link href={"/addexpenses"}>
                   <div
                     className="bg-[#fda80c] text-white rounded-lg px-3 gap-2 items-center mt-2 flex h-[45px]"
                     title="Add Parties"
-                  >
+                  >   
                     <IoMdAdd size={25} />
                     Add Expenses
                   </div>
@@ -178,7 +177,7 @@ export default function Page() {
         </div>
       </TabPanel>
       <TabPanel value={2} className="mt-5">
-      <div className="flex mt-5 gap-5">
+        <div className="flex mt-5 gap-5">
           <div className="w-[25%] rounded-lg overflow-hidden">
             <div className="bg-white border border-gray-200 rounded-2xl shadow-sm w-full h-full overflow-x-hidden">
               <div className="flex justify-between px-3 pb-5 pt-2 gap-3 w-[100%] items-center">
@@ -216,7 +215,7 @@ export default function Page() {
             </div>
           </div>
           <div className="w-[75%] flex-col gap-5">
-           <div className="flex justify-between w-full items-center px-3 my-3">
+            <div className="flex justify-between w-full items-center px-3 my-3">
               <div className="w-[300px]">
                 <TextInput
                   name="search"
